@@ -1,45 +1,168 @@
 {
   "characters": [
-    "Alisa Bosconovitch",
-    "Anna Williams",
-    "Armor King",
-    "Asuka Kazama",
-    "Baek Doo San",
-    "Bruce Irvin",
-    "Bryan Fury",
-    "Christie Monteiro",
-    "Craig Marduk",
-    "Devil Jin",
-    "Eddy Gordo",
-    "Emilie De Rochefort",
-    "Feng Wei",
-    "Ganryu",
-    "Heihachi Mishima",
-    "Hwoarang",
-    "Jack-6",
-    "Jin Kazama",
-    "Julia Chang",
-    "Kazuya Mishima",
-    "King",
-    "Kuma",
-    "Lars Alexandersson",
-    "Lee Chaolan",
-    "Lei Wulong",
-    "Leo Kliesen",
-    "Ling Xiaoyu",
-    "Marshall Law",
-    "Miguel Caballero Rojo",
-    "Mokujin",
-    "Nina Williams",
-    "Panda",
-    "Paul Phoenix",
-    "Raven",
-    "Robert \"Bob\" Richards",
-    "Roger Jr.",
-    "Sergei Dragunov",
-    "Steve Fox",
-    "Wang Jinrei",
-    "Yoshimitsu",
-    "Zafina"
+    {
+      "name": "Alisa Bosconovitch",
+      "uuid": "aca6d990-7648-4ebd-8416-0a24b28c6dd7"
+    },
+    {
+      "name": "Anna Williams",
+      "uuid": "20b79016-a6ba-4bf5-8a77-8223850b9eb1"
+    },
+    {
+      "name": "Armor King",
+      "uuid": "60fc452a-b903-4201-b434-2d3eaee93a9b"
+    },
+    {
+      "name": "Asuka Kazama",
+      "uuid": "5ef3d50c-8d36-4310-83ce-6508f088c919"
+    },
+    {
+      "name": "Baek Doo San",
+      "uuid": "2a3a9fef-8dc0-4519-b4a4-8f80df9c4c78"
+    },
+    {
+      "name": "Bruce Irvin",
+      "uuid": "2f71094e-5f6e-4d65-888a-7eb40ab10cf5"
+    },
+    {
+      "name": "Bryan Fury",
+      "uuid": "52423da4-1cb1-4a69-a6bb-e351aa3bfbcb"
+    },
+    {
+      "name": "Christie Monteiro",
+      "uuid": "f9f72b9b-dfea-4242-965e-09d1446ecadd"
+    },
+    {
+      "name": "Craig Marduk",
+      "uuid": "74fcb307-4a2c-4460-b353-c763e89f108e"
+    },
+    {
+      "name": "Devil Jin",
+      "uuid": "f1ffd139-098f-4bd6-83a1-e5b31056319a"
+    },
+    {
+      "name": "Eddy Gordo",
+      "uuid": "a02b39a8-4ab2-40c8-ae5a-1d1a50cf82ef"
+    },
+    {
+      "name": "Emilie De Rochefort",
+      "uuid": "cc76cddd-cd49-4d79-ba6e-7fad7de20796"
+    },
+    {
+      "name": "Feng Wei",
+      "uuid": "6ae7f346-9e0b-4ac7-b702-4fa21f74d996"
+    },
+    {
+      "name": "Ganryu",
+      "uuid": "33ef3a07-9f48-4022-bb7d-1d164f5c63ca"
+    },
+    {
+      "name": "Heihachi Mishima",
+      "uuid": "01266ce2-ff75-4263-931f-737a70b2a7b2"
+    },
+    {
+      "name": "Hwoarang",
+      "uuid": "7a4c53a1-522e-4dd5-a081-49da30a7e0e5"
+    },
+    {
+      "name": "Jack-6",
+      "uuid": "8a98eb6a-e1a3-401e-89f1-360158f23d6f"
+    },
+    {
+      "name": "Jin Kazama",
+      "uuid": "5282f42c-68b3-4d9d-bc13-af44154bfb1c"
+    },
+    {
+      "name": "Julia Chang",
+      "uuid": "a7773fb0-7c42-4a66-9ca7-c675a2b9d5ca"
+    },
+    {
+      "name": "Kazuya Mishima",
+      "uuid": "923859b9-e98f-4536-9b91-55fce235f7ee"
+    },
+    {
+      "name": "King",
+      "uuid": "055ea9f5-4f9a-49b3-9cf8-3cbb216d2744"
+    },
+    {
+      "name": "Kuma",
+      "uuid": "2499a1de-4cc7-40b8-95f8-f05e766e41dc"
+    },
+    {
+      "name": "Lars Alexandersson",
+      "uuid": "f1250c81-be50-4258-9997-cd16a7cd8fd5"
+    },
+    {
+      "name": "Lee Chaolan",
+      "uuid": "8b06c352-cc91-4d0a-b400-7fd92526c96e"
+    },
+    {
+      "name": "Lei Wulong",
+      "uuid": "414f5438-e18f-4ffe-9def-51f9f294b883"
+    },
+    {
+      "name": "Leo Kliesen",
+      "uuid": "ff17abac-6f60-4992-b33a-46199cf637ce"
+    },
+    {
+      "name": "Ling Xiaoyu",
+      "uuid": "19db2616-b1df-41e3-848d-dc1ad6ea1ebe"
+    },
+    {
+      "name": "Marshall Law",
+      "uuid": "2a5d335c-8792-49e0-9a68-f0d6b57ffd7b"
+    },
+    {
+      "name": "Miguel Caballero Rojo",
+      "uuid": "36b42df0-7fe6-49a2-a364-bb50f24bfd34"
+    },
+    {
+      "name": "Mokujin",
+      "uuid": "8b829922-3af2-493a-bca9-bc6db2d6be02"
+    },
+    {
+      "name": "Nina Williams",
+      "uuid": "8a5c64dd-91ec-49db-952b-c9d069c4bf0d"
+    },
+    {
+      "name": "Panda",
+      "uuid": "1fbe52cc-f969-453c-835a-a25335013355"
+    },
+    {
+      "name": "Paul Phoenix",
+      "uuid": "8af845a8-e202-4206-9923-4f2d785f918b"
+    },
+    {
+      "name": "Raven",
+      "uuid": "6a299736-3658-44d8-8a4c-e716050f7026"
+    },
+    {
+      "name": "Robert \"Bob\" Richards",
+      "uuid": "9d5bce45-6980-4a0e-917d-798bbabb26fe"
+    },
+    {
+      "name": "Roger Jr.",
+      "uuid": "5df61b0e-5e53-4f60-8639-21c8f7cdc4d2"
+    },
+    {
+      "name": "Sergei Dragunov",
+      "uuid": "0f09d1c4-edea-427e-a64e-605e8bbb0bc8"
+    },
+    {
+      "name": "Steve Fox",
+      "uuid": "6b593576-c120-4547-a386-156450aa71a0"
+    },
+    {
+      "name": "Wang Jinrei",
+      "uuid": "db510f11-b51b-4227-8a70-fc3190ae41c3"
+    },
+    {
+      "name": "Yoshimitsu",
+      "uuid": "2f8c490c-df0e-43f8-bff6-d497c6fd4e44"
+    },
+    {
+      "name": "Zafina",
+      "uuid": "c80122f7-2f81-496b-9d9c-81574b23d77d"
+    }
   ]
 }

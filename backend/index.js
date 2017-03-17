@@ -1,11 +1,8 @@
 // @flow
 import express from "express";
 import morgan from "morgan";
-import uuidV4 from "uuid/v4";
 
-import staticData from "../data.json";
-
-import { Player, Character } from "./models.js";
+import { Player, Character, TekkenSet } from "./models.js";
 
 const app = express();
 
@@ -16,7 +13,21 @@ app.get("/", (req: express$Request, res: express$Response) => {
 });
 
 app.get("/character/", (req: express$Request, res: express$Response) => {
-  res.send(staticData);
+  Character.findAll().then(characters => {
+    res.send(characters.map(char => char.toJSON()));
+  });
+});
+
+app.get("/player/", (req: express$Request, res: express$Response) => {
+  Player.findAll().then(players => {
+    res.send(players.map(char => char.toJSON()));
+  });
+});
+
+app.get("/set/", (req: express$Request, res: express$Response) => {
+  TekkenSet.findAll().then(tekkenSets => {
+    res.send(tekkenSets.map(tekkenSet => tekkenSet.toJSON()));
+  });
 });
 
 app.listen(3001);

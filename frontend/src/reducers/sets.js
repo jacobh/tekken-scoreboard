@@ -12,6 +12,12 @@ export default function sets(
       const newSet = Immutable.Map(action.payload);
       const newSetWithUuid = newSet.set("uuid", uuid);
       return state.set(uuid, newSetWithUuid);
+    case "LOAD_SET":
+      return (() => {
+        const newSet = Immutable.Map(action.payload);
+        const newSetWithUuid = newSet.set("uuid", action.payload.id);
+        return state.set(action.payload.id, newSetWithUuid);
+      })();
     default:
       return state;
   }

@@ -11,8 +11,7 @@ import sets from "./reducers/sets.js";
 
 const initialState = Immutable.Map({
   players: Immutable.fromJS(_.keyBy(data.players, "uuid")),
-  characters: Immutable.fromJS(_.keyBy(data.characters, "uuid")),
-  sets: Immutable.fromJS(_.keyBy(data.sets, "uuid"))
+  characters: Immutable.fromJS(_.keyBy(data.characters, "uuid"))
 });
 const rootReducer = combineReducers({ players, characters, sets });
 const store = createStore(rootReducer, initialState);

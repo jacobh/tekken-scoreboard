@@ -2,10 +2,22 @@
 import express from "express";
 import morgan from "morgan";
 import uuidV4 from "uuid/v4";
+import Sequelize from "sequelize";
 
 import staticData from "../data.json";
 
-console.log(staticData);
+const sequelize = new Sequelize(
+  "postgres://jacobhaslehurst@localhost:5432/tekken_scoreboard"
+);
+
+sequelize
+  .authenticate()
+  .then(function(err) {
+    console.log("Connection has been established successfully.");
+  })
+  .catch(function(err) {
+    console.log("Unable to connect to the database:", err);
+  });
 
 var app = express();
 
@@ -19,4 +31,4 @@ app.get("/character/", (req, res) => {
   res.send(staticData);
 });
 
-app.listen(3000);
+app.listen(3001);

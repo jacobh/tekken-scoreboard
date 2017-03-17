@@ -1,3 +1,12 @@
+declare module "bootstrap" {
+  declare module.exports: any;
+
+  /**
+ * We include stubs for each file inside this npm package in case you need to
+ * require those files directly. Feel free to delete any files that aren't
+ * needed.
+ */
+}
 // flow-typed signature: 7b5f2468573eb51f6426644831afee34
 // flow-typed version: <<STUB>>/bootstrap_v^3.3.7/flow_v0.41.0
 
@@ -13,103 +22,73 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "bootstrap" {
-  declare module.exports: any;
-}
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
 declare module "bootstrap/dist/js/bootstrap" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/dist/js/bootstrap.min" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/dist/js/npm" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/grunt/bs-commonjs-generator" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/grunt/bs-glyphicons-data-generator" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/grunt/bs-lessdoc-parser" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/grunt/bs-raw-files-generator" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/grunt/change-version" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/Gruntfile" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/affix" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/alert" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/button" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/carousel" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/collapse" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/dropdown" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/modal" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/popover" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/scrollspy" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/tab" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/tooltip" {
   declare module.exports: any;
 }
-
 declare module "bootstrap/js/transition" {
   declare module.exports: any;
 }
-
-// Filename aliases
 declare module "bootstrap/dist/js/bootstrap.js" {
   declare module.exports: $Exports<"bootstrap/dist/js/bootstrap">;
 }
+// Filename aliases
 declare module "bootstrap/dist/js/bootstrap.min.js" {
   declare module.exports: $Exports<"bootstrap/dist/js/bootstrap.min">;
 }

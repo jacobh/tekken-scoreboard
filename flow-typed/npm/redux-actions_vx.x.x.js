@@ -1,3 +1,12 @@
+declare module "redux-actions" {
+  declare module.exports: any;
+
+  /**
+ * We include stubs for each file inside this npm package in case you need to
+ * require those files directly. Feel free to delete any files that aren't
+ * needed.
+ */
+}
 // flow-typed signature: b22d6fea50884850efb72a21501d6a06
 // flow-typed version: <<STUB>>/redux-actions_v^2.0.1/flow_v0.41.0
 
@@ -13,103 +22,72 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "redux-actions" {
-  declare module.exports: any;
-}
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
 declare module "redux-actions/dist/redux-actions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/dist/redux-actions.min" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/arrayToObject" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/camelCase" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/combineActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/createAction" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/createActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/handleAction" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/handleActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/index" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/namespaceActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/es/ownKeys" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/arrayToObject" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/camelCase" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/combineActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/createAction" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/createActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/handleAction" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/handleActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/index" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/namespaceActions" {
   declare module.exports: any;
 }
-
 declare module "redux-actions/lib/ownKeys" {
   declare module.exports: any;
 }
-
 // Filename aliases
 declare module "redux-actions/dist/redux-actions.js" {
   declare module.exports: $Exports<"redux-actions/dist/redux-actions">;

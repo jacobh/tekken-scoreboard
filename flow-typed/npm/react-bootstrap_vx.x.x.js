@@ -1,3 +1,12 @@
+declare module "react-bootstrap" {
+  declare module.exports: any;
+
+  /**
+ * We include stubs for each file inside this npm package in case you need to
+ * require those files directly. Feel free to delete any files that aren't
+ * needed.
+ */
+}
 // flow-typed signature: 209f72d1c4ec7222f33eadf29165eb56
 // flow-typed version: <<STUB>>/react-bootstrap_v^0.30.8/flow_v0.41.0
 
@@ -13,799 +22,594 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "react-bootstrap" {
-  declare module.exports: any;
-}
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
 declare module "react-bootstrap/dist/react-bootstrap" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/dist/react-bootstrap.min" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Accordion" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Alert" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Badge" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Breadcrumb" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/BreadcrumbItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Button" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ButtonGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ButtonToolbar" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Carousel" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/CarouselCaption" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/CarouselItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Checkbox" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Clearfix" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Col" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Collapse" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ControlLabel" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Dropdown" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/DropdownButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/DropdownMenu" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/DropdownToggle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Fade" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Form" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/FormControl" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/FormControlFeedback" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/FormControlStatic" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/FormGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Glyphicon" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Grid" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/HelpBlock" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Image" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/index" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/InputGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/InputGroupAddon" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/InputGroupButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Jumbotron" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Label" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ListGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ListGroupItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Media" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MediaBody" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MediaHeading" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MediaLeft" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MediaList" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MediaListItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MediaRight" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/MenuItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Modal" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ModalBody" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ModalDialog" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ModalFooter" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ModalHeader" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ModalTitle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Nav" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Navbar" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/NavbarBrand" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/NavbarCollapse" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/NavbarHeader" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/NavbarToggle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/NavDropdown" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/NavItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Overlay" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/OverlayTrigger" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/PageHeader" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/PageItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Pager" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/PagerItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Pagination" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/PaginationButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Panel" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/PanelGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Popover" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ProgressBar" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Radio" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/ResponsiveEmbed" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Row" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/SafeAnchor" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/SplitButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/SplitToggle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Tab" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/TabContainer" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/TabContent" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Table" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/TabPane" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Tabs" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Thumbnail" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Tooltip" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/bootstrapUtils" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/capitalize" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/createChainedFunction" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/deprecationWarning" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/index" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/PropTypes" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/splitComponentProps" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/StyleConfig" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/TransitionEvents" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/utils/ValidComponentChildren" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/es/Well" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Accordion" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Alert" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Badge" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Breadcrumb" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/BreadcrumbItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Button" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ButtonGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ButtonToolbar" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Carousel" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/CarouselCaption" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/CarouselItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Checkbox" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Clearfix" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Col" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Collapse" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ControlLabel" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Dropdown" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/DropdownButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/DropdownMenu" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/DropdownToggle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Fade" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Form" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/FormControl" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/FormControlFeedback" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/FormControlStatic" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/FormGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Glyphicon" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Grid" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/HelpBlock" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Image" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/index" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/InputGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/InputGroupAddon" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/InputGroupButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Jumbotron" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Label" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ListGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ListGroupItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Media" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MediaBody" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MediaHeading" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MediaLeft" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MediaList" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MediaListItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MediaRight" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/MenuItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Modal" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ModalBody" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ModalDialog" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ModalFooter" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ModalHeader" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ModalTitle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Nav" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Navbar" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/NavbarBrand" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/NavbarCollapse" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/NavbarHeader" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/NavbarToggle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/NavDropdown" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/NavItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Overlay" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/OverlayTrigger" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/PageHeader" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/PageItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Pager" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/PagerItem" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Pagination" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/PaginationButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Panel" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/PanelGroup" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Popover" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ProgressBar" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Radio" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/ResponsiveEmbed" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Row" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/SafeAnchor" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/SplitButton" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/SplitToggle" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Tab" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/TabContainer" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/TabContent" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Table" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/TabPane" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Tabs" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Thumbnail" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Tooltip" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/bootstrapUtils" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/capitalize" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/createChainedFunction" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/deprecationWarning" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/index" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/PropTypes" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/splitComponentProps" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/StyleConfig" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/TransitionEvents" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/utils/ValidComponentChildren" {
   declare module.exports: any;
 }
-
 declare module "react-bootstrap/lib/Well" {
   declare module.exports: any;
 }
-
 // Filename aliases
 declare module "react-bootstrap/dist/react-bootstrap.js" {
   declare module.exports: $Exports<"react-bootstrap/dist/react-bootstrap">;

@@ -1,3 +1,12 @@
+declare module "redux-immutable" {
+  declare module.exports: any;
+
+  /**
+ * We include stubs for each file inside this npm package in case you need to
+ * require those files directly. Feel free to delete any files that aren't
+ * needed.
+ */
+}
 // flow-typed signature: f93f87822e4e8f35d19ba5c1634f6a74
 // flow-typed version: <<STUB>>/redux-immutable_v^4.0.0/flow_v0.41.0
 
@@ -13,47 +22,31 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "redux-immutable" {
-  declare module.exports: any;
-}
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
 declare module "redux-immutable/benchmarks/index" {
   declare module.exports: any;
 }
-
 declare module "redux-immutable/dist/combineReducers" {
   declare module.exports: any;
 }
-
 declare module "redux-immutable/dist/index" {
   declare module.exports: any;
 }
-
 declare module "redux-immutable/dist/utilities/getStateName" {
   declare module.exports: any;
 }
-
 declare module "redux-immutable/dist/utilities/getUnexpectedInvocationParameterMessage" {
   declare module.exports: any;
 }
-
 declare module "redux-immutable/dist/utilities/index" {
   declare module.exports: any;
 }
-
 declare module "redux-immutable/dist/utilities/validateNextState" {
   declare module.exports: any;
 }
-
-// Filename aliases
 declare module "redux-immutable/benchmarks/index.js" {
   declare module.exports: $Exports<"redux-immutable/benchmarks/index">;
 }
+// Filename aliases
 declare module "redux-immutable/dist/combineReducers.js" {
   declare module.exports: $Exports<"redux-immutable/dist/combineReducers">;
 }

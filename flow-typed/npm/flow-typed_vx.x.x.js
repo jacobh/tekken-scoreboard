@@ -1,3 +1,12 @@
+declare module "flow-typed" {
+  declare module.exports: any;
+
+  /**
+ * We include stubs for each file inside this npm package in case you need to
+ * require those files directly. Feel free to delete any files that aren't
+ * needed.
+ */
+}
 // flow-typed signature: 41e211c1b1d03d334affc1eabc95e79b
 // flow-typed version: <<STUB>>/flow-typed_v^2.0.0/flow_v0.41.0
 
@@ -13,95 +22,67 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "flow-typed" {
-  declare module.exports: any;
-}
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
 declare module "flow-typed/dist/cli" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/create-stub" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/install" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/runTests" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/search" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/update-cache" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/update" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/validateDefs" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/commands/version" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/codeSign" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/fileUtils" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/flowProjectUtils" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/git" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/github" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/libDefs" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/node" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/npmProjectUtils" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/semver" {
   declare module.exports: any;
 }
-
 declare module "flow-typed/dist/lib/stubUtils" {
   declare module.exports: any;
 }
-
-// Filename aliases
 declare module "flow-typed/dist/cli.js" {
   declare module.exports: $Exports<"flow-typed/dist/cli">;
 }
+// Filename aliases
 declare module "flow-typed/dist/commands/create-stub.js" {
   declare module.exports: $Exports<"flow-typed/dist/commands/create-stub">;
 }

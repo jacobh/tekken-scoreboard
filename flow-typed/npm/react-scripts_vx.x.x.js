@@ -1,3 +1,12 @@
+declare module "react-scripts" {
+  declare module.exports: any;
+
+  /**
+ * We include stubs for each file inside this npm package in case you need to
+ * require those files directly. Feel free to delete any files that aren't
+ * needed.
+ */
+}
 // flow-typed signature: aa92604bc852c762205333e6480d2257
 // flow-typed version: <<STUB>>/react-scripts_v0.9.5/flow_v0.41.0
 
@@ -13,87 +22,60 @@
  * https://github.com/flowtype/flow-typed
  */
 
-declare module "react-scripts" {
-  declare module.exports: any;
-}
-
-/**
- * We include stubs for each file inside this npm package in case you need to
- * require those files directly. Feel free to delete any files that aren't
- * needed.
- */
 declare module "react-scripts/bin/react-scripts" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/env" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/jest/babelTransform" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/jest/cssTransform" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/jest/fileTransform" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/paths" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/polyfills" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/webpack.config.dev" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/config/webpack.config.prod" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/scripts/build" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/scripts/eject" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/scripts/init" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/scripts/start" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/scripts/test" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/template/src/App" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/template/src/App.test" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/template/src/index" {
   declare module.exports: any;
 }
-
 declare module "react-scripts/utils/createJestConfig" {
   declare module.exports: any;
 }
-
 // Filename aliases
 declare module "react-scripts/bin/react-scripts.js" {
   declare module.exports: $Exports<"react-scripts/bin/react-scripts">;

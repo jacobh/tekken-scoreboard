@@ -23,11 +23,11 @@ var app = express();
 
 app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
+app.get("/", (req: express$Request, res: express$Response) => {
   res.send("hi");
 });
 
-app.get("/character/", (req, res) => {
+app.get("/character/", (req: express$Request, res: express$Response) => {
   res.send(staticData);
 });
 

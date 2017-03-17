@@ -2,7 +2,8 @@
 import React from "react";
 import * as Immutable from "immutable";
 import { connect } from "react-redux";
-import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
+import { createSet } from "../actions.js";
 import PlayerFormGroup from "./PlayerFormGroup.js";
 import CharacterFormGroup from "./CharacterFormGroup.js";
 import WinnerFormGroup from "./WinnerFormGroup.js";
@@ -10,7 +11,8 @@ import WinnerFormGroup from "./WinnerFormGroup.js";
 class CreateSetForm extends React.Component {
   props: {
     characters: Immutable.List<Immutable.Map<string, any>>,
-    players: Immutable.List<Immutable.Map<string, any>>
+    players: Immutable.List<Immutable.Map<string, any>>,
+    dispatch: () => void
   };
 
   state: {
@@ -23,6 +25,7 @@ class CreateSetForm extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       player1Id: "",
       character1Id: "",
@@ -32,13 +35,30 @@ class CreateSetForm extends React.Component {
     };
   }
 
+  canSubmit(): boolean {
+    for (let k in this.state) {
+      let v = this.state[k];
+      if (v === "") {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  onSubmit(evt: Event) {
+    evt.preventDefault();
+    this.props.dispatch(createSet(this.state));
+  }
+
   render() {
     const currentPlayers = this.props.players.filter(player => {
       const uuid = player.get("uuid");
       return uuid === this.state.player1Id || uuid === this.state.player2Id;
     });
+    const canSubmit = this.canSubmit.bind(this)();
+
     return (
-      <Form horizontal>
+      <Form horizontal onSubmit={this.onSubmit.bind(this)}>
         <h2>Create Set</h2>
         <hr />
         <h3>Player 1</h3>
@@ -73,6 +93,9 @@ class CreateSetForm extends React.Component {
           value={this.state.winnerId}
           onChange={val => this.setState({ winnerId: val })}
         />
+        <Button type="submit" disabled={!canSubmit}>
+          Submit
+        </Button>
         <pre>{JSON.stringify(this.state, null, 2)}</pre>
       </Form>
     );

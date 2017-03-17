@@ -6,18 +6,26 @@ import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 export default function WinnerFormGroup(
   props: {
     players: Immutable.List<Immutable.Map<string, any>>,
-    value: string,
-    onChange: (string) => void
+    value: ?string,
+    onChange: (?string) => void
   }
 ) {
+  let value = props.value;
+  if (props.value === null) {
+    value = "";
+  }
   return (
     <FormGroup>
       <ControlLabel>Winner</ControlLabel>
       <FormControl
         componentClass="select"
-        value={props.value}
+        value={value}
         onChange={evt => {
-          props.onChange(evt.target.value);
+          let changedValue = evt.target.value;
+          if (changedValue === "") {
+            changedValue = null;
+          }
+          props.onChange(changedValue);
         }}
       >
         <option value="">Select Winner</option>

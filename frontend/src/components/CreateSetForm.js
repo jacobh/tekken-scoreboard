@@ -16,29 +16,29 @@ class CreateSetForm extends React.Component {
   };
 
   state: {
-    player1Id: string,
-    character1Id: string,
-    player2Id: string,
-    character2Id: string,
-    winnerId: string
+    player1Id: ?string,
+    character1Id: ?string,
+    player2Id: ?string,
+    character2Id: ?string,
+    winnerId: ?string
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      player1Id: "",
-      character1Id: "",
-      player2Id: "",
-      character2Id: "",
-      winnerId: ""
+      player1Id: null,
+      character1Id: null,
+      player2Id: null,
+      character2Id: null,
+      winnerId: null
     };
   }
 
   canSubmit(): boolean {
     for (let k in this.state) {
       let v = this.state[k];
-      if (v === "") {
+      if (v === null) {
         return false;
       }
     }

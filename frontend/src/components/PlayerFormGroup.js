@@ -1,3 +1,4 @@
+// @flow
 import React from "react";
 import * as Immutable from "immutable";
 import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
@@ -9,7 +10,7 @@ export default function PlayerFormGroup(
     <FormGroup>
       <ControlLabel>Player</ControlLabel>
       <FormControl componentClass="select">
-        <option value="">Select Player</option>
+        <option value={null}>Select Player</option>
         {props.players.map(player => (
           <option value={player.get("uuid")} key={player.get("uuid")}>
             {player.get("name")}

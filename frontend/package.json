@@ -4,9 +4,13 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "immutable": "^3.8.1",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.8",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.3",
+    "redux": "^3.6.0",
+    "redux-immutable": "^4.0.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"

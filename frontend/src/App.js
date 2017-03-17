@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";

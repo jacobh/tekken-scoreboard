@@ -8,6 +8,6 @@ install:
   - (cd backend && ~/.yarn/bin/yarn)
   - (cd frontend && ~/.yarn/bin/yarn)
 script:
-  - yarn run flow check
-  - (cd frontend && yarn run build)
+  - ~/.yarn/bin/yarn run flow check
+  - (cd frontend && ~/.yarn/bin/yarn run build)
 cache: yarn

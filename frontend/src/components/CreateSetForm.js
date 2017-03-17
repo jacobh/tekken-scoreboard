@@ -43,7 +43,9 @@ class CreateSetForm extends React.Component {
         <hr />
         <h3>Player 1</h3>
         <PlayerFormGroup
-          players={this.props.players}
+          players={this.props.players.filterNot(
+            player => player.get("uuid") === this.state.player2Id
+          )}
           value={this.state.player1Id}
           onChange={val => this.setState({ player1Id: val })}
         />
@@ -55,7 +57,9 @@ class CreateSetForm extends React.Component {
         <hr />
         <h3>Player 2</h3>
         <PlayerFormGroup
-          players={this.props.players}
+          players={this.props.players.filterNot(
+            player => player.get("uuid") === this.state.player1Id
+          )}
           value={this.state.player2Id}
           onChange={val => this.setState({ player2Id: val })}
         />

@@ -35,6 +35,16 @@ class CreateSetForm extends React.Component {
     };
   }
 
+  resetState() {
+    this.setState({
+      player1Id: null,
+      character1Id: null,
+      player2Id: null,
+      character2Id: null,
+      winnerId: null
+    });
+  }
+
   canSubmit(): boolean {
     for (let k in this.state) {
       let v = this.state[k];
@@ -48,6 +58,7 @@ class CreateSetForm extends React.Component {
   onSubmit(evt: Event) {
     evt.preventDefault();
     this.props.dispatch(createSet(this.state));
+    this.resetState.bind(this)();
   }
 
   render() {

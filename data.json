@@ -17,6 +17,32 @@
       "uuid": "8a334c31-8e45-4457-9773-73be6e326198"
     }
   ],
+  "sets": [
+    {
+      "player1Id": "324055b1-c1a5-414f-8570-901268b9735c",
+      "character1Id": "01266ce2-ff75-4263-931f-737a70b2a7b2",
+      "player2Id": "5ec59730-45a6-4d8a-ae27-ad2750f31463",
+      "character2Id": "9d5bce45-6980-4a0e-917d-798bbabb26fe",
+      "winnerId": "324055b1-c1a5-414f-8570-901268b9735c",
+      "uuid": "d9a947dc-24f8-4584-88d7-194276f15e85"
+    },
+    {
+      "player1Id": "3d14e281-00bf-4265-8df7-2b292a777a83",
+      "character1Id": "8b829922-3af2-493a-bca9-bc6db2d6be02",
+      "player2Id": "5ec59730-45a6-4d8a-ae27-ad2750f31463",
+      "character2Id": "cc76cddd-cd49-4d79-ba6e-7fad7de20796",
+      "winnerId": "5ec59730-45a6-4d8a-ae27-ad2750f31463",
+      "uuid": "4d2ec8e4-40cd-449e-a901-77b1e0d50d2e"
+    },
+    {
+      "player1Id": "8a334c31-8e45-4457-9773-73be6e326198",
+      "character1Id": "f9f72b9b-dfea-4242-965e-09d1446ecadd",
+      "player2Id": "324055b1-c1a5-414f-8570-901268b9735c",
+      "character2Id": "2a5d335c-8792-49e0-9a68-f0d6b57ffd7b",
+      "winnerId": "8a334c31-8e45-4457-9773-73be6e326198",
+      "uuid": "a930740c-4fc9-473a-ad83-a6a06b22d235"
+    }
+  ],
   "characters": [
     {
       "name": "Alisa Bosconovitch",

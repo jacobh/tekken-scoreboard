@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  "node"
+install:
+  - yarn
+  - (cd backend && yarn)
+  - (cd frontend && yarn)
+test:
+  - yarn run flow
+cache: yarn

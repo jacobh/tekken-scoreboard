@@ -4,9 +4,9 @@ node_js:
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
 install:
-  - yarn
-  - (cd backend && yarn)
-  - (cd frontend && yarn)
+  - ~/.yarn/bin/yarn
+  - (cd backend && ~/.yarn/bin/yarn)
+  - (cd frontend && ~/.yarn/bin/yarn)
 test:
   - yarn run flow
 cache: yarn

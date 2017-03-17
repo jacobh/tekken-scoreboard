@@ -19,7 +19,7 @@ sequelize
     console.log("Unable to connect to the database:", err);
   });
 
-var app = express();
+const app = express();
 
 app.use(morgan("dev"));
 

@@ -9,7 +9,9 @@
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.23.0",
-    "babel-preset-env": "^1.2.1"
+    "babel-preset-env": "^1.2.1",
+    "flow-bin": "^0.41.0",
+    "flow-typed": "^2.0.0"
   },
   "dependencies": {
     "express": "^4.15.2",

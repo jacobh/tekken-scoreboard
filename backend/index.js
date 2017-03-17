@@ -8,23 +8,23 @@ const app = express();
 
 app.use(morgan("dev"));
 
-app.get("/", (req: express$Request, res: express$Response) => {
+app.get("/api/", (req: express$Request, res: express$Response) => {
   res.send("hi");
 });
 
-app.get("/character/", (req: express$Request, res: express$Response) => {
+app.get("/api/character/", (req: express$Request, res: express$Response) => {
   Character.findAll().then(characters => {
     res.send(characters.map(char => char.toJSON()));
   });
 });
 
-app.get("/player/", (req: express$Request, res: express$Response) => {
+app.get("/api/player/", (req: express$Request, res: express$Response) => {
   Player.findAll().then(players => {
     res.send(players.map(char => char.toJSON()));
   });
 });
 
-app.get("/set/", (req: express$Request, res: express$Response) => {
+app.get("/api/set/", (req: express$Request, res: express$Response) => {
   TekkenSet.findAll().then(tekkenSets => {
     res.send(tekkenSets.map(tekkenSet => tekkenSet.toJSON()));
   });

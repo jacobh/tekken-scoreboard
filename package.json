@@ -1,0 +1,22 @@
+{
+  "name": "tekken_scorecard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:jacobh/tekken-scoreboard.git",
+  "author": "Jacob Haslehurst <jacob@haslehurst.net>",
+  "license": "private",
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^0.13.2",
+    "lint-staged": "^3.4.0",
+    "prettier": "^0.22.0"
+  }
+}

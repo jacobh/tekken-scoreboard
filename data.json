@@ -1,4 +1,22 @@
 {
+  "players": [
+    {
+      "name": "Jacob",
+      "uuid": "324055b1-c1a5-414f-8570-901268b9735c"
+    },
+    {
+      "name": "Nic",
+      "uuid": "5ec59730-45a6-4d8a-ae27-ad2750f31463"
+    },
+    {
+      "name": "Nick F.",
+      "uuid": "3d14e281-00bf-4265-8df7-2b292a777a83"
+    },
+    {
+      "name": "Tony",
+      "uuid": "8a334c31-8e45-4457-9773-73be6e326198"
+    }
+  ],
   "characters": [
     {
       "name": "Alisa Bosconovitch",

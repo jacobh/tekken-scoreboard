@@ -4,9 +4,7 @@ import { combineReducers } from "redux-immutable";
 import { createStore } from "redux";
 import data from "../../data.json";
 
-const initialState = Immutable.Map({
-  characters: Immutable.fromJS(data.characters)
-});
+const initialState = Immutable.fromJS(data);
 const rootReducer = combineReducers({});
 const store = createStore(rootReducer, initialState);
 export default store;

@@ -5,7 +5,7 @@ import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 
 export default function CharacterFormGroup(
   props: {
-    characters: Immutable.List<Immutable.Map<string, any>>,
+    characters: Immutable.Map<string, Immutable.Map<string, any>>,
     value: ?string,
     onChange: (?string) => void
   }
@@ -29,7 +29,7 @@ export default function CharacterFormGroup(
         }}
       >
         <option value="">Select Character</option>
-        {props.characters.map(char => (
+        {props.characters.toIndexedSeq().map(char => (
           <option value={char.get("uuid")} key={char.get("uuid")}>
             {char.get("name")}
           </option>

@@ -2,7 +2,7 @@
 import * as Immutable from "immutable";
 
 export default function characters(
-  state: Immutable.List<Immutable.Map<string, any>>,
+  state: Immutable.Map<string, Immutable.Map<string, any>> = Immutable.Map(),
   action: any
 ) {
   return state;

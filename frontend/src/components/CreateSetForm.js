@@ -10,8 +10,8 @@ import WinnerFormGroup from "./WinnerFormGroup.js";
 
 class CreateSetForm extends React.Component {
   props: {
-    characters: Immutable.List<Immutable.Map<string, any>>,
-    players: Immutable.List<Immutable.Map<string, any>>,
+    characters: Immutable.Map<string, Immutable.Map<string, any>>,
+    players: Immutable.Map<string, Immutable.Map<string, any>>,
     dispatch: () => void
   };
 

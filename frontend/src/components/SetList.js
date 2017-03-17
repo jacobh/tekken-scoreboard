@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 function SetList(
   props: {
-    sets: Immutable.List<Immutable.Map<string, any>>
+    sets: Immutable.Map<string, Immutable.Map<string, any>>
   }
 ) {
   return (

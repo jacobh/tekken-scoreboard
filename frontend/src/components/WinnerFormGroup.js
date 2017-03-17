@@ -5,7 +5,7 @@ import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 
 export default function WinnerFormGroup(
   props: {
-    players: Immutable.List<Immutable.Map<string, any>>,
+    players: Immutable.Map<string, Immutable.Map<string, any>>,
     value: ?string,
     onChange: (?string) => void
   }
@@ -29,7 +29,7 @@ export default function WinnerFormGroup(
         }}
       >
         <option value="">Select Winner</option>
-        {props.players.map(player => (
+        {props.players.toIndexedSeq().map(player => (
           <option value={player.get("uuid")} key={player.get("uuid")}>
             {player.get("name")}
           </option>

@@ -1,9 +1,9 @@
 // @flow
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-bootstrap";
+import CreateSetForm from "./components/CreateSetForm.js";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
-import data from "../../data.json";
 
 class App extends Component {
   render() {
@@ -11,9 +11,7 @@ class App extends Component {
       <Grid>
         <Row>
           <Col>
-            <div className="App">
-              <pre>{JSON.stringify(data, null, 2)}</pre>
-            </div>
+            <CreateSetForm />
           </Col>
         </Row>
       </Grid>

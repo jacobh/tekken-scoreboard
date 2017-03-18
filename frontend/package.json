@@ -6,6 +6,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
+    "flux-standard-action": "^1.2.0",
     "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "react": "^15.4.2",

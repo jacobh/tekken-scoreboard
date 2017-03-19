@@ -1,17 +1,17 @@
 // @flow
 import React from "react";
-import * as Immutable from "immutable";
 import { connect } from "react-redux";
 import { Form, Button } from "react-bootstrap";
 import { createSet } from "../actions.js";
+import type { PlayerMap, CharacterMap } from "../models.js";
 import PlayerFormGroup from "./PlayerFormGroup.js";
 import CharacterFormGroup from "./CharacterFormGroup.js";
 import WinnerFormGroup from "./WinnerFormGroup.js";
 
 class CreateSetForm extends React.Component {
   props: {
-    characters: Immutable.Map<string, Immutable.Map<string, any>>,
-    players: Immutable.Map<string, Immutable.Map<string, any>>,
+    characters: CharacterMap,
+    players: PlayerMap,
     dispatch: () => void
   };
 
@@ -63,8 +63,8 @@ class CreateSetForm extends React.Component {
 
   render() {
     const currentPlayers = this.props.players.filter(player => {
-      const uuid = player.get("uuid");
-      return uuid === this.state.player1Id || uuid === this.state.player2Id;
+      const id = player.get("id");
+      return id === this.state.player1Id || id === this.state.player2Id;
     });
     const canSubmit = this.canSubmit.bind(this)();
 
@@ -75,7 +75,7 @@ class CreateSetForm extends React.Component {
         <h3>Player 1</h3>
         <PlayerFormGroup
           players={this.props.players.filterNot(
-            player => player.get("uuid") === this.state.player2Id
+            player => player.get("id") === this.state.player2Id
           )}
           value={this.state.player1Id}
           onChange={val => this.setState({ player1Id: val })}
@@ -89,7 +89,7 @@ class CreateSetForm extends React.Component {
         <h3>Player 2</h3>
         <PlayerFormGroup
           players={this.props.players.filterNot(
-            player => player.get("uuid") === this.state.player1Id
+            player => player.get("id") === this.state.player1Id
           )}
           value={this.state.player2Id}
           onChange={val => this.setState({ player2Id: val })}

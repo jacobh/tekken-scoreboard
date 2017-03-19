@@ -10,7 +10,7 @@ import "./App.css";
 
 class App extends Component {
   componentDidMount() {
-    fetch("/api/set/").then(res => res.json()).then(json => {
+    fetch("/api/set/").then(res => res.json()).then((json: any[]) => {
       for (let setData of json) {
         this.props.dispatch(loadSet(setData));
       }

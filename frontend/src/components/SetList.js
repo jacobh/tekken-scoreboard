@@ -3,11 +3,12 @@ import React from "react";
 import * as Immutable from "immutable";
 import classNames from "classnames";
 import { connect } from "react-redux";
+import type { PlayerMap } from "../models.js";
 
 function SetList(
   props: {
     sets: Immutable.Map<string, Immutable.Map<string, any>>,
-    players: Immutable.Map<string, Immutable.Map<string, any>>
+    players: PlayerMap
   }
 ) {
   const displaySets = props.sets.toIndexedSeq().map(set => {
@@ -21,7 +22,7 @@ function SetList(
     }
 
     return Immutable.Map({
-      uuid: set.get("uuid"),
+      id: set.get("id"),
       winner: winner,
       player1Name: props.players.get(set.get("player1Id")).get("name"),
       player2Name: props.players.get(set.get("player2Id")).get("name")
@@ -39,7 +40,7 @@ function SetList(
         </thead>
         <tbody>
           {displaySets.map(set => (
-            <tr key={set.get("uuid")}>
+            <tr key={set.get("id")}>
               <td
                 className={classNames({
                   success: set.get("winner") === "PLAYER_1"

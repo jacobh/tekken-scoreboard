@@ -1,11 +1,11 @@
 // @flow
 import React from "react";
-import * as Immutable from "immutable";
 import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
+import type { PlayerMap } from "../models.js";
 
 export default function WinnerFormGroup(
   props: {
-    players: Immutable.Map<string, Immutable.Map<string, any>>,
+    players: PlayerMap,
     value: ?string,
     onChange: (?string) => void
   }
@@ -30,7 +30,7 @@ export default function WinnerFormGroup(
       >
         <option value="">Select Winner</option>
         {props.players.toIndexedSeq().map(player => (
-          <option value={player.get("uuid")} key={player.get("uuid")}>
+          <option value={player.get("id")} key={player.get("id")}>
             {player.get("name")}
           </option>
         ))}

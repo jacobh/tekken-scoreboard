@@ -21,7 +21,7 @@ export const Character = sequelize.define("character", {
   name: DataTypes.STRING
 });
 
-export const TekkenSet = sequelize.define("tekken_set", {
+export const Match = sequelize.define("tekken_match", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,
@@ -29,15 +29,15 @@ export const TekkenSet = sequelize.define("tekken_set", {
   }
 });
 
-TekkenSet.belongsTo(Player, { as: "winner" });
-TekkenSet.belongsTo(Player, { as: "player1" });
-TekkenSet.belongsTo(Player, { as: "player2" });
-TekkenSet.belongsTo(Character, { as: "character1" });
-TekkenSet.belongsTo(Character, { as: "character2" });
+Match.belongsTo(Player, { as: "winner" });
+Match.belongsTo(Player, { as: "player1" });
+Match.belongsTo(Player, { as: "player2" });
+Match.belongsTo(Character, { as: "character1" });
+Match.belongsTo(Character, { as: "character2" });
 
 Player.sync();
 Character.sync();
-TekkenSet.sync();
+Match.sync();
 
 // load initial data
 for (let char of staticData.characters) {
@@ -54,15 +54,15 @@ for (let player of staticData.players) {
   });
 }
 
-for (let set of staticData.sets) {
-  TekkenSet.findOrCreate({
-    where: { id: set.uuid },
+for (let match of staticData.matches) {
+  Match.findOrCreate({
+    where: { id: match.uuid },
     defaults: {
-      winnerId: set.winnerId,
-      player1Id: set.player1Id,
-      player2Id: set.player2Id,
-      character1Id: set.character1Id,
-      character2Id: set.character2Id
+      winnerId: match.winnerId,
+      player1Id: match.player1Id,
+      player2Id: match.player2Id,
+      character1Id: match.character1Id,
+      character2Id: match.character2Id
     }
   });
 }

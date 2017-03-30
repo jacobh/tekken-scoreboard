@@ -2,17 +2,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Grid, Row, Col } from "react-bootstrap";
-import { loadSet } from "./actions.js";
-import CreateSetForm from "./components/CreateSetForm.js";
-import SetList from "./components/SetList.js";
+import { loadMatch } from "./actions.js";
+import CreateMatchForm from "./components/CreateMatchForm.js";
+import MatchList from "./components/MatchList.js";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 class App extends Component {
   componentDidMount() {
-    fetch("/api/set/").then(res => res.json()).then((json: any[]) => {
-      for (let setData of json) {
-        this.props.dispatch(loadSet(setData));
+    fetch("/api/match/").then(res => res.json()).then((json: any[]) => {
+      for (let matchData of json) {
+        this.props.dispatch(loadMatch(matchData));
       }
     });
   }
@@ -21,9 +21,9 @@ class App extends Component {
       <Grid>
         <Row>
           <Col>
-            <CreateSetForm />
+            <CreateMatchForm />
             <hr />
-            <SetList />
+            <MatchList />
           </Col>
         </Row>
       </Grid>

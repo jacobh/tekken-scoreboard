@@ -2,13 +2,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Form, Button } from "react-bootstrap";
-import { createSet } from "../actions.js";
+import { createMatch } from "../actions.js";
 import type { PlayerMap, CharacterMap } from "../models.js";
 import PlayerFormGroup from "./PlayerFormGroup.js";
 import CharacterFormGroup from "./CharacterFormGroup.js";
 import WinnerFormGroup from "./WinnerFormGroup.js";
 
-class CreateSetForm extends React.Component {
+class CreateMatchForm extends React.Component {
   props: {
     characters: CharacterMap,
     players: PlayerMap,
@@ -57,7 +57,7 @@ class CreateSetForm extends React.Component {
 
   onSubmit(evt: Event) {
     evt.preventDefault();
-    this.props.dispatch(createSet(this.state));
+    this.props.dispatch(createMatch(this.state));
     this.resetState.bind(this)();
   }
 
@@ -70,7 +70,7 @@ class CreateSetForm extends React.Component {
 
     return (
       <Form horizontal onSubmit={this.onSubmit.bind(this)}>
-        <h2>Create Set</h2>
+        <h2>Create Match</h2>
         <hr />
         <h3>Player 1</h3>
         <PlayerFormGroup
@@ -118,4 +118,4 @@ export default connect(state => {
     characters: state.get("characters"),
     players: state.get("players")
   };
-})(CreateSetForm);
+})(CreateMatchForm);

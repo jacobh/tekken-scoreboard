@@ -2,7 +2,7 @@
 import express from "express";
 import morgan from "morgan";
 
-import { Player, Character, TekkenSet } from "./models.js";
+import { Player, Character, Match } from "./models.js";
 
 const app = express();
 
@@ -24,9 +24,9 @@ app.get("/api/player/", (req: express$Request, res: express$Response) => {
   });
 });
 
-app.get("/api/set/", (req: express$Request, res: express$Response) => {
-  TekkenSet.findAll().then(tekkenSets => {
-    res.send(tekkenSets.map(tekkenSet => tekkenSet.toJSON()));
+app.get("/api/match/", (req: express$Request, res: express$Response) => {
+  Match.findAll().then(matches => {
+    res.send(matches.map(match => match.toJSON()));
   });
 });
 

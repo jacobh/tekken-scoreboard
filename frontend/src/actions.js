@@ -1,5 +1,5 @@
 // @flow
 import { createAction } from "redux-actions";
 
-export const createSet = createAction("CREATE_SET", set => set);
-export const loadSet = createAction("LOAD_SET", set => set);
+export const createMatch = createAction("CREATE_MATCH", match => match);
+export const loadMatch = createAction("LOAD_MATCH", match => match);

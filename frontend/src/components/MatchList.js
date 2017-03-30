@@ -5,32 +5,32 @@ import classNames from "classnames";
 import { connect } from "react-redux";
 import type { PlayerMap } from "../models.js";
 
-function SetList(
+function MatchList(
   props: {
-    sets: Immutable.Map<string, Immutable.Map<string, any>>,
+    matches: Immutable.Map<string, Immutable.Map<string, any>>,
     players: PlayerMap
   }
 ) {
-  const displaySets = props.sets.toIndexedSeq().map(set => {
-    const winnerId = set.get("winnerId");
+  const displayMatches = props.matches.toIndexedSeq().map(match => {
+    const winnerId = match.get("winnerId");
 
     let winner;
-    if (winnerId === set.get("player1Id")) {
+    if (winnerId === match.get("player1Id")) {
       winner = "PLAYER_1";
-    } else if (winnerId === set.get("player2Id")) {
+    } else if (winnerId === match.get("player2Id")) {
       winner = "PLAYER_2";
     }
 
     return Immutable.Map({
-      id: set.get("id"),
+      id: match.get("id"),
       winner: winner,
-      player1Name: props.players.get(set.get("player1Id")).get("name"),
-      player2Name: props.players.get(set.get("player2Id")).get("name")
+      player1Name: props.players.get(match.get("player1Id")).get("name"),
+      player2Name: props.players.get(match.get("player2Id")).get("name")
     });
   });
   return (
     <div>
-      <h2>Past Sets</h2>
+      <h2>Past Matches</h2>
       <table className="table">
         <thead>
           <tr>
@@ -39,21 +39,21 @@ function SetList(
           </tr>
         </thead>
         <tbody>
-          {displaySets.map(set => (
-            <tr key={set.get("id")}>
+          {displayMatches.map(match => (
+            <tr key={match.get("id")}>
               <td
                 className={classNames({
-                  success: set.get("winner") === "PLAYER_1"
+                  success: match.get("winner") === "PLAYER_1"
                 })}
               >
-                {set.get("player1Name")}
+                {match.get("player1Name")}
               </td>
               <td
                 className={classNames({
-                  success: set.get("winner") === "PLAYER_2"
+                  success: match.get("winner") === "PLAYER_2"
                 })}
               >
-                {set.get("player2Name")}
+                {match.get("player2Name")}
               </td>
             </tr>
           ))}
@@ -65,7 +65,7 @@ function SetList(
 
 export default connect(state => {
   return {
-    sets: state.get("sets"),
+    matches: state.get("matches"),
     players: state.get("players")
   };
-})(SetList);
+})(MatchList);

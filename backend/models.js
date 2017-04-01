@@ -21,7 +21,7 @@ export const Character = sequelize.define("character", {
   name: DataTypes.STRING
 });
 
-export const Match = sequelize.define("tekken_match", {
+export const Match = sequelize.define("match", {
   id: {
     primaryKey: true,
     type: DataTypes.UUID,

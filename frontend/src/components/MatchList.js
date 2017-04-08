@@ -1,7 +1,8 @@
 // @flow
 import React from "react";
 import classNames from "classnames";
-import { gql, graphql } from "react-apollo";
+import { graphql } from "react-apollo";
+import MatchListQuery from "../queries/MatchListQuery.js";
 
 function MatchList(props) {
   let matches = [];
@@ -43,21 +44,4 @@ function MatchList(props) {
   );
 }
 
-const query = gql`{
-  allMatches {
-    id
-    winner {
-      id
-    }
-    player1 {
-      id
-      name
-    }
-    player2 {
-      id
-      name
-    }
-  }
-}`;
-
-export default graphql(query)(MatchList);
+export default graphql(MatchListQuery)(MatchList);

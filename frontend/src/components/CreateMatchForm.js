@@ -3,6 +3,8 @@ import React from "react";
 import { compose } from "redux";
 import { Form, Button } from "react-bootstrap";
 import { gql, graphql } from "react-apollo";
+import CreateMatchFormQuery from "../queries/CreateMatchFormQuery.js";
+import MatchListQuery from "../queries/MatchListQuery.js";
 import PlayerFormGroup from "./PlayerFormGroup.js";
 import CharacterFormGroup from "./CharacterFormGroup.js";
 import WinnerFormGroup from "./WinnerFormGroup.js";
@@ -52,7 +54,10 @@ class CreateMatchForm extends React.Component {
 
   onSubmit(evt: Event) {
     evt.preventDefault();
-    this.props.mutate({ variables: this.state });
+    this.props.mutate({
+      variables: this.state,
+      refetchQueries: [{ query: MatchListQuery }]
+    });
     this.resetState.bind(this)();
   }
 
@@ -114,17 +119,6 @@ class CreateMatchForm extends React.Component {
   }
 }
 
-const query = gql`{
-  allPlayers {
-    id
-    name
-  }
-  allCharacters {
-    id
-    name
-  }
-}`;
-
 const mutation = gql`
 mutation createMatch(
   $winnerId: ID!,
@@ -144,4 +138,6 @@ mutation createMatch(
   }
 }`;
 
-export default compose(graphql(query), graphql(mutation))(CreateMatchForm);
+export default compose(graphql(CreateMatchFormQuery), graphql(mutation))(
+  CreateMatchForm
+);

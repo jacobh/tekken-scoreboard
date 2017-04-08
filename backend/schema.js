@@ -55,7 +55,7 @@ const typeDefs = `
 
 const resolvers = {
   Player: {
-    matches: async player => {
+    matches: async (player: Player): Promise<Match[]> => {
       return Match.findAll({
         where: {
           $or: [{ player1Id: player.id }, { player2Id: player.id }]
@@ -64,39 +64,39 @@ const resolvers = {
     }
   },
   Match: {
-    winner: async match => {
+    winner: async (match: Match): Promise<Player> => {
       return Player.findById(match.winnerId);
     },
-    player1: async match => {
+    player1: async (match: Match): Promise<Player> => {
       return Player.findById(match.player1Id);
     },
-    player2: async match => {
+    player2: async (match: Match): Promise<Player> => {
       return Player.findById(match.player2Id);
     },
-    character1: async match => {
+    character1: async (match: Match): Promise<Character> => {
       return Character.findById(match.character1Id);
     },
-    character2: async match => {
+    character2: async (match: Match): Promise<Character> => {
       return Character.findById(match.character2Id);
     }
   },
   Query: {
-    allPlayers: async () => {
+    allPlayers: async (): Promise<Player[]> => {
       return Player.findAll();
     },
-    allCharacters: async () => {
+    allCharacters: async (): Promise<Character[]> => {
       return Character.findAll();
     },
-    allMatches: async () => {
+    allMatches: async (): Promise<Match[]> => {
       return Match.findAll();
     },
-    getPlayer: async (obj, args) => {
+    getPlayer: async (_, args: { id: string }): Promise<Player> => {
       return Player.findById(args.id);
     },
-    getCharacter: async (obj, args) => {
+    getCharacter: async (_, args: { id: string }): Promise<Character> => {
       return Character.findById(args.id);
     },
-    getMatch: async (obj, args) => {
+    getMatch: async (_, args: { id: string }): Promise<Match> => {
       return Match.findById(args.id);
     }
   },
@@ -104,7 +104,7 @@ const resolvers = {
     createMatch: async (
       _,
       { winnerId, player1Id, player2Id, character1Id, character2Id }
-    ) => {
+    ): Promise<Match> => {
       return Match.create({
         winnerId,
         player1Id,

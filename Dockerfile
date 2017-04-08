@@ -18,3 +18,4 @@ COPY . .
 RUN (cd frontend && ~/.yarn/bin/yarn run build)
 
 CMD (cd backend && ~/.yarn/bin/yarn run dev)
+EXPOSE 4000

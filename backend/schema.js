@@ -33,6 +33,21 @@ const typeDefs = `
         getCharacter(id: String): Character
         getMatch(id: String): Match
     }
+
+    type Mutation {
+        createMatch(
+          winnerId: String!,
+          player1Id: String!,
+          player2Id: String!,
+          character1Id: String!,
+          character2Id: String!,
+        ): Match
+    }
+
+    schema {
+      query: Query
+      mutation: Mutation
+    }
 `;
 
 const resolvers = {
@@ -80,6 +95,20 @@ const resolvers = {
     },
     getMatch: async (obj, args) => {
       return Match.findById(args.id);
+    }
+  },
+  Mutation: {
+    createMatch: async (
+      _,
+      { winnerId, player1Id, player2Id, character1Id, character2Id }
+    ) => {
+      return Match.create({
+        winnerId,
+        player1Id,
+        player2Id,
+        character1Id,
+        character2Id
+      });
     }
   }
 };

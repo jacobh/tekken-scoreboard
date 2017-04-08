@@ -27,6 +27,10 @@ const typeDefs = `
         allPlayers: [Player]
         allCharacters: [Character]
         allMatches: [Match]
+
+        getPlayer(id: String): Player
+        getCharacter(id: String): Character
+        getMatch(id: String): Match
     }
 `;
 
@@ -57,6 +61,15 @@ const resolvers = {
     },
     allMatches: async () => {
       return Match.findAll();
+    },
+    getPlayer: async (obj, args) => {
+      return Player.findById(args.id);
+    },
+    getCharacter: async (obj, args) => {
+      return Character.findById(args.id);
+    },
+    getMatch: async (obj, args) => {
+      return Match.findById(args.id);
     }
   }
 };

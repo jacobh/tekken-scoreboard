@@ -16,7 +16,9 @@ function MatchList(props) {
         <thead>
           <tr>
             <th>Player 1</th>
+            <th />
             <th>Player 2</th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -29,6 +31,7 @@ function MatchList(props) {
               >
                 {match.player1.name}
               </td>
+              <td>{match.character1.name}</td>
               <td
                 className={classNames({
                   success: match.winner.id === match.player2.id
@@ -36,6 +39,7 @@ function MatchList(props) {
               >
                 {match.player2.name}
               </td>
+              <td>{match.character2.name}</td>
             </tr>
           ))}
         </tbody>

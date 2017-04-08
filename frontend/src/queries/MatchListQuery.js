@@ -15,5 +15,11 @@ export default gql`{
       id
       name
     }
+    character1 {
+      name
+    }
+    character2 {
+      name
+    }
   }
 }`;

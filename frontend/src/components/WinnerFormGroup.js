@@ -1,11 +1,10 @@
 // @flow
 import React from "react";
 import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
-import type { PlayerMap } from "../models.js";
 
 export default function WinnerFormGroup(
   props: {
-    players: PlayerMap,
+    players: { id: string, name: string }[],
     value: ?string,
     onChange: (?string) => void
   }
@@ -29,9 +28,9 @@ export default function WinnerFormGroup(
         }}
       >
         <option value="">Select Winner</option>
-        {props.players.toIndexedSeq().map(player => (
-          <option value={player.get("id")} key={player.get("id")}>
-            {player.get("name")}
+        {props.players.map(player => (
+          <option value={player.id} key={player.id}>
+            {player.name}
           </option>
         ))}
       </FormControl>

@@ -1,19 +1,14 @@
 // @flow
 import React from "react";
-import { connect } from "react-redux";
+import { compose } from "redux";
 import { Form, Button } from "react-bootstrap";
-import { createMatch } from "../actions.js";
-import type { PlayerMap, CharacterMap } from "../models.js";
+import { gql, graphql } from "react-apollo";
 import PlayerFormGroup from "./PlayerFormGroup.js";
 import CharacterFormGroup from "./CharacterFormGroup.js";
 import WinnerFormGroup from "./WinnerFormGroup.js";
 
 class CreateMatchForm extends React.Component {
-  props: {
-    characters: CharacterMap,
-    players: PlayerMap,
-    dispatch: () => void
-  };
+  props: any;
 
   state: {
     player1Id: ?string,
@@ -57,15 +52,25 @@ class CreateMatchForm extends React.Component {
 
   onSubmit(evt: Event) {
     evt.preventDefault();
-    this.props.dispatch(createMatch(this.state));
+    this.props.mutate({ variables: this.state });
     this.resetState.bind(this)();
   }
 
   render() {
-    const currentPlayers = this.props.players.filter(player => {
-      const id = player.get("id");
-      return id === this.state.player1Id || id === this.state.player2Id;
+    let players = [];
+    if (this.props.data.allPlayers != null) {
+      players = this.props.data.allPlayers;
+    }
+    let characters = [];
+    if (this.props.data.allCharacters != null) {
+      characters = this.props.data.allCharacters;
+    }
+
+    const currentPlayers = players.filter(player => {
+      return player.id === this.state.player1Id ||
+        player.id === this.state.player2Id;
     });
+
     const canSubmit = this.canSubmit.bind(this)();
 
     return (
@@ -74,28 +79,24 @@ class CreateMatchForm extends React.Component {
         <hr />
         <h3>Player 1</h3>
         <PlayerFormGroup
-          players={this.props.players.filterNot(
-            player => player.get("id") === this.state.player2Id
-          )}
+          players={players.filter(player => player.id !== this.state.player2Id)}
           value={this.state.player1Id}
           onChange={val => this.setState({ player1Id: val })}
         />
         <CharacterFormGroup
-          characters={this.props.characters}
+          characters={characters}
           value={this.state.character1Id}
           onChange={val => this.setState({ character1Id: val })}
         />
         <hr />
         <h3>Player 2</h3>
         <PlayerFormGroup
-          players={this.props.players.filterNot(
-            player => player.get("id") === this.state.player1Id
-          )}
+          players={players.filter(player => player.id !== this.state.player1Id)}
           value={this.state.player2Id}
           onChange={val => this.setState({ player2Id: val })}
         />
         <CharacterFormGroup
-          characters={this.props.characters}
+          characters={characters}
           value={this.state.character2Id}
           onChange={val => this.setState({ character2Id: val })}
         />
@@ -113,9 +114,34 @@ class CreateMatchForm extends React.Component {
   }
 }
 
-export default connect(state => {
-  return {
-    characters: state.get("characters"),
-    players: state.get("players")
-  };
-})(CreateMatchForm);
+const query = gql`{
+  allPlayers {
+    id
+    name
+  }
+  allCharacters {
+    id
+    name
+  }
+}`;
+
+const mutation = gql`
+mutation createMatch(
+  $winnerId: ID!,
+  $player1Id: ID!,
+  $player2Id: ID!,
+  $character1Id: ID!,
+  $character2Id: ID!,
+) {
+  createMatch(
+    winnerId: $winnerId,
+    player1Id: $player1Id,
+    player2Id: $player2Id,
+    character1Id: $character1Id,
+    character2Id: $character2Id,
+  ) {
+    id
+  }
+}`;
+
+export default compose(graphql(query), graphql(mutation))(CreateMatchForm);

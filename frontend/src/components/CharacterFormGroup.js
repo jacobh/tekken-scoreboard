@@ -1,11 +1,10 @@
 // @flow
 import React from "react";
 import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
-import type { CharacterMap } from "../models.js";
 
 export default function CharacterFormGroup(
   props: {
-    characters: CharacterMap,
+    characters: { id: string, name: string }[],
     value: ?string,
     onChange: (?string) => void
   }
@@ -29,9 +28,9 @@ export default function CharacterFormGroup(
         }}
       >
         <option value="">Select Character</option>
-        {props.characters.toIndexedSeq().map(char => (
-          <option value={char.get("id")} key={char.get("id")}>
-            {char.get("name")}
+        {props.characters.map(char => (
+          <option value={char.id} key={char.id}>
+            {char.name}
           </option>
         ))}
       </FormControl>

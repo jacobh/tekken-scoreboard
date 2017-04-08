@@ -5,18 +5,18 @@ import { Player, Character, Match } from "./models.js";
 
 const typeDefs = `
     type Player {
-        id: String
+        id: ID
         name: String
         matches: [Match]
     }
 
     type Character {
-        id: String
+        id: ID
         name: String
     }
 
     type Match {
-        id: String
+        id: ID
         winner: Player
         player1: Player
         player2: Player
@@ -29,9 +29,24 @@ const typeDefs = `
         allCharacters: [Character]
         allMatches: [Match]
 
-        getPlayer(id: String): Player
-        getCharacter(id: String): Character
-        getMatch(id: String): Match
+        getPlayer(id: ID): Player
+        getCharacter(id: ID): Character
+        getMatch(id: ID): Match
+    }
+
+    type Mutation {
+        createMatch(
+          winnerId: ID!,
+          player1Id: ID!,
+          player2Id: ID!,
+          character1Id: ID!,
+          character2Id: ID!,
+        ): Match
+    }
+
+    schema {
+      query: Query
+      mutation: Mutation
     }
 `;
 
@@ -80,6 +95,20 @@ const resolvers = {
     },
     getMatch: async (obj, args) => {
       return Match.findById(args.id);
+    }
+  },
+  Mutation: {
+    createMatch: async (
+      _,
+      { winnerId, player1Id, player2Id, character1Id, character2Id }
+    ) => {
+      return Match.create({
+        winnerId,
+        player1Id,
+        player2Id,
+        character1Id,
+        character2Id
+      });
     }
   }
 };

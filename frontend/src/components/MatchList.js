@@ -1,33 +1,14 @@
 // @flow
 import React from "react";
-import * as Immutable from "immutable";
 import classNames from "classnames";
-import { connect } from "react-redux";
-import type { PlayerMap } from "../models.js";
+import { graphql } from "react-apollo";
+import MatchListQuery from "../queries/MatchListQuery.js";
 
-function MatchList(
-  props: {
-    matches: Immutable.Map<string, Immutable.Map<string, any>>,
-    players: PlayerMap
+function MatchList(props) {
+  let matches = [];
+  if (props.data.allMatches != null) {
+    matches = props.data.allMatches;
   }
-) {
-  const displayMatches = props.matches.toIndexedSeq().map(match => {
-    const winnerId = match.get("winnerId");
-
-    let winner;
-    if (winnerId === match.get("player1Id")) {
-      winner = "PLAYER_1";
-    } else if (winnerId === match.get("player2Id")) {
-      winner = "PLAYER_2";
-    }
-
-    return Immutable.Map({
-      id: match.get("id"),
-      winner: winner,
-      player1Name: props.players.get(match.get("player1Id")).get("name"),
-      player2Name: props.players.get(match.get("player2Id")).get("name")
-    });
-  });
   return (
     <div>
       <h2>Past Matches</h2>
@@ -39,21 +20,21 @@ function MatchList(
           </tr>
         </thead>
         <tbody>
-          {displayMatches.map(match => (
-            <tr key={match.get("id")}>
+          {matches.map(match => (
+            <tr key={match.id}>
               <td
                 className={classNames({
-                  success: match.get("winner") === "PLAYER_1"
+                  success: match.winner.id === match.player1.id
                 })}
               >
-                {match.get("player1Name")}
+                {match.player1.name}
               </td>
               <td
                 className={classNames({
-                  success: match.get("winner") === "PLAYER_2"
+                  success: match.winner.id === match.player2.id
                 })}
               >
-                {match.get("player2Name")}
+                {match.player2.name}
               </td>
             </tr>
           ))}
@@ -63,9 +44,4 @@ function MatchList(
   );
 }
 
-export default connect(state => {
-  return {
-    matches: state.get("matches"),
-    players: state.get("players")
-  };
-})(MatchList);
+export default graphql(MatchListQuery)(MatchList);

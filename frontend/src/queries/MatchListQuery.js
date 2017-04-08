@@ -4,6 +4,7 @@ import { gql } from "react-apollo";
 export default gql`{
   allMatches {
     id
+    createdAt
     winner {
       id
     }

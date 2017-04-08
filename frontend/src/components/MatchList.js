@@ -1,8 +1,24 @@
 // @flow
 import React from "react";
 import classNames from "classnames";
+import moment from "moment";
 import { graphql } from "react-apollo";
 import MatchListQuery from "../queries/MatchListQuery.js";
+
+function sorted<T>(arr: T[], compareFn: (T, T) => number): T[] {
+  return arr.slice(0).sort(compareFn);
+}
+
+function compareMatches(
+  a: { createdAt: string },
+  b: { createdAt: string }
+): number {
+  if (a.createdAt > b.createdAt) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
 
 function MatchList(props) {
   let matches = [];
@@ -15,6 +31,7 @@ function MatchList(props) {
       <table className="table">
         <thead>
           <tr>
+            <th>Date</th>
             <th>Player 1</th>
             <th />
             <th>Player 2</th>
@@ -22,8 +39,9 @@ function MatchList(props) {
           </tr>
         </thead>
         <tbody>
-          {matches.map(match => (
+          {sorted(matches, compareMatches).map(match => (
             <tr key={match.id}>
+              <td>{moment(match.createdAt).fromNow()}</td>
               <td
                 className={classNames({
                   success: match.winner.id === match.player1.id

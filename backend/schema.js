@@ -4,6 +4,8 @@ import { makeExecutableSchema } from "graphql-tools";
 import { Player, Character, Match } from "./models.js";
 
 const typeDefs = `
+    scalar Date
+
     type Player {
         id: ID
         name: String
@@ -17,6 +19,7 @@ const typeDefs = `
 
     type Match {
         id: ID
+        createdAt: Date
         winner: Player
         player1: Player
         player2: Player
@@ -109,6 +112,14 @@ const resolvers = {
         character1Id,
         character2Id
       });
+    }
+  },
+  Date: {
+    serialize(value: Date): string {
+      return value.toISOString();
+    },
+    parseValue(value: string): Date {
+      return new Date(value);
     }
   }
 };

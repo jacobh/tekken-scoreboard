@@ -7,6 +7,7 @@ const typeDefs = `
     type Player {
         id: String
         name: String
+        matches: [Match]
     }
 
     type Character {
@@ -35,6 +36,15 @@ const typeDefs = `
 `;
 
 const resolvers = {
+  Player: {
+    matches: async player => {
+      return Match.findAll({
+        where: {
+          $or: [{ player1Id: player.id }, { player2Id: player.id }]
+        }
+      });
+    }
+  },
   Match: {
     winner: async match => {
       return Player.findById(match.winnerId);

@@ -9,6 +9,7 @@
     "flux-standard-action": "^1.2.0",
     "immutable": "^3.8.1",
     "react": "^15.4.2",
+    "react-apollo": "^1.0.1",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",

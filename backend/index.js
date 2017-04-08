@@ -18,26 +18,4 @@ app.use(
   })
 );
 
-app.get("/api/", (req: express$Request, res: express$Response) => {
-  res.send("hi");
-});
-
-app.get("/api/character/", (req: express$Request, res: express$Response) => {
-  Character.findAll().then(characters => {
-    res.send(characters.map(char => char.toJSON()));
-  });
-});
-
-app.get("/api/player/", (req: express$Request, res: express$Response) => {
-  Player.findAll().then(players => {
-    res.send(players.map(char => char.toJSON()));
-  });
-});
-
-app.get("/api/match/", (req: express$Request, res: express$Response) => {
-  Match.findAll().then(matches => {
-    res.send(matches.map(match => match.toJSON()));
-  });
-});
-
 app.listen(4000);

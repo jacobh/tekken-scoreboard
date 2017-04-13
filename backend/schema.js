@@ -21,6 +21,7 @@ const typeDefs = `
         id: ID
         createdAt: Date
         winner: Player
+        loser: Player
         player1: Player
         player2: Player
         character1: Character
@@ -66,6 +67,16 @@ const resolvers = {
   Match: {
     winner: async (match: Match): Promise<Player> => {
       return Player.findById(match.winnerId);
+    },
+    loser: async (match: Match): Promise<Player> => {
+      const winnerId = match.winnerId;
+      let loserId = null;
+      if (match.player1Id == winnerId) {
+        loserId = match.player2Id;
+      } else {
+        loserId = match.player1Id;
+      }
+      return Player.findById(loserId);
     },
     player1: async (match: Match): Promise<Player> => {
       return Player.findById(match.player1Id);

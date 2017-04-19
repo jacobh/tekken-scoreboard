@@ -5,6 +5,7 @@ import { Form, Button } from "react-bootstrap";
 import { gql, graphql } from "react-apollo";
 import CreateMatchFormQuery from "../queries/CreateMatchFormQuery.js";
 import MatchListQuery from "../queries/MatchListQuery.js";
+import PlayerListQuery from "../queries/PlayerListQuery.js";
 import PlayerFormGroup from "./PlayerFormGroup.js";
 import CharacterFormGroup from "./CharacterFormGroup.js";
 import WinnerFormGroup from "./WinnerFormGroup.js";
@@ -56,7 +57,7 @@ class CreateMatchForm extends React.Component {
     evt.preventDefault();
     this.props.mutate({
       variables: this.state,
-      refetchQueries: [{ query: MatchListQuery }]
+      refetchQueries: [{ query: MatchListQuery }, { query: PlayerListQuery }]
     });
     this.resetState.bind(this)();
   }

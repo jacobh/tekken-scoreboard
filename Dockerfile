@@ -6,12 +6,15 @@ RUN chmod 777 ~/.yarn/bin/yarn
 WORKDIR /app
 
 ADD package.json package.json
+ADD yarn.lock yarn.lock
 RUN yarn
 
 ADD backend/package.json backend/package.json
+ADD backend/yarn.lock backend/yarn.lock
 RUN (cd backend && ~/.yarn/bin/yarn)
 
 ADD frontend/package.json frontend/package.json
+ADD frontend/yarn.lock frontend/yarn.lock
 RUN (cd frontend && ~/.yarn/bin/yarn)
 
 COPY . .

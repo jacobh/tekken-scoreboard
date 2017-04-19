@@ -6,7 +6,8 @@
   "author": "Jacob Haslehurst <jacob@haslehurst.net>",
   "license": "private",
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "deploy": "heroku container:push web"
   },
   "lint-staged": {
     "*.js": [

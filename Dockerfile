@@ -1,6 +1,7 @@
 FROM node:7
 
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+RUN chmod 777 ~/.yarn/bin/yarn
 
 WORKDIR /app
 
@@ -17,5 +18,5 @@ COPY . .
 
 RUN (cd frontend && ~/.yarn/bin/yarn run build)
 
-CMD (cd backend && ~/.yarn/bin/yarn run dev)
+CMD (cd backend && /root/.yarn/bin/yarn run dev)
 EXPOSE 4000

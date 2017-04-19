@@ -113,7 +113,6 @@ class CreateMatchForm extends React.Component {
         <Button type="submit" disabled={!canSubmit}>
           Submit
         </Button>
-        <pre>{JSON.stringify(this.state, null, 2)}</pre>
       </Form>
     );
   }

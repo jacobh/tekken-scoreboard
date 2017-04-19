@@ -1,6 +1,8 @@
 // @flow
 import sequelize from "sequelize";
+import UUID from "uuid-js";
 import { makeExecutableSchema } from "graphql-tools";
+import { Kind } from "graphql/language";
 
 import { Player, Character, Match } from "./models.js";
 
@@ -157,6 +159,23 @@ const resolvers = {
     },
     parseValue(value: string): Date {
       return new Date(value);
+    }
+  },
+  ID: {
+    serialize(value: string): string {
+      const uuid = UUID.fromURN(value);
+      return new Buffer(uuid.toBytes()).toString("base64");
+    },
+    parseValue(value: string): string {
+      const bytes = new Buffer(value, "base64");
+      return UUID.fromBytes(bytes).toString();
+    },
+    parseLiteral(ast): ?string {
+      if (ast.kind === Kind.STRING) {
+        const bytes = new Buffer(ast.value, "base64");
+        return UUID.fromBytes(bytes).toString();
+      }
+      return null;
     }
   }
 };

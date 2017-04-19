@@ -1,4 +1,5 @@
 // @flow
+import sequelize from "sequelize";
 import { makeExecutableSchema } from "graphql-tools";
 
 import { Player, Character, Match } from "./models.js";
@@ -10,6 +11,9 @@ const typeDefs = `
         id: ID
         name: String
         matches: [Match]
+        playedMatches: Int
+        wonMatches: Int
+        lostMatches: Int
     }
 
     type Character {
@@ -60,6 +64,28 @@ const resolvers = {
       return Match.findAll({
         where: {
           $or: [{ player1Id: player.id }, { player2Id: player.id }]
+        }
+      });
+    },
+    playedMatches: async (player: Player): Promise<Number> => {
+      return Match.count({
+        where: {
+          $or: [{ player1Id: player.id }, { player2Id: player.id }]
+        }
+      });
+    },
+    wonMatches: async (player: Player): Promise<Number> => {
+      return Match.count({
+        where: {
+          winnerId: player.id
+        }
+      });
+    },
+    lostMatches: async (player: Player): Promise<Number> => {
+      return Match.count({
+        where: {
+          $or: [{ player1Id: player.id }, { player2Id: player.id }],
+          $not: { winnerId: player.id }
         }
       });
     }

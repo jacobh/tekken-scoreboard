@@ -29,4 +29,9 @@ app.get("*", (req: express$Request, res: express$Response) => {
   );
 });
 
-app.listen(4000);
+let PORT = 4000;
+if (process.env.PORT != null) {
+  PORT = process.env.PORT;
+}
+
+app.listen(PORT);

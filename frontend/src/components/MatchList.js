@@ -3,11 +3,8 @@ import React from "react";
 import classNames from "classnames";
 import moment from "moment";
 import { graphql } from "react-apollo";
+import { sorted } from "../utils/sort.js";
 import MatchListQuery from "../queries/MatchListQuery.js";
-
-function sorted<T>(arr: T[], compareFn: (T, T) => number): T[] {
-  return arr.slice(0).sort(compareFn);
-}
 
 function compareMatches(
   a: { createdAt: string },

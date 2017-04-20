@@ -4,6 +4,18 @@ import classNames from "classnames";
 import { graphql } from "react-apollo";
 import EloTableQuery from "../queries/EloTableQuery.js";
 import { calcNewElos } from "../utils/elo.js";
+import { sorted } from "../utils/sort.js";
+
+function compareMatches(
+  a: { createdAt: string },
+  b: { createdAt: string }
+): number {
+  if (a.createdAt < b.createdAt) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
 
 type EloMatrixRow = {
   [playerId: string]: {
@@ -22,7 +34,7 @@ function EloTable(props) {
 
   let matches = [];
   if (props.data.allMatches != null) {
-    matches = props.data.allMatches;
+    matches = sorted(props.data.allMatches, compareMatches);
   }
 
   let initialEloScores: EloMatrixRow = {};

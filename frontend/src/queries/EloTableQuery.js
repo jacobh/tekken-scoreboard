@@ -8,6 +8,7 @@ export default gql`{
   }
   allMatches {
     id
+    createdAt
     winner {
       id
       name

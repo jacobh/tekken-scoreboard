@@ -4,7 +4,20 @@ import UUID from "uuid-js";
 import { makeExecutableSchema } from "graphql-tools";
 import { Kind } from "graphql/language";
 
+import staticData from "../data.json";
 import { Player, Character, Match } from "./models.js";
+
+function findCharacterById(id: string): { id: string, name: string } {
+  for (let char of staticData.characters) {
+    if (char.uuid === id) {
+      return {
+        id: char.uuid,
+        name: char.name
+      };
+    }
+  }
+  throw Error("Couldnt find character with provided id");
+}
 
 const typeDefs = `
     scalar Date
@@ -112,19 +125,22 @@ const resolvers = {
     player2: async (match: Match): Promise<Player> => {
       return Player.findById(match.player2Id);
     },
-    character1: async (match: Match): Promise<Character> => {
-      return Character.findById(match.character1Id);
+    character1: async (match: Match): Character => {
+      return findCharacterById(match.character1Id);
     },
-    character2: async (match: Match): Promise<Character> => {
-      return Character.findById(match.character2Id);
+    character2: async (match: Match): Character => {
+      return findCharacterById(match.character2Id);
     }
   },
   Query: {
     allPlayers: async (): Promise<Player[]> => {
       return Player.findAll();
     },
-    allCharacters: async (): Promise<Character[]> => {
-      return Character.findAll();
+    allCharacters: (): Character[] => {
+      return staticData.characters.map(char => ({
+        id: char.uuid,
+        name: char.name
+      }));
     },
     allMatches: async (): Promise<Match[]> => {
       return Match.findAll();

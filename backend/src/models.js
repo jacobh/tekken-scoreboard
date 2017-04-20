@@ -33,7 +33,3 @@ Match.belongsTo(Player, { as: "player1" });
 Match.belongsTo(Player, { as: "player2" });
 Match.belongsTo(Character, { as: "character1" });
 Match.belongsTo(Character, { as: "character2" });
-
-Player.sync();
-Character.sync();
-Match.sync();

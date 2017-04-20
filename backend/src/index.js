@@ -20,12 +20,14 @@ app.use(
 );
 
 // Serve static assets
-app.use(express.static(path.resolve(__dirname, "..", "frontend", "build")));
+app.use(
+  express.static(path.resolve(__dirname, "..", "..", "frontend", "build"))
+);
 
 // Always return the main index.html, so react-router render the route in the client
 app.get("*", (req: express$Request, res: express$Response) => {
   res.sendFile(
-    path.resolve(__dirname, "..", "frontend", "build", "index.html")
+    path.resolve(__dirname, "..", "..", "frontend", "build", "index.html")
   );
 });
 

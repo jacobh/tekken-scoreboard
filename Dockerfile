@@ -19,7 +19,11 @@ RUN (cd frontend && ~/.yarn/bin/yarn)
 
 COPY . .
 
+# Build backend
+RUN (cd backend && ~/.yarn/bin/yarn run build)
+
+# Build frontend
 RUN (cd frontend && ~/.yarn/bin/yarn run build)
 
-CMD (cd backend && /root/.yarn/bin/yarn run dev)
+CMD (cd backend && /root/.yarn/bin/yarn run serve)
 EXPOSE 4000

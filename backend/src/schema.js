@@ -4,7 +4,7 @@ import UUID from "uuid-js";
 import { makeExecutableSchema } from "graphql-tools";
 import { Kind } from "graphql/language";
 
-import staticData from "../data.json";
+import staticData from "../../data.json";
 import { Player, Character, Match } from "./models.js";
 
 function findCharacterById(id: string): { id: string, name: string } {

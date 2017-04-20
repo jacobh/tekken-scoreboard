@@ -1,5 +1,5 @@
 // @flow
-import staticData from "../data.json";
+import staticData from "../../data.json";
 import { Player, Character, Match } from "./models.js";
 
 // load initial data

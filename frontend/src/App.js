@@ -13,7 +13,7 @@ export default class App extends Component {
     return (
       <Grid>
         <Row>
-          <Col>
+          <Col md={12}>
             <CreateMatchForm />
             <hr />
             <PlayerList />

@@ -1,5 +1,6 @@
 // @flow
 import React from "react";
+import { Row, Col } from "react-bootstrap";
 import { compose } from "redux";
 import { Form, Button } from "react-bootstrap";
 import { gql, graphql } from "react-apollo";
@@ -85,32 +86,42 @@ class CreateMatchForm extends React.Component {
     const canSubmit = this.canSubmit.bind(this)();
 
     return (
-      <Form horizontal onSubmit={this.onSubmit.bind(this)}>
+      <Form onSubmit={this.onSubmit.bind(this)}>
         <h2>Create Match</h2>
         <hr />
-        <h3>Player 1</h3>
-        <PlayerFormGroup
-          players={players.filter(player => player.id !== this.state.player2Id)}
-          value={this.state.player1Id}
-          onChange={val => this.setState({ player1Id: val })}
-        />
-        <CharacterFormGroup
-          characters={characters}
-          value={this.state.character1Id}
-          onChange={val => this.setState({ character1Id: val })}
-        />
+        <Row>
+          <Col md={6}>
+            <h3>Player 1</h3>
+            <PlayerFormGroup
+              players={players.filter(
+                player => player.id !== this.state.player2Id
+              )}
+              value={this.state.player1Id}
+              onChange={val => this.setState({ player1Id: val })}
+            />
+            <CharacterFormGroup
+              characters={characters}
+              value={this.state.character1Id}
+              onChange={val => this.setState({ character1Id: val })}
+            />
+          </Col>
+          <Col md={6}>
+            <h3>Player 2</h3>
+            <PlayerFormGroup
+              players={players.filter(
+                player => player.id !== this.state.player1Id
+              )}
+              value={this.state.player2Id}
+              onChange={val => this.setState({ player2Id: val })}
+            />
+            <CharacterFormGroup
+              characters={characters}
+              value={this.state.character2Id}
+              onChange={val => this.setState({ character2Id: val })}
+            />
+          </Col>
+        </Row>
         <hr />
-        <h3>Player 2</h3>
-        <PlayerFormGroup
-          players={players.filter(player => player.id !== this.state.player1Id)}
-          value={this.state.player2Id}
-          onChange={val => this.setState({ player2Id: val })}
-        />
-        <CharacterFormGroup
-          characters={characters}
-          value={this.state.character2Id}
-          onChange={val => this.setState({ character2Id: val })}
-        />
         <WinnerFormGroup
           players={currentPlayers}
           value={this.state.winnerId}

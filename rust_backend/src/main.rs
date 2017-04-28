@@ -1,6 +1,6 @@
 extern crate iron;
 extern crate chrono;
-extern crate router;
+extern crate mount;
 extern crate logger;
 extern crate env_logger;
 extern crate uuid;
@@ -8,7 +8,7 @@ extern crate uuid;
 use iron::prelude::*;
 use chrono::prelude::*;
 use iron::status;
-use router::Router;
+use mount::Mount;
 use logger::Logger;
 use logger::Format;
 use uuid::Uuid;
@@ -42,10 +42,10 @@ fn main() {
     env_logger::init().unwrap();
     let (logger_before, logger_after) = Logger::new(Some(Format::default()));
 
-    let mut router = Router::new();
-    router.get("/graphql", handler, "graphql");
+    let mut mount = Mount::new();
+    mount.mount("/graphql", handler);
 
-    let mut chain = Chain::new(router);
+    let mut chain = Chain::new(mount);
 
     chain.link_before(logger_before);
     chain.link_after(logger_after);

@@ -2,5 +2,6 @@
 Dockerfile
 node_modules
 */node_modules
+dumps
 
 frontend/build

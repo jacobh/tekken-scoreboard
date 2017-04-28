@@ -9,7 +9,6 @@ extern crate juniper;
 
 use iron::prelude::*;
 use chrono::prelude::*;
-use iron::status;
 use mount::Mount;
 use logger::Logger;
 use logger::Format;
@@ -119,8 +118,4 @@ fn main() {
     chain.link_after(logger_after);
 
     Iron::new(chain).http("localhost:3000").unwrap();
-
-    fn handler(req: &mut Request) -> IronResult<Response> {
-        Ok(Response::with((status::Ok, "Hi")))
-    }
 }

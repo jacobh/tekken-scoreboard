@@ -15,7 +15,7 @@ use logger::Logger;
 use logger::Format;
 use uuid::Uuid;
 use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
-use juniper::{FieldResult, Context, EmptyMutation};
+use juniper::{FieldResult, Context, EmptyMutation, Value};
 
 struct Database {
     characters: Vec<Character>,
@@ -32,7 +32,7 @@ struct Player {
 }
 
 struct Character {
-    id: String,
+    id: Uuid,
     name: String,
 }
 
@@ -47,10 +47,22 @@ struct Match {
     character2: Character,
 }
 
+graphql_scalar!(Uuid {
+    description: "converts uuid's to strings and back again"
+
+    resolve(&self) -> Value {
+        Value::String(self.hyphenated().to_string())
+    }
+
+    from_input_value(v: &InputValue) -> Option<Uuid> {
+        v.as_string_value().map(|s| Uuid::parse_str(s.to_owned()))
+    }
+});
+
 graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
-    field id() -> FieldResult<&String> {
+    field id() -> FieldResult<&Uuid> {
         Ok(&self.id)
     }
 
@@ -68,12 +80,12 @@ graphql_object!(QueryRoot: Database |&self| {
 
 fn context_factory(_: &mut Request) -> Database {
     Database {
-        characters: vec![Character {
-                             id: "52423da4-1cb1-4a69-a6bb-e351aa3bfbcb".to_string(),
+        characters: vec![Character { 
+                             id: Uuid::parse_str("52423da4-1cb1-4a69-a6bb-e351aa3bfbcb").unwrap(),
                              name: "Bryan Fury".to_string(),
                          },
                          Character {
-                             id: "f1ffd139-098f-4bd6-83a1-e5b31056319a".to_string(),
+                             id: Uuid::parse_str("f1ffd139-098f-4bd6-83a1-e5b31056319a").unwrap(),
                              name: "Devil Jin".to_string(),
                          }],
     }

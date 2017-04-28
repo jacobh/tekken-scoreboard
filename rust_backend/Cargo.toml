@@ -10,3 +10,6 @@ router = "*"
 logger = "*"
 env_logger = "0.4.2"
 juniper = { version = "0.7.0", features = ["iron-handlers"] }
+uuid = { version = "0.4", features = ["serde", "v4"] }
+serde = "*"
+chrono = "*"

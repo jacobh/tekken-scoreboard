@@ -1,0 +1,6 @@
+[package]
+name = "tekken_scorecard_backend"
+version = "0.1.0"
+authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
+
+[dependencies]

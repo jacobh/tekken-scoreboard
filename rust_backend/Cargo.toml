@@ -4,3 +4,9 @@ version = "0.1.0"
 authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
 
 [dependencies]
+postgres = "0.14"
+iron = "0.5.1"
+router = "*"
+logger = "*"
+env_logger = "0.4.2"
+juniper = { version = "0.7.0", features = ["iron-handlers"] }

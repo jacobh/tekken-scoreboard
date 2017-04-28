@@ -5,3 +5,5 @@ node_modules
 dumps
 
 frontend/build
+
+rust_backend/target

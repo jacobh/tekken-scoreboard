@@ -22,8 +22,10 @@ struct Database {
 }
 impl Context for Database {}
 
+struct ID(Uuid);
+
 struct Player {
-    id: Uuid,
+    id: ID,
     name: String,
     matches: Vec<Match>,
     played_matches: u32,
@@ -32,12 +34,12 @@ struct Player {
 }
 
 struct Character {
-    id: Uuid,
+    id: ID,
     name: String,
 }
 
 struct Match {
-    id: Uuid,
+    id: ID,
     created_at: DateTime<UTC>,
     winner: Player,
     loser: Player,
@@ -47,22 +49,29 @@ struct Match {
     character2: Character,
 }
 
-graphql_scalar!(Uuid {
+graphql_scalar!(ID {
     description: "converts uuid's to strings and back again"
 
     resolve(&self) -> Value {
-        Value::String(self.hyphenated().to_string())
+        Value::String(self.0.hyphenated().to_string())
     }
 
-    from_input_value(v: &InputValue) -> Option<Uuid> {
-        v.as_string_value().map(|s| Uuid::parse_str(s.to_owned()))
+    from_input_value(v: &InputValue) -> Option<ID> {
+        let string_value: Option<&str> = v.as_string_value();
+        if string_value.is_some() {
+            let uuid_result = Uuid::parse_str(string_value.unwrap());
+            if uuid_result.is_ok() {
+                return Some(ID(uuid_result.unwrap()));
+            }
+        }
+        return None;
     }
 });
 
 graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
-    field id() -> FieldResult<&Uuid> {
+    field id() -> FieldResult<&ID> {
         Ok(&self.id)
     }
 
@@ -81,11 +90,11 @@ graphql_object!(QueryRoot: Database |&self| {
 fn context_factory(_: &mut Request) -> Database {
     Database {
         characters: vec![Character { 
-                             id: Uuid::parse_str("52423da4-1cb1-4a69-a6bb-e351aa3bfbcb").unwrap(),
+                             id: ID(Uuid::parse_str("52423da4-1cb1-4a69-a6bb-e351aa3bfbcb").unwrap()),
                              name: "Bryan Fury".to_string(),
                          },
                          Character {
-                             id: Uuid::parse_str("f1ffd139-098f-4bd6-83a1-e5b31056319a").unwrap(),
+                             id: ID(Uuid::parse_str("f1ffd139-098f-4bd6-83a1-e5b31056319a").unwrap()),
                              name: "Devil Jin".to_string(),
                          }],
     }

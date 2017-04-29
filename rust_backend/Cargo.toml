@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
 
 [dependencies]
-postgres = {version = "0.14", features = ["with-uuid", "with-chrono", "with-native-tls"]}
+postgres = {version = "0.14", features = ["with-uuid", "with-chrono"]}
 iron = "0.5.1"
 mount = "*"
 logger = "*"

@@ -78,6 +78,15 @@ struct Match {
     character1_id: ID,
     character2_id: ID,
 }
+impl Match {
+    fn loser_id(&self) -> &ID {
+        if self.winner_id.0 == self.player1_id.0 {
+            return &self.player2_id;
+        } else {
+            return &self.player1_id;
+        }
+    }
+}
 impl RowData for Match {
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
@@ -219,6 +228,12 @@ graphql_object!(Match: Database |&self| {
     field winner(&executor) -> FieldResult<Player> {
         let conn = &executor.context().get_conn();
         let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&self.winner_id.0]).unwrap();
+        Ok(Player::new_from_row(&result.get(0)))
+    }
+
+    field loser(&executor) -> FieldResult<Player> {
+        let conn = &executor.context().get_conn();
+        let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&self.loser_id().0]).unwrap();
         Ok(Player::new_from_row(&result.get(0)))
     }
 

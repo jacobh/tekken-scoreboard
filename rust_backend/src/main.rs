@@ -77,13 +77,23 @@ graphql_scalar!(ID {
     }
 });
 
-graphql_object!(Player: () |&self| {
+graphql_object!(Player: Database |&self| {
     field id() -> FieldResult<&ID> {
         Ok(&self.id)
     }
 
     field name() -> FieldResult<&String> {
         Ok(&self.name)
+    }
+
+    field played_matches(&executor) -> FieldResult<i64> {
+        let conn = &executor.context().pg_pool.get().unwrap();
+
+        let result = &conn.query(
+            "SELECT COUNT(*) FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
+            &[&self.id.0]
+        ).unwrap();
+        Ok(result.get(0).get(0))
     }
 });
 

@@ -62,6 +62,32 @@ struct Match {
     character1_id: ID,
     character2_id: ID,
 }
+impl RowData for Match {
+    fn new_from_row(row: &postgres::rows::Row) -> Match {
+        Match {
+            id: ID(row.get("id")),
+            created_at: DateTime(row.get("createdAt")),
+            winner_id: ID(row.get("winnerId")),
+            player1_id: ID(row.get("player1Id")),
+            player2_id: ID(row.get("player2Id")),
+            character1_id: ID(row.get("character1Id")),
+            character2_id: ID(row.get("character2Id")),
+        }
+    }
+}
+
+trait RowData {
+    fn new_from_row(row: &postgres::rows::Row) -> Self;
+    fn new_from_rows(rows: &postgres::rows::Rows) -> Vec<Self>
+        where Self: std::marker::Sized
+    {
+        let mut instances: Vec<Self> = Vec::new();
+        for row in rows.iter() {
+            instances.push(Self::new_from_row(&row))
+        }
+        instances
+    }
+}
 
 graphql_scalar!(ID {
     description: "converts uuid's to strings and back again"
@@ -110,6 +136,16 @@ graphql_object!(Player: Database |&self| {
 
     field name() -> FieldResult<&String> {
         Ok(&self.name)
+    }
+
+    field matches(&executor) -> FieldResult<Vec<Match>> {
+        let conn = &executor.context().get_conn();
+        let result = &conn.query(
+            "SELECT * FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
+            &[&self.id.0]
+        ).unwrap();
+
+        Ok(Match::new_from_rows(result))
     }
 
     field played_matches(&executor) -> FieldResult<i64> {
@@ -197,25 +233,10 @@ graphql_object!(QueryRoot: Database |&self| {
 
     field all_matches(&executor) -> Vec<Match> {
         let conn = &executor.context().get_conn();
-        let mut matches: Vec<Match> = Vec::new();
 
-        for row in &conn.query(
-            "SELECT id, \"createdAt\", \"winnerId\", \"player1Id\", \"player2Id\", \"character1Id\", \"character2Id\" FROM matches",
-            &[]
-        ).unwrap() {
-            let match_ = Match {
-                id: ID(row.get(0)),
-                created_at: DateTime(row.get(1)),
-                winner_id: ID(row.get(2)),
-                player1_id: ID(row.get(3)),
-                player2_id: ID(row.get(4)),
-                character1_id: ID(row.get(5)),
-                character2_id: ID(row.get(6)),
-            };
-            &matches.push(match_);
-        }
-
-        matches
+        let result = &conn.query("SELECT * FROM matches", &[]).unwrap();
+        
+        Match::new_from_rows(result)
     }
 });
 

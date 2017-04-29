@@ -22,7 +22,7 @@ use logger::Logger;
 use logger::Format;
 use uuid::Uuid;
 use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
-use juniper::{FieldResult, Context, EmptyMutation, Value};
+use juniper::{FieldResult, Context, Value};
 use persistent::Read;
 use std::env;
 

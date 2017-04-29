@@ -1,15 +1,9 @@
-FROM node:7.9-alpine
+FROM node:7.9
 
-WORKDIR /app
+WORKDIR /install
 
-ADD package.json package.json
-ADD yarn.lock yarn.lock
-RUN yarn
-
-WORKDIR /app/backend
-ADD backend/package.json package.json
-ADD backend/yarn.lock yarn.lock
-RUN yarn
+RUN curl https://sh.rustup.rs > install_rust.sh && sh install_rust.sh -y
+ENV PATH="$PATH:/root/.cargo/bin"
 
 WORKDIR /app/frontend
 ADD frontend/package.json package.json
@@ -19,11 +13,12 @@ RUN yarn
 WORKDIR /app
 COPY . .
 
-# Build backend
-RUN (cd backend && yarn run build)
+WORKDIR /app/rust_backend
+RUN cargo build --release && mv target/release/tekken_scorecard_backend . && rm -rf target
 
-# Build frontend
+WORKDIR /app
 RUN (cd frontend && yarn run build)
 
-CMD (cd backend && yarn run serve)
+CMD /app/tekken_scorecard_backend
 EXPOSE 4000
+ENV STATIC_DIR=/app/frontend/build

@@ -32,6 +32,7 @@ use iron_cors::CORS;
 struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
     characters: HashMap<Uuid, Character>,
+    players: HashMap<Uuid, Player>,
 }
 impl Context for Database {}
 impl Database {
@@ -258,28 +259,20 @@ graphql_object!(Match: Database |&self| {
         Ok(&self.created_at)
     }
 
-    field winner(&executor) -> FieldResult<Player> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&self.winner_id.0]).unwrap();
-        Ok(Player::new_from_row(&result.get(0)))
+    field winner(&executor) -> FieldResult<&Player> {
+        Ok((&executor.context().players.get(&self.winner_id.0)).unwrap())
     }
 
-    field loser(&executor) -> FieldResult<Player> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&self.loser_id().0]).unwrap();
-        Ok(Player::new_from_row(&result.get(0)))
+    field loser(&executor) -> FieldResult<&Player> {
+        Ok((&executor.context().players.get(&self.loser_id().0)).unwrap())
     }
 
-    field player1(&executor) -> FieldResult<Player> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&self.player1_id.0]).unwrap();
-        Ok(Player::new_from_row(&result.get(0)))
+    field player1(&executor) -> FieldResult<&Player> {
+        Ok((&executor.context().players.get(&self.player1_id.0)).unwrap())
     }
 
-    field player2(&executor) -> FieldResult<Player> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&self.player2_id.0]).unwrap();
-        Ok(Player::new_from_row(&result.get(0)))
+    field player2(&executor) -> FieldResult<&Player> {
+        Ok((&executor.context().players.get(&self.player2_id.0)).unwrap())
     }
 
     field character1(&executor) -> FieldResult<&Character> {
@@ -348,12 +341,15 @@ fn context_factory(req: &mut Request) -> Database {
     let pg_pool = req.get::<Read<PgConnPool>>().unwrap().0.clone();
     let conn = pg_pool.get().unwrap();
 
-    let result = &conn.query("SELECT * FROM characters", &[]).unwrap();
-    let characters = Character::new_hashmap_from_rows(result);
+    let characters = Character::new_hashmap_from_rows(&conn.query("SELECT * FROM characters", &[])
+                                                           .unwrap());
+    let players = Player::new_hashmap_from_rows(&conn.query("SELECT * FROM players", &[]).unwrap());
+
 
     Database {
         pg_pool: pg_pool,
         characters: characters,
+        players: players,
     }
 }
 

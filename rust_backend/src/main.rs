@@ -305,22 +305,16 @@ graphql_object!(QueryRoot: Database |&self| {
         Match::new_from_rows(result)
     }
 
-    field get_character(&executor, id: ID) -> Character {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM characters WHERE id = $1", &[&id.0]).unwrap();
-        Character::new_from_row(&result.get(0))
+    field get_character(&executor, id: ID) -> &Character {
+        (&executor.context().characters.get(&id.0)).unwrap()
     }
 
-    field get_player(&executor, id: ID) -> Player {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM players WHERE id = $1", &[&id.0]).unwrap();
-        Player::new_from_row(&result.get(0))
+    field get_player(&executor, id: ID) -> &Player {
+        (&executor.context().players.get(&id.0)).unwrap()
     }
 
-    field get_match(&executor, id: ID) -> Match {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM matches WHERE id = $1", &[&id.0]).unwrap();
-        Match::new_from_row(&result.get(0))
+    field get_match(&executor, id: ID) -> &Match {
+        (&executor.context().matches.get(&id.0)).unwrap()
     }
 });
 

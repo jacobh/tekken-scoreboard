@@ -301,6 +301,20 @@ graphql_object!(QueryRoot: Database |&self| {
     }
 });
 
+struct MutationRoot;
+graphql_object!(MutationRoot: Database |&self| {
+    field create_match(&executor, winner_id: ID, player1_id: ID, player2_id: ID, character1_id: ID, character2_id: ID) -> Match {
+        let conn = &executor.context().get_conn();
+        let result = &conn.query(
+            "INSERT INTO matches (
+                id, \"createdAt\", \"updatedAt\", \"winnerId\", \"player1Id\", \"player2Id\", \"character1Id\", \"character2Id\"
+            ) VALUES ($1, $2, $2, $3, $4, $5, $6, $7) RETURNING *",
+            &[&Uuid::new_v4(), &chrono::UTC::now(), &winner_id.0, &player1_id.0, &player2_id.0, &character1_id.0, &character2_id.0]
+        ).unwrap();
+        Match::new_from_row(&result.get(0))
+    }
+});
+
 fn context_factory(req: &mut Request) -> Database {
     Database { pg_pool: req.get::<Read<PgConnPool>>().unwrap().0.clone() }
 }
@@ -316,8 +330,7 @@ fn main() {
 
     let mut mount = Mount::new();
 
-    let graphql_handler =
-        GraphQLHandler::new(context_factory, QueryRoot, EmptyMutation::<Database>::new());
+    let graphql_handler = GraphQLHandler::new(context_factory, QueryRoot, MutationRoot);
     let graphiql_handler = GraphiQLHandler::new("/graphql");
 
     mount.mount("/graphql", graphql_handler);
@@ -329,5 +342,5 @@ fn main() {
     chain.link_after(logger_after);
     chain.link(Read::<PgConnPool>::both(pg_pool));
 
-    Iron::new(chain).http("localhost:3000").unwrap();
+    Iron::new(chain).http("0.0.0.0:4000").unwrap();
 }

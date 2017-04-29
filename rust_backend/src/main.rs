@@ -26,10 +26,12 @@ use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
 use juniper::{FieldResult, Context, Value};
 use persistent::Read;
 use std::env;
+use std::collections::HashMap;
 use iron_cors::CORS;
 
 struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
+    characters: HashMap<Uuid, Character>,
 }
 impl Context for Database {}
 impl Database {
@@ -44,6 +46,11 @@ impl Key for PgConnPool {
 }
 
 struct ID(Uuid);
+impl Clone for ID {
+    fn clone(&self) -> ID {
+        ID(self.0.clone())
+    }
+}
 
 struct DateTime(chrono::DateTime<chrono::UTC>);
 
@@ -52,6 +59,9 @@ struct Player {
     name: String,
 }
 impl RowData for Player {
+    fn get_id(&self) -> &ID {
+        &self.id
+    }
     fn new_from_row(row: &postgres::rows::Row) -> Player {
         Player {
             id: ID(row.get("id")),
@@ -65,6 +75,9 @@ struct Character {
     name: String,
 }
 impl RowData for Character {
+    fn get_id(&self) -> &ID {
+        &self.id
+    }
     fn new_from_row(row: &postgres::rows::Row) -> Character {
         Character {
             id: ID(row.get("id")),
@@ -92,6 +105,9 @@ impl Match {
     }
 }
 impl RowData for Match {
+    fn get_id(&self) -> &ID {
+        &self.id
+    }
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
             id: ID(row.get("id")),
@@ -106,6 +122,7 @@ impl RowData for Match {
 }
 
 trait RowData {
+    fn get_id(&self) -> &ID;
     fn new_from_row(row: &postgres::rows::Row) -> Self;
     fn new_from_rows(rows: &postgres::rows::Rows) -> Vec<Self>
         where Self: std::marker::Sized
@@ -115,6 +132,18 @@ trait RowData {
             instances.push(Self::new_from_row(&row))
         }
         instances
+    }
+    fn new_hashmap_from_rows(rows: &postgres::rows::Rows) -> HashMap<Uuid, Self>
+        where Self: std::marker::Sized
+    {
+        let instances = Self::new_from_rows(rows);
+        let mut instance_map: HashMap<Uuid, Self> = HashMap::new();
+
+        for instance in instances {
+            instance_map.insert(instance.get_id().0, instance);
+        }
+
+        instance_map
     }
 }
 
@@ -320,7 +349,16 @@ graphql_object!(MutationRoot: Database |&self| {
 });
 
 fn context_factory(req: &mut Request) -> Database {
-    Database { pg_pool: req.get::<Read<PgConnPool>>().unwrap().0.clone() }
+    let pg_pool = req.get::<Read<PgConnPool>>().unwrap().0.clone();
+    let conn = pg_pool.get().unwrap();
+
+    let result = &conn.query("SELECT * FROM characters", &[]).unwrap();
+    let characters = Character::new_hashmap_from_rows(result);
+
+    Database {
+        pg_pool: pg_pool,
+        characters: characters,
+    }
 }
 
 fn main() {

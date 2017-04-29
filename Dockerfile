@@ -14,11 +14,11 @@ WORKDIR /app
 COPY . .
 
 WORKDIR /app/rust_backend
-RUN cargo build --release && mv target/release/tekken_scorecard_backend . && rm -rf target
+RUN cargo build --release && mv target/release/tekken_scorecard_backend . && rm -rf target && rm -rf /root/.cargo
 
 WORKDIR /app
 RUN (cd frontend && yarn run build)
 
-CMD /app/tekken_scorecard_backend
+CMD /app/rust_backend/tekken_scorecard_backend
 EXPOSE 4000
 ENV STATIC_DIR=/app/frontend/build

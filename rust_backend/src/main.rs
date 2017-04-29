@@ -29,6 +29,11 @@ struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
 }
 impl Context for Database {}
+impl Database {
+    pub fn get_conn(&self) -> r2d2::PooledConnection<PostgresConnectionManager> {
+        self.pg_pool.get().unwrap()
+    }
+}
 
 struct PgConnPool(r2d2::Pool<PostgresConnectionManager>);
 impl Key for PgConnPool {
@@ -87,7 +92,7 @@ graphql_object!(Player: Database |&self| {
     }
 
     field played_matches(&executor) -> FieldResult<i64> {
-        let conn = &executor.context().pg_pool.get().unwrap();
+        let conn = &executor.context().get_conn();
 
         let result = &conn.query(
             "SELECT COUNT(*) FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
@@ -112,7 +117,7 @@ graphql_object!(Character: () |&self| {
 struct QueryRoot;
 graphql_object!(QueryRoot: Database |&self| {
     field all_characters(&executor) -> Vec<Character> {
-        let conn = &executor.context().pg_pool.get().unwrap();
+        let conn = &executor.context().get_conn();
         let mut characters: Vec<Character> = Vec::new();
         for row in &conn.query("SELECT id, name FROM characters", &[]).unwrap() {
             let character = Character {
@@ -125,7 +130,7 @@ graphql_object!(QueryRoot: Database |&self| {
     }
 
     field all_players(&executor) -> Vec<Player> {
-        let conn = &executor.context().pg_pool.get().unwrap();
+        let conn = &executor.context().get_conn();
         let mut players: Vec<Player> = Vec::new();
 
         for row in &conn.query("SELECT id, name FROM players", &[]).unwrap() {

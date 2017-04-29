@@ -40,10 +40,6 @@ struct ID(Uuid);
 struct Player {
     id: ID,
     name: String,
-    matches: Vec<Match>,
-    played_matches: u32,
-    won_matches: u32,
-    lost_matches: u32,
 }
 
 struct Character {
@@ -81,6 +77,16 @@ graphql_scalar!(ID {
     }
 });
 
+graphql_object!(Player: () |&self| {
+    field id() -> FieldResult<&ID> {
+        Ok(&self.id)
+    }
+
+    field name() -> FieldResult<&String> {
+        Ok(&self.name)
+    }
+});
+
 graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
@@ -106,6 +112,21 @@ graphql_object!(QueryRoot: Database |&self| {
             &characters.push(character);
         }
         characters
+    }
+
+    field all_players(&executor) -> Vec<Player> {
+        let conn = &executor.context().pg_pool.get().unwrap();
+        let mut players: Vec<Player> = Vec::new();
+
+        for row in &conn.query("SELECT id, name FROM players", &[]).unwrap() {
+            let player = Player {
+                id: ID(row.get(0)),
+                name: row.get(1)
+            };
+            &players.push(player);
+        }
+
+        players
     }
 });
 

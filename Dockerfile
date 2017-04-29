@@ -1,14 +1,14 @@
-FROM node:7.9
-
-WORKDIR /install
-
-RUN curl https://sh.rustup.rs > install_rust.sh && sh install_rust.sh -y
-ENV PATH="$PATH:/root/.cargo/bin"
+FROM jimmycuadra/rust
 
 WORKDIR /app
-COPY . .
+RUN mkdir src && touch src/main.rs
+COPY rust_backend/Cargo.toml .
+COPY rust_backend/Cargo.lock .
 
-WORKDIR /app/rust_backend
-RUN cargo build --release && mv target/release/tekken_scorecard_backend . && rm -rf target && rm -rf /root/.cargo
+RUN cargo fetch
 
-CMD /app/rust_backend/tekken_scorecard_backend
+COPY rust_backend/ .
+
+RUN cargo build --release && mv target/release/tekken_scorecard_backend . && rm -rf target
+
+CMD /app/tekken_scorecard_backend

@@ -14,7 +14,6 @@ extern crate persistent;
 
 use iron::prelude::*;
 use iron::typemap::Key;
-use chrono::prelude::*;
 use r2d2_postgres::{TlsMode, PostgresConnectionManager};
 use postgres::Connection;
 use mount::Mount;
@@ -42,6 +41,8 @@ impl Key for PgConnPool {
 
 struct ID(Uuid);
 
+struct DateTime(chrono::DateTime<chrono::UTC>);
+
 struct Player {
     id: ID,
     name: String,
@@ -54,13 +55,12 @@ struct Character {
 
 struct Match {
     id: ID,
-    created_at: DateTime<UTC>,
-    winner: Player,
-    loser: Player,
-    player1: Player,
-    player2: Player,
-    character1: Character,
-    character2: Character,
+    created_at: DateTime,
+    winner_id: ID,
+    player1_id: ID,
+    player2_id: ID,
+    character1_id: ID,
+    character2_id: ID,
 }
 
 graphql_scalar!(ID {
@@ -76,6 +76,27 @@ graphql_scalar!(ID {
             let uuid_result = Uuid::parse_str(string_value.unwrap());
             if uuid_result.is_ok() {
                 return Some(ID(uuid_result.unwrap()));
+            }
+        }
+        return None;
+    }
+});
+
+graphql_scalar!(DateTime {
+    description: "datetimes to iso8601 strings"
+
+    resolve(&self) -> Value {
+        Value::String(self.0.to_rfc3339())
+    }
+
+    from_input_value(v: &InputValue) -> Option<DateTime> {
+        let string_value: Option<&str> = v.as_string_value();
+        if string_value.is_some() {
+            let parse_result = chrono::DateTime::parse_from_rfc3339(
+                string_value.unwrap()
+            );
+            if parse_result.is_ok() {
+                return Some(DateTime(parse_result.unwrap().with_timezone(&chrono::UTC)));
             }
         }
         return None;
@@ -134,6 +155,16 @@ graphql_object!(Character: () |&self| {
     }
 });
 
+graphql_object!(Match: Database |&self| {
+    field id() -> FieldResult<&ID> {
+        Ok(&self.id)
+    }
+
+    field created_at() -> FieldResult<&DateTime> {
+        Ok(&self.created_at)
+    }
+});
+
 struct QueryRoot;
 graphql_object!(QueryRoot: Database |&self| {
     field all_characters(&executor) -> Vec<Character> {
@@ -162,6 +193,29 @@ graphql_object!(QueryRoot: Database |&self| {
         }
 
         players
+    }
+
+    field all_matches(&executor) -> Vec<Match> {
+        let conn = &executor.context().get_conn();
+        let mut matches: Vec<Match> = Vec::new();
+
+        for row in &conn.query(
+            "SELECT id, \"createdAt\", \"winnerId\", \"player1Id\", \"player2Id\", \"character1Id\", \"character2Id\" FROM matches",
+            &[]
+        ).unwrap() {
+            let match_ = Match {
+                id: ID(row.get(0)),
+                created_at: DateTime(row.get(1)),
+                winner_id: ID(row.get(2)),
+                player1_id: ID(row.get(3)),
+                player2_id: ID(row.get(4)),
+                character1_id: ID(row.get(5)),
+                character2_id: ID(row.get(6)),
+            };
+            &matches.push(match_);
+        }
+
+        matches
     }
 });
 

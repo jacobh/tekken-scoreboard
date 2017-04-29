@@ -33,6 +33,7 @@ struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
     characters: HashMap<Uuid, Character>,
     players: HashMap<Uuid, Player>,
+    matches: HashMap<Uuid, Match>,
 }
 impl Context for Database {}
 impl Database {
@@ -344,12 +345,14 @@ fn context_factory(req: &mut Request) -> Database {
     let characters = Character::new_hashmap_from_rows(&conn.query("SELECT * FROM characters", &[])
                                                            .unwrap());
     let players = Player::new_hashmap_from_rows(&conn.query("SELECT * FROM players", &[]).unwrap());
+    let matches = Match::new_hashmap_from_rows(&conn.query("SELECT * FROM matches", &[]).unwrap());
 
 
     Database {
         pg_pool: pg_pool,
         characters: characters,
         players: players,
+        matches: matches,
     }
 }
 

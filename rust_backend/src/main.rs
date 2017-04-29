@@ -15,7 +15,7 @@ extern crate persistent;
 use iron::prelude::*;
 use iron::typemap::Key;
 use r2d2_postgres::{TlsMode, PostgresConnectionManager};
-use postgres::Connection;
+use postgres::tls::openssl::OpenSsl;
 use mount::Mount;
 use logger::Logger;
 use logger::Format;
@@ -23,6 +23,7 @@ use uuid::Uuid;
 use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
 use juniper::{FieldResult, Context, EmptyMutation, Value};
 use persistent::Read;
+use std::env;
 
 struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
@@ -320,12 +321,22 @@ fn context_factory(req: &mut Request) -> Database {
 }
 
 fn main() {
+    let mut database_url: String = "".to_string();
+    let mut port: String = "4000".to_string();
+    for (key, value) in env::vars() {
+        if key == "DATABASE_URL" {
+            database_url = value
+        } else if key == "PORT" {
+            port = value
+        }
+    }
+
     env_logger::init().unwrap();
     let (logger_before, logger_after) = Logger::new(Some(Format::default()));
 
-    let pg_pool_manager = PostgresConnectionManager::new("postgres://jacobhaslehurst@localhost/tekken_scoreboard",
-                                                         TlsMode::None)
-            .unwrap();
+    let negotiator = Box::new(OpenSsl::new().unwrap());
+    let pg_pool_manager = PostgresConnectionManager::new(database_url, TlsMode::Prefer(negotiator))
+        .unwrap();
     let pg_pool = PgConnPool(r2d2::Pool::new(r2d2::Config::default(), pg_pool_manager).unwrap());
 
     let mut mount = Mount::new();
@@ -342,5 +353,7 @@ fn main() {
     chain.link_after(logger_after);
     chain.link(Read::<PgConnPool>::both(pg_pool));
 
-    Iron::new(chain).http("0.0.0.0:4000").unwrap();
+    Iron::new(chain)
+        .http(format!("0.0.0.0:{}", port))
+        .unwrap();
 }

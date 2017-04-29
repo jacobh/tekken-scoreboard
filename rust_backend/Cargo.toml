@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
 
 [dependencies]
-postgres = "0.14"
+postgres = {version = "0.14", features = ["with-uuid", "with-chrono"]}
 iron = "0.5.1"
 mount = "*"
 logger = "*"
@@ -13,3 +13,6 @@ juniper = { version = "0.7.0", features = ["iron-handlers"] }
 uuid = { version = "0.4", features = ["serde", "v4"] }
 serde = "*"
 chrono = "*"
+persistent = "*"
+r2d2 = "*"
+r2d2_postgres = "*"

@@ -47,10 +47,26 @@ struct Player {
     id: ID,
     name: String,
 }
+impl RowData for Player {
+    fn new_from_row(row: &postgres::rows::Row) -> Player {
+        Player {
+            id: ID(row.get("id")),
+            name: row.get("name"),
+        }
+    }
+}
 
 struct Character {
     id: ID,
     name: String,
+}
+impl RowData for Character {
+    fn new_from_row(row: &postgres::rows::Row) -> Character {
+        Character {
+            id: ID(row.get("id")),
+            name: row.get("name"),
+        }
+    }
 }
 
 struct Match {
@@ -205,37 +221,19 @@ struct QueryRoot;
 graphql_object!(QueryRoot: Database |&self| {
     field all_characters(&executor) -> Vec<Character> {
         let conn = &executor.context().get_conn();
-        let mut characters: Vec<Character> = Vec::new();
-        for row in &conn.query("SELECT id, name FROM characters", &[]).unwrap() {
-            let character = Character {
-                id: ID(row.get(0)),
-                name: row.get(1)
-            };
-            &characters.push(character);
-        }
-        characters
+        let result = &conn.query("SELECT * FROM characters", &[]).unwrap();
+        Character::new_from_rows(result)
     }
 
     field all_players(&executor) -> Vec<Player> {
         let conn = &executor.context().get_conn();
-        let mut players: Vec<Player> = Vec::new();
-
-        for row in &conn.query("SELECT id, name FROM players", &[]).unwrap() {
-            let player = Player {
-                id: ID(row.get(0)),
-                name: row.get(1)
-            };
-            &players.push(player);
-        }
-
-        players
+        let result = &conn.query("SELECT * FROM players", &[]).unwrap();
+        Player::new_from_rows(result)
     }
 
     field all_matches(&executor) -> Vec<Match> {
         let conn = &executor.context().get_conn();
-
         let result = &conn.query("SELECT * FROM matches", &[]).unwrap();
-        
         Match::new_from_rows(result)
     }
 });

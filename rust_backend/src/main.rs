@@ -11,10 +11,12 @@ extern crate postgres;
 extern crate juniper;
 extern crate persistent;
 extern crate staticfile;
+extern crate iron_cors;
 
 
 use iron::prelude::*;
 use iron::typemap::Key;
+use iron::method::Method;
 use r2d2_postgres::{TlsMode, PostgresConnectionManager};
 use mount::Mount;
 use logger::Logger;
@@ -24,6 +26,7 @@ use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
 use juniper::{FieldResult, Context, Value};
 use persistent::Read;
 use std::env;
+use iron_cors::CORS;
 
 struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
@@ -354,6 +357,12 @@ fn main() {
     chain.link_before(logger_before);
     chain.link_after(logger_after);
     chain.link(Read::<PgConnPool>::both(pg_pool));
+
+    let cors = CORS::new(vec![
+         (vec![Method::Get, Method::Post], "graphql".to_owned())
+    ]);
+
+    chain.link_after(cors);
 
     Iron::new(chain)
         .http(format!("0.0.0.0:{}", port))

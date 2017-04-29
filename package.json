@@ -7,7 +7,8 @@
   "license": "private",
   "scripts": {
     "precommit": "lint-staged",
-    "deploy": "heroku container:push web"
+    "deploy": "heroku container:push web",
+    "deploy:frontend": "(cd frontend && yarn run deploy)"
   },
   "lint-staged": {
     "*.js": [

@@ -17,3 +17,4 @@ persistent = "*"
 r2d2 = "*"
 r2d2_postgres = "*"
 staticfile = "*"
+iron-cors = { git = "https://github.com/fxbox/iron-cors.git" }

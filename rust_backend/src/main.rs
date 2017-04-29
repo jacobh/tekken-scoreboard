@@ -100,6 +100,26 @@ graphql_object!(Player: Database |&self| {
         ).unwrap();
         Ok(result.get(0).get(0))
     }
+
+    field won_matches(&executor) -> FieldResult<i64> {
+        let conn = &executor.context().get_conn();
+
+        let result = &conn.query(
+            "SELECT COUNT(*) FROM matches where \"winnerId\" = $1",
+            &[&self.id.0]
+        ).unwrap();
+        Ok(result.get(0).get(0))
+    }
+
+    field lost_matches(&executor) -> FieldResult<i64> {
+        let conn = &executor.context().get_conn();
+
+        let result = &conn.query(
+            "SELECT COUNT(*) FROM matches WHERE (\"player1Id\" = $1 OR \"player2Id\" = $1) AND \"winnerId\" != $1",
+            &[&self.id.0]
+        ).unwrap();
+        Ok(result.get(0).get(0))
+    }
 });
 
 graphql_object!(Character: () |&self| {

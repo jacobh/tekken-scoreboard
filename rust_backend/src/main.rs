@@ -282,16 +282,12 @@ graphql_object!(Match: Database |&self| {
         Ok(Player::new_from_row(&result.get(0)))
     }
 
-    field character1(&executor) -> FieldResult<Character> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM characters WHERE id = $1", &[&self.character1_id.0]).unwrap();
-        Ok(Character::new_from_row(&result.get(0)))
+    field character1(&executor) -> FieldResult<&Character> {
+        Ok((&executor.context().characters.get(&self.character1_id.0)).unwrap())
     }
 
-    field character2(&executor) -> FieldResult<Character> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM characters WHERE id = $1", &[&self.character2_id.0]).unwrap();
-        Ok(Character::new_from_row(&result.get(0)))
+    field character2(&executor) -> FieldResult<&Character> {
+        Ok((&executor.context().characters.get(&self.character2_id.0)).unwrap())
     }
 });
 

@@ -26,7 +26,6 @@ use juniper::{FieldResult, Context, EmptyMutation, Value};
 use persistent::Read;
 
 struct Database {
-    characters: Vec<Character>,
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
 }
 impl Context for Database {}
@@ -111,17 +110,7 @@ graphql_object!(QueryRoot: Database |&self| {
 });
 
 fn context_factory(req: &mut Request) -> Database {
-    Database {
-        characters: vec![Character { 
-                             id: ID(Uuid::parse_str("52423da4-1cb1-4a69-a6bb-e351aa3bfbcb").unwrap()),
-                             name: "Bryan Fury".to_string(),
-                         },
-                         Character {
-                             id: ID(Uuid::parse_str("f1ffd139-098f-4bd6-83a1-e5b31056319a").unwrap()),
-                             name: "Devil Jin".to_string(),
-                         }],
-        pg_pool: req.get::<Read<PgConnPool>>().unwrap().0.clone()
-    }
+    Database { pg_pool: req.get::<Read<PgConnPool>>().unwrap().0.clone() }
 }
 
 fn main() {

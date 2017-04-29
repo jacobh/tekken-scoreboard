@@ -287,22 +287,28 @@ graphql_object!(Match: Database |&self| {
 
 struct QueryRoot;
 graphql_object!(QueryRoot: Database |&self| {
-    field all_characters(&executor) -> Vec<Character> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM characters", &[]).unwrap();
-        Character::new_from_rows(result)
+    field all_characters(&executor) -> Vec<&Character> {
+        let mut characters: Vec<&Character> = Vec::new();
+        for (_, character) in (&executor.context().characters).iter() {
+            characters.push(character);
+        }
+        characters
     }
 
-    field all_players(&executor) -> Vec<Player> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM players", &[]).unwrap();
-        Player::new_from_rows(result)
+    field all_players(&executor) -> Vec<&Player> {
+        let mut players: Vec<&Player> = Vec::new();
+        for (_, player) in (&executor.context().players).iter() {
+            players.push(player);
+        }
+        players
     }
 
-    field all_matches(&executor) -> Vec<Match> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query("SELECT * FROM matches", &[]).unwrap();
-        Match::new_from_rows(result)
+    field all_matches(&executor) -> Vec<&Match> {
+        let mut matches: Vec<&Match> = Vec::new();
+        for (_, match_) in (&executor.context().matches).iter() {
+            matches.push(match_);
+        }
+        matches
     }
 
     field get_character(&executor, id: ID) -> &Character {

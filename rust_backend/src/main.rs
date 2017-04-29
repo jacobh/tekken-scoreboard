@@ -15,7 +15,7 @@ extern crate persistent;
 use iron::prelude::*;
 use iron::typemap::Key;
 use r2d2_postgres::{TlsMode, PostgresConnectionManager};
-use postgres::tls::openssl::OpenSsl;
+use postgres::tls::native_tls::NativeTls;
 use mount::Mount;
 use logger::Logger;
 use logger::Format;
@@ -334,7 +334,7 @@ fn main() {
     env_logger::init().unwrap();
     let (logger_before, logger_after) = Logger::new(Some(Format::default()));
 
-    let negotiator = Box::new(OpenSsl::new().unwrap());
+    let negotiator = Box::new(NativeTls::new().unwrap());
     let pg_pool_manager = PostgresConnectionManager::new(database_url, TlsMode::Prefer(negotiator))
         .unwrap();
     let pg_pool = PgConnPool(r2d2::Pool::new(r2d2::Config::default(), pg_pool_manager).unwrap());

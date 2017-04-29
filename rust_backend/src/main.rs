@@ -10,6 +10,7 @@ extern crate postgres;
 #[macro_use]
 extern crate juniper;
 extern crate persistent;
+extern crate staticfile;
 
 
 use iron::prelude::*;
@@ -323,11 +324,14 @@ fn context_factory(req: &mut Request) -> Database {
 fn main() {
     let mut database_url: String = "".to_string();
     let mut port: String = "4000".to_string();
+    let mut static_dir: String = "../frontend/build".to_string();
     for (key, value) in env::vars() {
         if key == "DATABASE_URL" {
             database_url = value
         } else if key == "PORT" {
             port = value
+        } else if key == "STATIC_DIR" {
+            static_dir = value
         }
     }
 
@@ -346,6 +350,7 @@ fn main() {
 
     mount.mount("/graphql", graphql_handler);
     mount.mount("/graphiql", graphiql_handler);
+    mount.mount("/", staticfile::Static::new(static_dir));
 
     let mut chain = Chain::new(mount);
 

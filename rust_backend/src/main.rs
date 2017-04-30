@@ -11,6 +11,7 @@ extern crate postgres;
 extern crate juniper;
 extern crate persistent;
 extern crate iron_cors;
+extern crate md5;
 
 
 use iron::prelude::*;
@@ -58,6 +59,7 @@ struct DateTime(chrono::DateTime<chrono::UTC>);
 struct Player {
     id: Uuid,
     name: String,
+    email: String,
 }
 impl RowData for Player {
     fn get_id(&self) -> &Uuid {
@@ -67,6 +69,7 @@ impl RowData for Player {
         Player {
             id: row.get("id"),
             name: row.get("name"),
+            email: row.get("email"),
         }
     }
 }
@@ -195,6 +198,10 @@ graphql_object!(Player: Database |&self| {
 
     field name() -> FieldResult<&String> {
         Ok(&self.name)
+    }
+
+    field gravatar_url() -> FieldResult<String> {
+        Ok(format!("https://s.gravatar.com/avatar/{:x}", md5::compute(&self.email)))
     }
 
     field matches(&executor) -> FieldResult<Vec<Match>> {

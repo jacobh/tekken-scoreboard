@@ -56,49 +56,49 @@ impl Clone for ID {
 struct DateTime(chrono::DateTime<chrono::UTC>);
 
 struct Player {
-    id: ID,
+    id: Uuid,
     name: String,
 }
 impl RowData for Player {
-    fn get_id(&self) -> &ID {
+    fn get_id(&self) -> &Uuid {
         &self.id
     }
     fn new_from_row(row: &postgres::rows::Row) -> Player {
         Player {
-            id: ID(row.get("id")),
+            id: row.get("id"),
             name: row.get("name"),
         }
     }
 }
 
 struct Character {
-    id: ID,
+    id: Uuid,
     name: String,
 }
 impl RowData for Character {
-    fn get_id(&self) -> &ID {
+    fn get_id(&self) -> &Uuid {
         &self.id
     }
     fn new_from_row(row: &postgres::rows::Row) -> Character {
         Character {
-            id: ID(row.get("id")),
+            id: row.get("id"),
             name: row.get("name"),
         }
     }
 }
 
 struct Match {
-    id: ID,
+    id: Uuid,
     created_at: DateTime,
-    winner_id: ID,
-    player1_id: ID,
-    player2_id: ID,
-    character1_id: ID,
-    character2_id: ID,
+    winner_id: Uuid,
+    player1_id: Uuid,
+    player2_id: Uuid,
+    character1_id: Uuid,
+    character2_id: Uuid,
 }
 impl Match {
-    fn loser_id(&self) -> &ID {
-        if self.winner_id.0 == self.player1_id.0 {
+    fn loser_id(&self) -> &Uuid {
+        if self.winner_id == self.player1_id {
             return &self.player2_id;
         } else {
             return &self.player1_id;
@@ -106,24 +106,24 @@ impl Match {
     }
 }
 impl RowData for Match {
-    fn get_id(&self) -> &ID {
+    fn get_id(&self) -> &Uuid {
         &self.id
     }
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
-            id: ID(row.get("id")),
+            id: row.get("id"),
             created_at: DateTime(row.get("createdAt")),
-            winner_id: ID(row.get("winnerId")),
-            player1_id: ID(row.get("player1Id")),
-            player2_id: ID(row.get("player2Id")),
-            character1_id: ID(row.get("character1Id")),
-            character2_id: ID(row.get("character2Id")),
+            winner_id: row.get("winnerId"),
+            player1_id: row.get("player1Id"),
+            player2_id: row.get("player2Id"),
+            character1_id: row.get("character1Id"),
+            character2_id: row.get("character2Id"),
         }
     }
 }
 
 trait RowData {
-    fn get_id(&self) -> &ID;
+    fn get_id(&self) -> &Uuid;
     fn new_from_row(row: &postgres::rows::Row) -> Self;
     fn new_from_rows(rows: &postgres::rows::Rows) -> Vec<Self>
         where Self: std::marker::Sized
@@ -141,7 +141,7 @@ trait RowData {
         let mut instance_map: HashMap<Uuid, Self> = HashMap::new();
 
         for instance in instances {
-            instance_map.insert(instance.get_id().0, instance);
+            instance_map.insert(instance.get_id().clone(), instance);
         }
 
         instance_map
@@ -189,8 +189,8 @@ graphql_scalar!(DateTime {
 });
 
 graphql_object!(Player: Database |&self| {
-    field id() -> FieldResult<&ID> {
-        Ok(&self.id)
+    field id() -> FieldResult<ID> {
+        Ok(ID(self.id))
     }
 
     field name() -> FieldResult<&String> {
@@ -201,7 +201,7 @@ graphql_object!(Player: Database |&self| {
         let conn = &executor.context().get_conn();
         let result = &conn.query(
             "SELECT * FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
-            &[&self.id.0]
+            &[&self.id]
         ).unwrap();
 
         Ok(Match::new_from_rows(result))
@@ -212,7 +212,7 @@ graphql_object!(Player: Database |&self| {
 
         let result = &conn.query(
             "SELECT COUNT(*) FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
-            &[&self.id.0]
+            &[&self.id]
         ).unwrap();
         Ok(result.get(0).get(0))
     }
@@ -222,7 +222,7 @@ graphql_object!(Player: Database |&self| {
 
         let result = &conn.query(
             "SELECT COUNT(*) FROM matches where \"winnerId\" = $1",
-            &[&self.id.0]
+            &[&self.id]
         ).unwrap();
         Ok(result.get(0).get(0))
     }
@@ -232,7 +232,7 @@ graphql_object!(Player: Database |&self| {
 
         let result = &conn.query(
             "SELECT COUNT(*) FROM matches WHERE (\"player1Id\" = $1 OR \"player2Id\" = $1) AND \"winnerId\" != $1",
-            &[&self.id.0]
+            &[&self.id]
         ).unwrap();
         Ok(result.get(0).get(0))
     }
@@ -241,8 +241,8 @@ graphql_object!(Player: Database |&self| {
 graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
-    field id() -> FieldResult<&ID> {
-        Ok(&self.id)
+    field id() -> FieldResult<ID> {
+        Ok(ID(self.id))
     }
 
     field name() -> FieldResult<&String> {
@@ -251,8 +251,8 @@ graphql_object!(Character: () |&self| {
 });
 
 graphql_object!(Match: Database |&self| {
-    field id() -> FieldResult<&ID> {
-        Ok(&self.id)
+    field id() -> FieldResult<ID> {
+        Ok(ID(self.id))
     }
 
     field created_at() -> FieldResult<&DateTime> {
@@ -260,27 +260,27 @@ graphql_object!(Match: Database |&self| {
     }
 
     field winner(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.winner_id.0)).unwrap())
+        Ok((&executor.context().players.get(&self.winner_id)).unwrap())
     }
 
     field loser(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.loser_id().0)).unwrap())
+        Ok((&executor.context().players.get(&self.loser_id())).unwrap())
     }
 
     field player1(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.player1_id.0)).unwrap())
+        Ok((&executor.context().players.get(&self.player1_id)).unwrap())
     }
 
     field player2(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.player2_id.0)).unwrap())
+        Ok((&executor.context().players.get(&self.player2_id)).unwrap())
     }
 
     field character1(&executor) -> FieldResult<&Character> {
-        Ok((&executor.context().characters.get(&self.character1_id.0)).unwrap())
+        Ok((&executor.context().characters.get(&self.character1_id)).unwrap())
     }
 
     field character2(&executor) -> FieldResult<&Character> {
-        Ok((&executor.context().characters.get(&self.character2_id.0)).unwrap())
+        Ok((&executor.context().characters.get(&self.character2_id)).unwrap())
     }
 });
 

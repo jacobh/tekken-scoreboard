@@ -204,16 +204,16 @@ graphql_scalar!(DateTime {
 });
 
 graphql_object!(Player: Database |&self| {
-    field id() -> FieldResult<ID> {
-        Ok(ID(self.id))
+    field id() -> ID {
+        ID(self.id)
     }
 
-    field name() -> FieldResult<&String> {
-        Ok(&self.name)
+    field name() -> &String {
+        &self.name
     }
 
-    field gravatar_url() -> FieldResult<String> {
-        Ok(format!("https://s.gravatar.com/avatar/{:x}", md5::compute(&self.email)))
+    field gravatar_url() -> String {
+        format!("https://s.gravatar.com/avatar/{:x}", md5::compute(&self.email))
     }
 
     field matches(&executor) -> FieldResult<Vec<Match>> {
@@ -260,22 +260,22 @@ graphql_object!(Player: Database |&self| {
 graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
-    field id() -> FieldResult<ID> {
-        Ok(ID(self.id))
+    field id() -> ID {
+        ID(self.id)
     }
 
-    field name() -> FieldResult<&String> {
-        Ok(&self.name)
+    field name() -> &String {
+        &self.name
     }
 });
 
 graphql_object!(Match: Database |&self| {
-    field id() -> FieldResult<ID> {
-        Ok(ID(self.id))
+    field id() -> ID {
+        ID(self.id)
     }
 
-    field created_at() -> FieldResult<&DateTime> {
-        Ok(&self.created_at)
+    field created_at() -> &DateTime {
+        &self.created_at
     }
 
     field winner(&executor) -> FieldResult<&Player> {

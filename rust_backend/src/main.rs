@@ -130,10 +130,10 @@ impl RowData for Match {
 
 struct EloRow {
     created_at: Option<DateTime>,
-    columns: Vec<EloColumn>,
+    cells: Vec<EloCell>,
 }
 
-struct EloColumn {
+struct EloCell {
     player_id: Uuid,
     score: f64,
     score_change: f64,
@@ -313,12 +313,12 @@ graphql_object!(EloRow: Database |&self| {
     field created_at() -> &Option<DateTime> {
         &self.created_at
     }
-    field columns() -> &Vec<EloColumn> {
-        &self.columns
+    field cells() -> &Vec<EloCell> {
+        &self.cells
     }
 });
 
-graphql_object!(EloColumn: Database |&self| {
+graphql_object!(EloCell: Database |&self| {
     field player(&executor) -> &Player {
         (&executor.context().players.get(&self.player_id)).unwrap()
     }
@@ -351,7 +351,7 @@ graphql_object!(QueryRoot: Database |&self| {
         let player_ids: Vec<&Uuid> = executor.context().players.values().map(|x| &x.id).collect();
         let initial_row = EloRow {
             created_at: None,
-            columns: player_ids.iter().map(|id| EloColumn {
+            cells: player_ids.iter().map(|id| EloCell {
                 player_id: *id.clone(),
                 score: 1000.0,
                 score_change: 0.0,

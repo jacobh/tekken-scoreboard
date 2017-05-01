@@ -306,27 +306,15 @@ graphql_object!(Match: Database |&self| {
 struct QueryRoot;
 graphql_object!(QueryRoot: Database |&self| {
     field all_characters(&executor) -> Vec<&Character> {
-        let mut characters: Vec<&Character> = Vec::new();
-        for (_, character) in (&executor.context().characters).iter() {
-            characters.push(character);
-        }
-        characters
+        executor.context().characters.values().collect()
     }
 
     field all_players(&executor) -> Vec<&Player> {
-        let mut players: Vec<&Player> = Vec::new();
-        for (_, player) in (&executor.context().players).iter() {
-            players.push(player);
-        }
-        players
+        executor.context().players.values().collect()
     }
 
     field all_matches(&executor) -> Vec<&Match> {
-        let mut matches: Vec<&Match> = Vec::new();
-        for (_, match_) in (&executor.context().matches).iter() {
-            matches.push(match_);
-        }
-        matches
+        executor.context().matches.values().collect()
     }
 
     field get_character(&executor, id: ID) -> &Character {

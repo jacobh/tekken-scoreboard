@@ -159,14 +159,21 @@ graphql_scalar!(ID {
     }
 
     from_input_value(v: &InputValue) -> Option<ID> {
-        let string_value: Option<&str> = v.as_string_value();
-        if string_value.is_some() {
-            let uuid_result = Uuid::parse_str(string_value.unwrap());
-            if uuid_result.is_ok() {
-                return Some(ID(uuid_result.unwrap()));
+        match v.as_string_value() {
+            Some(string_value) => {
+                match Uuid::parse_str(string_value) {
+                    Ok(uuid_) => {
+                        Some(ID(uuid_))
+                    }
+                    Err(_) => {
+                        None
+                    }
+                }
+            }
+            None => {
+                None
             }
         }
-        return None;
     }
 });
 
@@ -178,16 +185,21 @@ graphql_scalar!(DateTime {
     }
 
     from_input_value(v: &InputValue) -> Option<DateTime> {
-        let string_value: Option<&str> = v.as_string_value();
-        if string_value.is_some() {
-            let parse_result = chrono::DateTime::parse_from_rfc3339(
-                string_value.unwrap()
-            );
-            if parse_result.is_ok() {
-                return Some(DateTime(parse_result.unwrap().with_timezone(&chrono::UTC)));
+        match v.as_string_value() {
+            Some(string_value) => {
+                match chrono::DateTime::parse_from_rfc3339(string_value) {
+                    Ok(datetime) => {
+                        Some(DateTime(datetime.with_timezone(&chrono::UTC)))
+                    }
+                    Err(_) => {
+                        None
+                    }
+                }
+            }
+            None => {
+                None
             }
         }
-        return None;
     }
 });
 

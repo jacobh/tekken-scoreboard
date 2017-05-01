@@ -317,16 +317,25 @@ graphql_object!(QueryRoot: Database |&self| {
         executor.context().matches.values().collect()
     }
 
-    field get_character(&executor, id: ID) -> &Character {
-        (&executor.context().characters.get(&id.0)).unwrap()
+    field get_character(&executor, id: ID) -> FieldResult<&Character> {
+        match executor.context().characters.get(&id.0) {
+            Some(character) => { Ok(character) }
+            None => { Err("Couldn't find character".to_string()) }
+        }
     }
 
-    field get_player(&executor, id: ID) -> &Player {
-        (&executor.context().players.get(&id.0)).unwrap()
+    field get_player(&executor, id: ID) -> FieldResult<&Player> {
+        match executor.context().players.get(&id.0) {
+            Some(player) => { Ok(player) }
+            None => { Err("Couldn't find player".to_string()) }
+        }
     }
 
-    field get_match(&executor, id: ID) -> &Match {
-        (&executor.context().matches.get(&id.0)).unwrap()
+    field get_match(&executor, id: ID) -> FieldResult<&Match> {
+        match executor.context().matches.get(&id.0) {
+            Some(match_) => { Ok(match_) }
+            None => { Err("Couldn't find match".to_string()) }
+        }
     }
 });
 
@@ -348,11 +357,30 @@ fn context_factory(req: &mut Request) -> Database {
     let pg_pool = req.get::<Read<PgConnPool>>().unwrap().0.clone();
     let conn = pg_pool.get().unwrap();
 
-    let characters = Character::new_hashmap_from_rows(&conn.query("SELECT * FROM characters", &[])
-                                                           .unwrap());
-    let players = Player::new_hashmap_from_rows(&conn.query("SELECT * FROM players", &[]).unwrap());
-    let matches = Match::new_hashmap_from_rows(&conn.query("SELECT * FROM matches", &[]).unwrap());
-
+    let characters = match conn.query("SELECT * FROM characters", &[]) {
+        Ok(rows) => {
+            Character::new_hashmap_from_rows(&rows)
+        }
+        Err(_) => {
+            HashMap::new()
+        }
+    };
+    let players = match conn.query("SELECT * FROM players", &[]) {
+        Ok(rows) => {
+            Player::new_hashmap_from_rows(&rows)
+        }
+        Err(_) => {
+            HashMap::new()
+        }
+    };
+    let matches = match conn.query("SELECT * FROM matches", &[]) {
+        Ok(rows) => {
+            Match::new_hashmap_from_rows(&rows)
+        }
+        Err(_) => {
+            HashMap::new()
+        }
+    };
 
     Database {
         pg_pool: pg_pool,

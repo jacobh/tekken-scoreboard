@@ -350,28 +350,16 @@ fn context_factory(req: &mut Request) -> Database {
     let conn = pg_pool.get().unwrap();
 
     let characters = match conn.query("SELECT * FROM characters", &[]) {
-        Ok(rows) => {
-            Character::new_hashmap_from_rows(&rows)
-        }
-        Err(_) => {
-            HashMap::new()
-        }
+        Ok(rows) => Character::new_hashmap_from_rows(&rows),
+        Err(_) => HashMap::new(),
     };
     let players = match conn.query("SELECT * FROM players", &[]) {
-        Ok(rows) => {
-            Player::new_hashmap_from_rows(&rows)
-        }
-        Err(_) => {
-            HashMap::new()
-        }
+        Ok(rows) => Player::new_hashmap_from_rows(&rows),
+        Err(_) => HashMap::new(),
     };
     let matches = match conn.query("SELECT * FROM matches", &[]) {
-        Ok(rows) => {
-            Match::new_hashmap_from_rows(&rows)
-        }
-        Err(_) => {
-            HashMap::new()
-        }
+        Ok(rows) => Match::new_hashmap_from_rows(&rows),
+        Err(_) => HashMap::new(),
     };
 
     Database {

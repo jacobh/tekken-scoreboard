@@ -14,6 +14,7 @@ extern crate iron_cors;
 extern crate md5;
 mod utils;
 mod db;
+mod elo;
 
 use iron::prelude::*;
 use iron::method::Method;
@@ -52,6 +53,11 @@ impl Clone for ID {
 }
 
 struct DateTime(chrono::DateTime<chrono::UTC>);
+impl Clone for DateTime {
+    fn clone(&self) -> DateTime {
+        DateTime(self.0.clone())
+    }
+}
 
 struct Player {
     id: Uuid,
@@ -120,6 +126,17 @@ impl RowData for Match {
             character2_id: row.get("character2Id"),
         }
     }
+}
+
+struct EloRow {
+    created_at: Option<DateTime>,
+    columns: Vec<EloColumn>,
+}
+
+struct EloColumn {
+    player_id: Uuid,
+    score: f64,
+    score_change: f64,
 }
 
 trait RowData {
@@ -292,6 +309,27 @@ graphql_object!(Match: Database |&self| {
     }
 });
 
+graphql_object!(EloRow: Database |&self| {
+    field created_at() -> &Option<DateTime> {
+        &self.created_at
+    }
+    field columns() -> &Vec<EloColumn> {
+        &self.columns
+    }
+});
+
+graphql_object!(EloColumn: Database |&self| {
+    field player(&executor) -> &Player {
+        (&executor.context().players.get(&self.player_id)).unwrap()
+    }
+    field score() -> &f64 {
+        &self.score
+    }
+    field score_change() -> &f64 {
+        &self.score_change
+    }
+});
+
 struct QueryRoot;
 graphql_object!(QueryRoot: Database |&self| {
     field all_characters(&executor) -> Vec<&Character> {
@@ -304,6 +342,22 @@ graphql_object!(QueryRoot: Database |&self| {
 
     field all_matches(&executor) -> Vec<&Match> {
         executor.context().matches.values().collect()
+    }
+
+    field all_elo_rows(&executor) -> Vec<EloRow> {
+        // fn calc_next_elo_row(prev_row: &EloRow, match_: &Match) -> EloRow {}
+
+        let matches: Vec<&Match> = executor.context().matches.values().collect();
+        let player_ids: Vec<&Uuid> = executor.context().players.values().map(|x| &x.id).collect();
+        let initial_row = EloRow {
+            created_at: None,
+            columns: player_ids.iter().map(|id| EloColumn {
+                player_id: *id.clone(),
+                score: 1000.0,
+                score_change: 0.0,
+            }).collect()
+        };
+        vec!(initial_row)
     }
 
     field get_character(&executor, id: ID) -> FieldResult<&Character> {

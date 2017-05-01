@@ -368,13 +368,6 @@ fn context_factory(req: &mut Request) -> Database {
 }
 
 fn main() {
-    let mut port: String = "4000".to_string();
-    for (key, value) in env::vars() {
-        if key == "PORT" {
-            port = value
-        }
-    }
-
     env_logger::init().unwrap();
     let (logger_before, logger_after) = Logger::new(Some(Format::default()));
 
@@ -400,6 +393,7 @@ fn main() {
 
     chain.link_after(cors);
 
+    let port = utils::get_env_var("PORT".to_string()).unwrap_or("4000".to_string());
     Iron::new(chain)
         .http(format!("0.0.0.0:{}", port))
         .unwrap();

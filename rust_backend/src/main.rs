@@ -12,12 +12,12 @@ extern crate juniper;
 extern crate persistent;
 extern crate iron_cors;
 extern crate md5;
-
+mod utils;
+mod db;
 
 use iron::prelude::*;
-use iron::typemap::Key;
 use iron::method::Method;
-use r2d2_postgres::{TlsMode, PostgresConnectionManager};
+use r2d2_postgres::PostgresConnectionManager;
 use mount::Mount;
 use logger::Logger;
 use logger::Format;
@@ -28,6 +28,8 @@ use persistent::Read;
 use std::env;
 use std::collections::HashMap;
 use iron_cors::CORS;
+
+use db::PgConnPool;
 
 struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
@@ -40,11 +42,6 @@ impl Database {
     pub fn get_conn(&self) -> r2d2::PooledConnection<PostgresConnectionManager> {
         self.pg_pool.get().unwrap()
     }
-}
-
-struct PgConnPool(r2d2::Pool<PostgresConnectionManager>);
-impl Key for PgConnPool {
-    type Value = PgConnPool;
 }
 
 struct ID(Uuid);
@@ -371,12 +368,9 @@ fn context_factory(req: &mut Request) -> Database {
 }
 
 fn main() {
-    let mut database_url: String = "".to_string();
     let mut port: String = "4000".to_string();
     for (key, value) in env::vars() {
-        if key == "DATABASE_URL" {
-            database_url = value
-        } else if key == "PORT" {
+        if key == "PORT" {
             port = value
         }
     }
@@ -384,8 +378,7 @@ fn main() {
     env_logger::init().unwrap();
     let (logger_before, logger_after) = Logger::new(Some(Format::default()));
 
-    let pg_pool_manager = PostgresConnectionManager::new(database_url, TlsMode::None).unwrap();
-    let pg_pool = PgConnPool(r2d2::Pool::new(r2d2::Config::default(), pg_pool_manager).unwrap());
+    let pg_pool = PgConnPool::new();
 
     let mut mount = Mount::new();
 

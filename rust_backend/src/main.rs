@@ -216,44 +216,36 @@ graphql_object!(Player: Database |&self| {
         format!("https://s.gravatar.com/avatar/{:x}", md5::compute(&self.email))
     }
 
-    field matches(&executor) -> FieldResult<Vec<Match>> {
-        let conn = &executor.context().get_conn();
-        let result = &conn.query(
-            "SELECT * FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
-            &[&self.id]
-        ).unwrap();
+    field matches(&executor) -> Vec<&Match> {
+        let matches = &executor.context().matches;
 
-        Ok(Match::new_from_rows(result))
+        matches.values().filter(
+            |m| m.player1_id == self.id || m.player2_id == self.id
+        ).collect()
     }
 
-    field played_matches(&executor) -> FieldResult<i64> {
-        let conn = &executor.context().get_conn();
+    field played_matches(&executor) -> i64 {
+        let matches = &executor.context().matches;
 
-        let result = &conn.query(
-            "SELECT COUNT(*) FROM matches WHERE \"player1Id\" = $1 OR \"player2Id\" = $1",
-            &[&self.id]
-        ).unwrap();
-        Ok(result.get(0).get(0))
+        matches.values().filter(
+            |m| m.player1_id == self.id || m.player2_id == self.id
+        ).count() as i64
     }
 
-    field won_matches(&executor) -> FieldResult<i64> {
-        let conn = &executor.context().get_conn();
+    field won_matches(&executor) -> i64 {
+        let matches = &executor.context().matches;
 
-        let result = &conn.query(
-            "SELECT COUNT(*) FROM matches where \"winnerId\" = $1",
-            &[&self.id]
-        ).unwrap();
-        Ok(result.get(0).get(0))
+        matches.values().filter(
+            |m| m.winner_id == self.id
+        ).count() as i64
     }
 
-    field lost_matches(&executor) -> FieldResult<i64> {
-        let conn = &executor.context().get_conn();
+    field lost_matches(&executor) -> i64 {
+        let matches = &executor.context().matches;
 
-        let result = &conn.query(
-            "SELECT COUNT(*) FROM matches WHERE (\"player1Id\" = $1 OR \"player2Id\" = $1) AND \"winnerId\" != $1",
-            &[&self.id]
-        ).unwrap();
-        Ok(result.get(0).get(0))
+        matches.values().filter(
+            |m| m.loser_id() == &self.id
+        ).count() as i64
     }
 });
 

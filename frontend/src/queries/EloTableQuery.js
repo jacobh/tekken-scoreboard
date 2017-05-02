@@ -2,22 +2,19 @@
 import { gql } from "react-apollo";
 
 export default gql`{
-  allPlayers {
-    id
-    name
-  }
-  allMatches {
-    id
+  allEloRows {
     createdAt
-    winner {
-      id
-      name
+    cells {
+      player {
+        id
+      }
+      score
+      scoreChange
     }
-    loser {
-      id
-      name
-    }
-    
+  }
+  allPlayers {
+    name
+    id
   }
 }
 `;

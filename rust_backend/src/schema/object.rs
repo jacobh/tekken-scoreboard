@@ -68,8 +68,8 @@ graphql_object!(Match: ContextData |&self| {
         ID(*self.id)
     }
 
-    field created_at() -> &DateTime {
-        &self.created_at
+    field created_at() -> DateTime {
+        DateTime(*self.created_at)
     }
 
     field winner(&executor) -> FieldResult<&Player> {
@@ -101,7 +101,7 @@ graphql_object!(EloRow: ContextData |&self| {
     field created_at() -> Option<DateTime> {
         match self.created_at.clone() {
             Some(datetime) => {
-                Some((*datetime).clone())
+                Some(DateTime((*datetime).clone()))
             }
             None => None
         }

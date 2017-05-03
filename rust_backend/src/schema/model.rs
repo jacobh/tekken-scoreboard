@@ -1,10 +1,9 @@
+use chrono;
 use std;
 use std::collections::HashMap;
 use std::rc::Rc;
 use uuid::Uuid;
 use postgres;
-
-use schema::scalar::DateTime;
 
 pub trait RowData {
     fn get_id(&self) -> Rc<Uuid>;
@@ -68,7 +67,7 @@ impl RowData for Character {
 
 pub struct Match {
     pub id: Rc<Uuid>,
-    pub created_at: Rc<DateTime>,
+    pub created_at: Rc<chrono::DateTime<chrono::UTC>>,
     pub winner_id: Rc<Uuid>,
     pub player1_id: Rc<Uuid>,
     pub player2_id: Rc<Uuid>,
@@ -91,7 +90,7 @@ impl RowData for Match {
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
             id: Rc::new(row.get("id")),
-            created_at: Rc::new(DateTime(row.get("createdAt"))),
+            created_at: Rc::new(row.get("createdAt")),
             winner_id: Rc::new(row.get("winnerId")),
             player1_id: Rc::new(row.get("player1Id")),
             player2_id: Rc::new(row.get("player2Id")),
@@ -102,7 +101,7 @@ impl RowData for Match {
 }
 
 pub struct EloRow {
-    pub created_at: Option<Rc<DateTime>>,
+    pub created_at: Option<Rc<chrono::DateTime<chrono::UTC>>>,
     pub cells: Vec<EloCell>,
 }
 

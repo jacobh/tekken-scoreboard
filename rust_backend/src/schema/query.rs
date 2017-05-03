@@ -54,7 +54,7 @@ graphql_object!(QueryRoot: ContextData |&self| {
         }
 
         let mut matches: Vec<&Match> = executor.context().matches.values().collect();
-        matches.sort_by_key(|m| m.created_at.0);
+        matches.sort_by_key(|m| m.created_at.clone());
         let player_ids: Vec<Rc<Uuid>> = executor.context().players.values().map(|x| x.id.clone()).collect();
         let initial_row = EloRow {
             created_at: None,

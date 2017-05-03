@@ -96,7 +96,7 @@ impl RowData for Character {
 
 struct Match {
     id: Rc<Uuid>,
-    created_at: DateTime,
+    created_at: Rc<DateTime>,
     winner_id: Rc<Uuid>,
     player1_id: Rc<Uuid>,
     player2_id: Rc<Uuid>,
@@ -119,7 +119,7 @@ impl RowData for Match {
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
             id: Rc::new(row.get("id")),
-            created_at: DateTime(row.get("createdAt")),
+            created_at: Rc::new(DateTime(row.get("createdAt"))),
             winner_id: Rc::new(row.get("winnerId")),
             player1_id: Rc::new(row.get("player1Id")),
             player2_id: Rc::new(row.get("player2Id")),
@@ -130,7 +130,7 @@ impl RowData for Match {
 }
 
 struct EloRow {
-    created_at: Option<DateTime>,
+    created_at: Option<Rc<DateTime>>,
     cells: Vec<EloCell>,
 }
 
@@ -311,8 +311,13 @@ graphql_object!(Match: Database |&self| {
 });
 
 graphql_object!(EloRow: Database |&self| {
-    field created_at() -> &Option<DateTime> {
-        &self.created_at
+    field created_at() -> Option<DateTime> {
+        match self.created_at.clone() {
+            Some(datetime) => {
+                Some((*datetime).clone())
+            }
+            None => None
+        }
     }
     field cells() -> &Vec<EloCell> {
         &self.cells

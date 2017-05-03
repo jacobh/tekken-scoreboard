@@ -97,18 +97,18 @@ impl RowData for Character {
 struct Match {
     id: Rc<Uuid>,
     created_at: DateTime,
-    winner_id: Uuid,
-    player1_id: Uuid,
-    player2_id: Uuid,
-    character1_id: Uuid,
-    character2_id: Uuid,
+    winner_id: Rc<Uuid>,
+    player1_id: Rc<Uuid>,
+    player2_id: Rc<Uuid>,
+    character1_id: Rc<Uuid>,
+    character2_id: Rc<Uuid>,
 }
 impl Match {
-    fn loser_id(&self) -> &Uuid {
+    fn loser_id(&self) -> Rc<Uuid> {
         if self.winner_id == self.player1_id {
-            return &self.player2_id;
+            return self.player2_id.clone();
         } else {
-            return &self.player1_id;
+            return self.player1_id.clone();
         }
     }
 }
@@ -120,11 +120,11 @@ impl RowData for Match {
         Match {
             id: Rc::new(row.get("id")),
             created_at: DateTime(row.get("createdAt")),
-            winner_id: row.get("winnerId"),
-            player1_id: row.get("player1Id"),
-            player2_id: row.get("player2Id"),
-            character1_id: row.get("character1Id"),
-            character2_id: row.get("character2Id"),
+            winner_id: Rc::new(row.get("winnerId")),
+            player1_id: Rc::new(row.get("player1Id")),
+            player2_id: Rc::new(row.get("player2Id")),
+            character1_id: Rc::new(row.get("character1Id")),
+            character2_id: Rc::new(row.get("character2Id")),
         }
     }
 }
@@ -235,7 +235,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.player1_id == *self.id || m.player2_id == *self.id
+            |m| m.player1_id == self.id || m.player2_id == self.id
         ).collect()
     }
 
@@ -243,7 +243,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.player1_id == *self.id || m.player2_id == *self.id
+            |m| m.player1_id == self.id || m.player2_id == self.id
         ).count() as i64
     }
 
@@ -251,7 +251,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.winner_id == *self.id
+            |m| m.winner_id == self.id
         ).count() as i64
     }
 
@@ -259,7 +259,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| *m.loser_id() == *self.id
+            |m| m.loser_id() == self.id
         ).count() as i64
     }
 });
@@ -347,10 +347,10 @@ graphql_object!(QueryRoot: Database |&self| {
 
     field all_elo_rows(&executor) -> Vec<EloRow> {
         fn calc_next_elo_row(prev_row: &EloRow, match_: &Match) -> EloRow {
-            let winner_id = match_.winner_id;
+            let winner_id = match_.winner_id.clone();
             let loser_id = match_.loser_id();
 
-            let winner_prev_elo = prev_row.cells.iter().find(|x| *x.player_id == winner_id).unwrap().score;
+            let winner_prev_elo = prev_row.cells.iter().find(|x| x.player_id == winner_id).unwrap().score;
             let loser_prev_elo = prev_row.cells.iter().find(|x| *x.player_id == *loser_id).unwrap().score;
 
             let (winner_next_elo, loser_next_elo) = elo::calc_new_elos(winner_prev_elo, loser_prev_elo);
@@ -360,7 +360,7 @@ graphql_object!(QueryRoot: Database |&self| {
                 cells: prev_row.cells.iter().map(|prev_cell| {
                     let player_id = prev_cell.player_id.clone();
                     let next_score = {
-                        if *player_id == winner_id {
+                        if player_id == winner_id {
                             winner_next_elo
                         } else if *player_id == *loser_id {
                             loser_next_elo

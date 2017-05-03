@@ -28,6 +28,7 @@ use juniper::{FieldResult, Context, Value};
 use persistent::Read;
 use std::env;
 use std::collections::HashMap;
+use std::rc::Rc;
 use iron_cors::CORS;
 
 use db::PgConnPool;
@@ -60,7 +61,7 @@ impl Clone for DateTime {
 }
 
 struct Player {
-    id: Uuid,
+    id: Rc<Uuid>,
     name: String,
     email: String,
 }
@@ -70,7 +71,7 @@ impl RowData for Player {
     }
     fn new_from_row(row: &postgres::rows::Row) -> Player {
         Player {
-            id: row.get("id"),
+            id: Rc::new(row.get("id")),
             name: row.get("name"),
             email: row.get("email"),
         }
@@ -78,7 +79,7 @@ impl RowData for Player {
 }
 
 struct Character {
-    id: Uuid,
+    id: Rc<Uuid>,
     name: String,
 }
 impl RowData for Character {
@@ -87,14 +88,14 @@ impl RowData for Character {
     }
     fn new_from_row(row: &postgres::rows::Row) -> Character {
         Character {
-            id: row.get("id"),
+            id: Rc::new(row.get("id")),
             name: row.get("name"),
         }
     }
 }
 
 struct Match {
-    id: Uuid,
+    id: Rc<Uuid>,
     created_at: DateTime,
     winner_id: Uuid,
     player1_id: Uuid,
@@ -117,7 +118,7 @@ impl RowData for Match {
     }
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
-            id: row.get("id"),
+            id: Rc::new(row.get("id")),
             created_at: DateTime(row.get("createdAt")),
             winner_id: row.get("winnerId"),
             player1_id: row.get("player1Id"),
@@ -134,7 +135,7 @@ struct EloRow {
 }
 
 struct EloCell {
-    player_id: Uuid,
+    player_id: Rc<Uuid>,
     score: f64,
     score_change: f64,
 }
@@ -219,7 +220,7 @@ graphql_scalar!(DateTime {
 
 graphql_object!(Player: Database |&self| {
     field id() -> ID {
-        ID(self.id)
+        ID(*self.id)
     }
 
     field name() -> &String {
@@ -234,7 +235,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.player1_id == self.id || m.player2_id == self.id
+            |m| m.player1_id == *self.id || m.player2_id == *self.id
         ).collect()
     }
 
@@ -242,7 +243,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.player1_id == self.id || m.player2_id == self.id
+            |m| m.player1_id == *self.id || m.player2_id == *self.id
         ).count() as i64
     }
 
@@ -250,7 +251,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.winner_id == self.id
+            |m| m.winner_id == *self.id
         ).count() as i64
     }
 
@@ -258,7 +259,7 @@ graphql_object!(Player: Database |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.loser_id() == &self.id
+            |m| *m.loser_id() == *self.id
         ).count() as i64
     }
 });
@@ -267,7 +268,7 @@ graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
     field id() -> ID {
-        ID(self.id)
+        ID(*self.id)
     }
 
     field name() -> &String {
@@ -277,7 +278,7 @@ graphql_object!(Character: () |&self| {
 
 graphql_object!(Match: Database |&self| {
     field id() -> ID {
-        ID(self.id)
+        ID(*self.id)
     }
 
     field created_at() -> &DateTime {
@@ -349,8 +350,8 @@ graphql_object!(QueryRoot: Database |&self| {
             let winner_id = match_.winner_id;
             let loser_id = match_.loser_id();
 
-            let winner_prev_elo = prev_row.cells.iter().find(|x| x.player_id == winner_id).unwrap().score;
-            let loser_prev_elo = prev_row.cells.iter().find(|x| &x.player_id == loser_id).unwrap().score;
+            let winner_prev_elo = prev_row.cells.iter().find(|x| *x.player_id == winner_id).unwrap().score;
+            let loser_prev_elo = prev_row.cells.iter().find(|x| *x.player_id == *loser_id).unwrap().score;
 
             let (winner_next_elo, loser_next_elo) = elo::calc_new_elos(winner_prev_elo, loser_prev_elo);
 
@@ -359,9 +360,9 @@ graphql_object!(QueryRoot: Database |&self| {
                 cells: prev_row.cells.iter().map(|prev_cell| {
                     let player_id = prev_cell.player_id.clone();
                     let next_score = {
-                        if player_id == winner_id {
+                        if *player_id == winner_id {
                             winner_next_elo
-                        } else if &player_id == loser_id {
+                        } else if *player_id == *loser_id {
                             loser_next_elo
                         } else {
                             prev_cell.score
@@ -378,11 +379,11 @@ graphql_object!(QueryRoot: Database |&self| {
 
         let mut matches: Vec<&Match> = executor.context().matches.values().collect();
         matches.sort_by_key(|m| m.created_at.0);
-        let player_ids: Vec<&Uuid> = executor.context().players.values().map(|x| &x.id).collect();
+        let player_ids: Vec<Rc<Uuid>> = executor.context().players.values().map(|x| x.id.clone()).collect();
         let initial_row = EloRow {
             created_at: None,
             cells: player_ids.iter().map(|id| EloCell {
-                player_id: *id.clone(),
+                player_id: id.clone(),
                 score: 1000.0,
                 score_change: 0.0,
             }).collect()

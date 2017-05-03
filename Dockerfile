@@ -1,5 +1,9 @@
 FROM jimmycuadra/rust
 
+# Melbourne timezone
+ENV TZ=Australia/Melbourne
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 WORKDIR /app
 RUN mkdir src && touch src/main.rs
 COPY rust_backend/Cargo.toml .

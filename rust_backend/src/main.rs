@@ -19,35 +19,21 @@ mod schema;
 
 use iron::prelude::*;
 use iron::method::Method;
-use r2d2_postgres::PostgresConnectionManager;
 use mount::Mount;
 use logger::Logger;
 use logger::Format;
 use uuid::Uuid;
 use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
-use juniper::{FieldResult, Context};
+use juniper::FieldResult;
 use persistent::Read;
 use std::env;
-use std::collections::HashMap;
 use std::rc::Rc;
 use iron_cors::CORS;
 
 use db::PgConnPool;
+use schema::context::{ContextData, context_factory};
 use schema::scalar::{ID, DateTime};
 use schema::model::{Player, Character, Match, EloRow, EloCell, RowData};
-
-pub struct ContextData {
-    pg_pool: r2d2::Pool<PostgresConnectionManager>,
-    characters: HashMap<Rc<Uuid>, Character>,
-    players: HashMap<Rc<Uuid>, Player>,
-    matches: HashMap<Rc<Uuid>, Match>,
-}
-impl Context for ContextData {}
-impl ContextData {
-    pub fn get_conn(&self) -> r2d2::PooledConnection<PostgresConnectionManager> {
-        self.pg_pool.get().unwrap()
-    }
-}
 
 graphql_object!(Player: ContextData |&self| {
     field id() -> ID {
@@ -270,31 +256,6 @@ graphql_object!(MutationRoot: ContextData |&self| {
         Match::new_from_row(&result.get(0))
     }
 });
-
-fn context_factory(req: &mut Request) -> ContextData {
-    let pg_pool = req.get::<Read<PgConnPool>>().unwrap().0.clone();
-    let conn = pg_pool.get().unwrap();
-
-    let characters = match conn.query("SELECT * FROM characters", &[]) {
-        Ok(rows) => Character::new_hashmap_from_rows(&rows),
-        Err(_) => HashMap::new(),
-    };
-    let players = match conn.query("SELECT * FROM players", &[]) {
-        Ok(rows) => Player::new_hashmap_from_rows(&rows),
-        Err(_) => HashMap::new(),
-    };
-    let matches = match conn.query("SELECT * FROM matches", &[]) {
-        Ok(rows) => Match::new_hashmap_from_rows(&rows),
-        Err(_) => HashMap::new(),
-    };
-
-    ContextData {
-        pg_pool: pg_pool,
-        characters: characters,
-        players: players,
-        matches: matches,
-    }
-}
 
 fn main() {
     env_logger::init().unwrap();

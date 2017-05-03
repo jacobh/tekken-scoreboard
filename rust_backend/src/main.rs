@@ -35,14 +35,14 @@ use iron_cors::CORS;
 use db::PgConnPool;
 use schema::scalar::{ID, DateTime};
 
-struct Database {
+struct ContextData {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
     characters: HashMap<Uuid, Character>,
     players: HashMap<Uuid, Player>,
     matches: HashMap<Uuid, Match>,
 }
-impl Context for Database {}
-impl Database {
+impl Context for ContextData {}
+impl ContextData {
     pub fn get_conn(&self) -> r2d2::PooledConnection<PostgresConnectionManager> {
         self.pg_pool.get().unwrap()
     }
@@ -154,7 +154,7 @@ trait RowData {
     }
 }
 
-graphql_object!(Player: Database |&self| {
+graphql_object!(Player: ContextData |&self| {
     field id() -> ID {
         ID(*self.id)
     }
@@ -212,7 +212,7 @@ graphql_object!(Character: () |&self| {
     }
 });
 
-graphql_object!(Match: Database |&self| {
+graphql_object!(Match: ContextData |&self| {
     field id() -> ID {
         ID(*self.id)
     }
@@ -246,7 +246,7 @@ graphql_object!(Match: Database |&self| {
     }
 });
 
-graphql_object!(EloRow: Database |&self| {
+graphql_object!(EloRow: ContextData |&self| {
     field created_at() -> Option<DateTime> {
         match self.created_at.clone() {
             Some(datetime) => {
@@ -260,7 +260,7 @@ graphql_object!(EloRow: Database |&self| {
     }
 });
 
-graphql_object!(EloCell: Database |&self| {
+graphql_object!(EloCell: ContextData |&self| {
     field player(&executor) -> &Player {
         (&executor.context().players.get(&self.player_id)).unwrap()
     }
@@ -273,7 +273,7 @@ graphql_object!(EloCell: Database |&self| {
 });
 
 struct QueryRoot;
-graphql_object!(QueryRoot: Database |&self| {
+graphql_object!(QueryRoot: ContextData |&self| {
     field all_characters(&executor) -> Vec<&Character> {
         executor.context().characters.values().collect()
     }
@@ -363,7 +363,7 @@ graphql_object!(QueryRoot: Database |&self| {
 });
 
 struct MutationRoot;
-graphql_object!(MutationRoot: Database |&self| {
+graphql_object!(MutationRoot: ContextData |&self| {
     field create_match(&executor, winner_id: ID, player1_id: ID, player2_id: ID, character1_id: ID, character2_id: ID) -> Match {
         let conn = &executor.context().get_conn();
         let result = &conn.query(
@@ -376,7 +376,7 @@ graphql_object!(MutationRoot: Database |&self| {
     }
 });
 
-fn context_factory(req: &mut Request) -> Database {
+fn context_factory(req: &mut Request) -> ContextData {
     let pg_pool = req.get::<Read<PgConnPool>>().unwrap().0.clone();
     let conn = pg_pool.get().unwrap();
 
@@ -393,7 +393,7 @@ fn context_factory(req: &mut Request) -> Database {
         Err(_) => HashMap::new(),
     };
 
-    Database {
+    ContextData {
         pg_pool: pg_pool,
         characters: characters,
         players: players,

@@ -37,9 +37,9 @@ use schema::scalar::{ID, DateTime};
 
 struct ContextData {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
-    characters: HashMap<Uuid, Character>,
-    players: HashMap<Uuid, Player>,
-    matches: HashMap<Uuid, Match>,
+    characters: HashMap<Rc<Uuid>, Character>,
+    players: HashMap<Rc<Uuid>, Player>,
+    matches: HashMap<Rc<Uuid>, Match>,
 }
 impl Context for ContextData {}
 impl ContextData {
@@ -54,8 +54,8 @@ struct Player {
     email: String,
 }
 impl RowData for Player {
-    fn get_id(&self) -> &Uuid {
-        &self.id
+    fn get_id(&self) -> Rc<Uuid> {
+        self.id.clone()
     }
     fn new_from_row(row: &postgres::rows::Row) -> Player {
         Player {
@@ -71,8 +71,8 @@ struct Character {
     name: String,
 }
 impl RowData for Character {
-    fn get_id(&self) -> &Uuid {
-        &self.id
+    fn get_id(&self) -> Rc<Uuid> {
+        self.id.clone()
     }
     fn new_from_row(row: &postgres::rows::Row) -> Character {
         Character {
@@ -101,8 +101,8 @@ impl Match {
     }
 }
 impl RowData for Match {
-    fn get_id(&self) -> &Uuid {
-        &self.id
+    fn get_id(&self) -> Rc<Uuid> {
+        self.id.clone()
     }
     fn new_from_row(row: &postgres::rows::Row) -> Match {
         Match {
@@ -129,7 +129,7 @@ struct EloCell {
 }
 
 trait RowData {
-    fn get_id(&self) -> &Uuid;
+    fn get_id(&self) -> Rc<Uuid>;
     fn new_from_row(row: &postgres::rows::Row) -> Self;
     fn new_from_rows(rows: &postgres::rows::Rows) -> Vec<Self>
         where Self: std::marker::Sized
@@ -140,14 +140,14 @@ trait RowData {
         }
         instances
     }
-    fn new_hashmap_from_rows(rows: &postgres::rows::Rows) -> HashMap<Uuid, Self>
+    fn new_hashmap_from_rows(rows: &postgres::rows::Rows) -> HashMap<Rc<Uuid>, Self>
         where Self: std::marker::Sized
     {
         let instances = Self::new_from_rows(rows);
-        let mut instance_map: HashMap<Uuid, Self> = HashMap::new();
+        let mut instance_map: HashMap<Rc<Uuid>, Self> = HashMap::new();
 
         for instance in instances {
-            instance_map.insert(instance.get_id().clone(), instance);
+            instance_map.insert(instance.get_id(), instance);
         }
 
         instance_map

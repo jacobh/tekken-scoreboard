@@ -34,9 +34,6 @@ use schema::query::QueryRoot;
 
 fn main() {
     env_logger::init().unwrap();
-    let (logger_before, logger_after) = Logger::new(Some(Format::default()));
-
-    let pg_pool = PgConnPool::new();
 
     let mut mount = Mount::new();
 
@@ -48,12 +45,15 @@ fn main() {
 
     let mut chain = Chain::new(mount);
 
-    chain.link_before(logger_before);
-    chain.link_after(logger_after);
+    // set up logging
+    chain.link(Logger::new(Some(Format::default())));
+
+    // set up postgres connection pool
+    let pg_pool = PgConnPool::new();
     chain.link(Read::<PgConnPool>::both(pg_pool));
 
+    // cors
     let cors = CORS::new(vec![(vec![Method::Get, Method::Post], "graphql".to_owned())]);
-
     chain.link_after(cors);
 
     let port = utils::get_env_var("PORT".to_string()).unwrap_or("4000".to_string());

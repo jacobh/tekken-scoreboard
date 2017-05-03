@@ -15,6 +15,7 @@ extern crate md5;
 mod utils;
 mod db;
 mod elo;
+mod schema;
 
 use iron::prelude::*;
 use iron::method::Method;
@@ -24,7 +25,7 @@ use logger::Logger;
 use logger::Format;
 use uuid::Uuid;
 use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
-use juniper::{FieldResult, Context, Value};
+use juniper::{FieldResult, Context};
 use persistent::Read;
 use std::env;
 use std::collections::HashMap;
@@ -32,6 +33,7 @@ use std::rc::Rc;
 use iron_cors::CORS;
 
 use db::PgConnPool;
+use schema::scalar::{ID, DateTime};
 
 struct Database {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
@@ -43,20 +45,6 @@ impl Context for Database {}
 impl Database {
     pub fn get_conn(&self) -> r2d2::PooledConnection<PostgresConnectionManager> {
         self.pg_pool.get().unwrap()
-    }
-}
-
-struct ID(Uuid);
-impl Clone for ID {
-    fn clone(&self) -> ID {
-        ID(self.0.clone())
-    }
-}
-
-struct DateTime(chrono::DateTime<chrono::UTC>);
-impl Clone for DateTime {
-    fn clone(&self) -> DateTime {
-        DateTime(self.0.clone())
     }
 }
 
@@ -165,58 +153,6 @@ trait RowData {
         instance_map
     }
 }
-
-graphql_scalar!(ID {
-    description: "converts uuid's to strings and back again"
-
-    resolve(&self) -> Value {
-        Value::String(self.0.hyphenated().to_string())
-    }
-
-    from_input_value(v: &InputValue) -> Option<ID> {
-        match v.as_string_value() {
-            Some(string_value) => {
-                match Uuid::parse_str(string_value) {
-                    Ok(uuid_) => {
-                        Some(ID(uuid_))
-                    }
-                    Err(_) => {
-                        None
-                    }
-                }
-            }
-            None => {
-                None
-            }
-        }
-    }
-});
-
-graphql_scalar!(DateTime {
-    description: "datetimes to iso8601 strings"
-
-    resolve(&self) -> Value {
-        Value::String(self.0.to_rfc3339())
-    }
-
-    from_input_value(v: &InputValue) -> Option<DateTime> {
-        match v.as_string_value() {
-            Some(string_value) => {
-                match chrono::DateTime::parse_from_rfc3339(string_value) {
-                    Ok(datetime) => {
-                        Some(DateTime(datetime.with_timezone(&chrono::UTC)))
-                    }
-                    Err(_) => {
-                        None
-                    }
-                }
-            }
-            None => {
-                None
-            }
-        }
-    }
-});
 
 graphql_object!(Player: Database |&self| {
     field id() -> ID {

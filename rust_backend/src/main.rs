@@ -34,8 +34,9 @@ use iron_cors::CORS;
 
 use db::PgConnPool;
 use schema::scalar::{ID, DateTime};
+use schema::model::{Player, Character, Match, EloRow, EloCell, RowData};
 
-struct ContextData {
+pub struct ContextData {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
     characters: HashMap<Rc<Uuid>, Character>,
     players: HashMap<Rc<Uuid>, Player>,
@@ -45,112 +46,6 @@ impl Context for ContextData {}
 impl ContextData {
     pub fn get_conn(&self) -> r2d2::PooledConnection<PostgresConnectionManager> {
         self.pg_pool.get().unwrap()
-    }
-}
-
-struct Player {
-    id: Rc<Uuid>,
-    name: String,
-    email: String,
-}
-impl RowData for Player {
-    fn get_id(&self) -> Rc<Uuid> {
-        self.id.clone()
-    }
-    fn new_from_row(row: &postgres::rows::Row) -> Player {
-        Player {
-            id: Rc::new(row.get("id")),
-            name: row.get("name"),
-            email: row.get("email"),
-        }
-    }
-}
-
-struct Character {
-    id: Rc<Uuid>,
-    name: String,
-}
-impl RowData for Character {
-    fn get_id(&self) -> Rc<Uuid> {
-        self.id.clone()
-    }
-    fn new_from_row(row: &postgres::rows::Row) -> Character {
-        Character {
-            id: Rc::new(row.get("id")),
-            name: row.get("name"),
-        }
-    }
-}
-
-struct Match {
-    id: Rc<Uuid>,
-    created_at: Rc<DateTime>,
-    winner_id: Rc<Uuid>,
-    player1_id: Rc<Uuid>,
-    player2_id: Rc<Uuid>,
-    character1_id: Rc<Uuid>,
-    character2_id: Rc<Uuid>,
-}
-impl Match {
-    fn loser_id(&self) -> Rc<Uuid> {
-        if self.winner_id == self.player1_id {
-            return self.player2_id.clone();
-        } else {
-            return self.player1_id.clone();
-        }
-    }
-}
-impl RowData for Match {
-    fn get_id(&self) -> Rc<Uuid> {
-        self.id.clone()
-    }
-    fn new_from_row(row: &postgres::rows::Row) -> Match {
-        Match {
-            id: Rc::new(row.get("id")),
-            created_at: Rc::new(DateTime(row.get("createdAt"))),
-            winner_id: Rc::new(row.get("winnerId")),
-            player1_id: Rc::new(row.get("player1Id")),
-            player2_id: Rc::new(row.get("player2Id")),
-            character1_id: Rc::new(row.get("character1Id")),
-            character2_id: Rc::new(row.get("character2Id")),
-        }
-    }
-}
-
-struct EloRow {
-    created_at: Option<Rc<DateTime>>,
-    cells: Vec<EloCell>,
-}
-
-struct EloCell {
-    player_id: Rc<Uuid>,
-    score: f64,
-    score_change: f64,
-}
-
-trait RowData {
-    fn get_id(&self) -> Rc<Uuid>;
-    fn new_from_row(row: &postgres::rows::Row) -> Self;
-    fn new_from_rows(rows: &postgres::rows::Rows) -> Vec<Self>
-        where Self: std::marker::Sized
-    {
-        let mut instances: Vec<Self> = Vec::new();
-        for row in rows.iter() {
-            instances.push(Self::new_from_row(&row))
-        }
-        instances
-    }
-    fn new_hashmap_from_rows(rows: &postgres::rows::Rows) -> HashMap<Rc<Uuid>, Self>
-        where Self: std::marker::Sized
-    {
-        let instances = Self::new_from_rows(rows);
-        let mut instance_map: HashMap<Rc<Uuid>, Self> = HashMap::new();
-
-        for instance in instances {
-            instance_map.insert(instance.get_id(), instance);
-        }
-
-        instance_map
     }
 }
 

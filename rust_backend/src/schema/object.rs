@@ -1,8 +1,8 @@
 use md5;
 use juniper::FieldResult;
 
+use model::{Player, Character, Match, EloRow, EloCell};
 use schema::context::ContextData;
-use schema::model::{Player, Character, Match, EloRow, EloCell};
 use schema::scalar::{ID, DateTime};
 
 graphql_object!(Player: ContextData |&self| {

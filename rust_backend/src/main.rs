@@ -15,6 +15,7 @@ extern crate md5;
 mod utils;
 mod db;
 mod elo;
+mod model;
 mod schema;
 
 use iron::prelude::*;

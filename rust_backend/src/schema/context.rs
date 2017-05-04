@@ -8,7 +8,7 @@ use r2d2_postgres::PostgresConnectionManager;
 use uuid::Uuid;
 
 use db::PgConnPool;
-use schema::model::{Character, Player, Match, RowData};
+use model::{Character, Player, Match, RowData};
 
 pub struct ContextData {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,

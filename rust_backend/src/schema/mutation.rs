@@ -1,8 +1,8 @@
 use chrono;
 use uuid::Uuid;
 
+use model::{Match, RowData};
 use schema::context::ContextData;
-use schema::model::{Match, RowData};
 use schema::scalar::ID;
 
 pub struct MutationRoot;

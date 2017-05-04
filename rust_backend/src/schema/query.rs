@@ -3,8 +3,8 @@ use std::rc::Rc;
 use uuid::Uuid;
 
 use elo;
+use model::{Character, Player, Match, EloCell, EloRow};
 use schema::context::ContextData;
-use schema::model::{Character, Player, Match, EloCell, EloRow};
 use schema::scalar::ID;
 
 pub struct QueryRoot;

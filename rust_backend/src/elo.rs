@@ -1,3 +1,7 @@
+use chrono;
+use uuid::Uuid;
+use std::collections::{BTreeMap, HashSet};
+use std::rc::Rc;
 use model::{EloCell, EloRow, Match};
 
 const K: f64 = 32.0;
@@ -17,7 +21,11 @@ fn calc_new_elos(winner_original_elo: f64, loser_original_elo: f64) -> (f64, f64
     (elo(winner_original_elo, winner_exp, 1.0), elo(loser_original_elo, loser_exp, 0.0))
 }
 
-pub fn calc_next_elo_row(prev_row: &EloRow, match_: &Match) -> EloRow {
+// fn group_matches_by_date(matches: Vec<&Match>) -> BTreeMap<chrono::Date<chrono::UTC>, Vec<&Match>> {
+//     matches
+// }
+
+fn calc_next_elo_row(prev_row: &EloRow, match_: &Match) -> EloRow {
     let winner_id = match_.winner_id.clone();
     let loser_id = match_.loser_id();
 
@@ -60,4 +68,44 @@ pub fn calc_next_elo_row(prev_row: &EloRow, match_: &Match) -> EloRow {
             })
             .collect(),
     }
+}
+
+fn get_initial_row(matches: &Vec<&Match>) -> EloRow {
+    let player_ids: HashSet<Rc<Uuid>> = matches
+        .iter()
+        .fold(HashSet::new(), |mut acc, &x| {
+            acc.insert(x.player1_id.clone());
+            acc.insert(x.player2_id.clone());
+            acc
+        });
+
+    EloRow {
+        created_at: None,
+        cells: player_ids
+            .iter()
+            .map(|id| {
+                     EloCell {
+                         player_id: id.clone(),
+                         score: 1000.0,
+                         score_change: 0.0,
+                     }
+                 })
+            .collect(),
+    }
+}
+
+pub fn calc_elo_rows(mut matches: Vec<&Match>) -> Vec<EloRow> {
+    matches.sort_by_key(|m| m.created_at.clone());
+
+    let initial_row = get_initial_row(&matches);
+
+    let mut rows: Vec<EloRow> = vec![initial_row];
+    for match_ in matches.iter() {
+        let row = {
+            let prev_row = rows.last().expect("There should always be one row");
+            calc_next_elo_row(prev_row, match_)
+        };
+        rows.push(row);
+    }
+    rows
 }

@@ -2,6 +2,7 @@
 import React from "react";
 import classNames from "classnames";
 import { graphql } from "react-apollo";
+import moment from "moment";
 import EloTableQuery from "../queries/EloTableQuery.js";
 import { sorted } from "../utils/sort.js";
 
@@ -30,12 +31,18 @@ function EloTable(props) {
       <table className="table">
         <thead>
           <tr>
+            <th style={{ width: "120px" }} />
             {players.map(player => <th key={player.id}>{player.name}</th>)}
           </tr>
         </thead>
         <tbody>
           {eloRows.map((eloRow, i) => (
             <tr key={i}>
+              <td>
+                {eloRow.date != null
+                  ? moment(eloRow.date).format("ddd Do MMM")
+                  : ""}
+              </td>
               {players.map(player => {
                 for (let cell of eloRow.cells) {
                   if (cell.player.id === player.id) {

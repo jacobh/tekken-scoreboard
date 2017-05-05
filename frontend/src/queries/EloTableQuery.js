@@ -10,6 +10,8 @@ export default gql`{
       }
       score
       scoreChange
+      matchesWon
+      matchesLost
     }
   }
   allPlayers {

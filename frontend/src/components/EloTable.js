@@ -55,6 +55,13 @@ function EloTable(props) {
                         })}
                       >
                         {Math.round(cell.score)}
+                        {" "}
+                        (+
+                        {cell.matchesWon}
+                        {" "}
+                        / -
+                        {cell.matchesLost}
+                        )
                       </td>
                     );
                   }

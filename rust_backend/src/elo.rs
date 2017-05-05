@@ -109,14 +109,14 @@ fn get_initial_row(player_ids: &Vec<Rc<Uuid>>) -> EloRow {
 
 pub fn calc_elo_rows(player_ids: Vec<Rc<Uuid>>, matches: Vec<&Match>) -> Vec<EloRow> {
     let initial_row = get_initial_row(&player_ids);
-
-    let mut rows: Vec<EloRow> = vec![initial_row];
-    for (date, matches) in group_matches_by_date(matches).iter() {
-        let row = {
-            let prev_row = rows.last().expect("There should always be one row");
-            calc_next_elo_row(prev_row, date, matches)
-        };
-        rows.push(row);
-    }
-    rows
+    group_matches_by_date(matches)
+        .iter()
+        .fold(vec![initial_row], |mut rows, (date, matches)| {
+            let row = {
+                let prev_row = rows.last().expect("There should always be one row");
+                calc_next_elo_row(prev_row, date, matches)
+            };
+            rows.push(row);
+            rows
+        })
 }

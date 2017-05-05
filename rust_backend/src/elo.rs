@@ -1,6 +1,7 @@
 use chrono;
 use uuid::Uuid;
 use std::collections::{BTreeMap, HashMap};
+use std::collections::btree_map::Entry;
 use std::rc::Rc;
 use model::{EloCell, EloRow, Match};
 
@@ -22,12 +23,14 @@ fn group_matches_by_date(mut matches: Vec<&Match>)
         .iter()
         .fold(BTreeMap::new(), |mut acc, &x| {
             let date = x.created_at.date();
-            if acc.contains_key(&date) {
-                let mut todays_matches = acc.get_mut(&date).unwrap();
-                todays_matches.push(x);
-            } else {
-                acc.insert(date, vec![x]);
-            }
+            match acc.entry(date) {
+                Entry::Occupied(mut entry) => {
+                    entry.get_mut().push(x);
+                }
+                Entry::Vacant(entry) => {
+                    entry.insert(vec![x]);
+                }
+            };
             acc
         })
 }

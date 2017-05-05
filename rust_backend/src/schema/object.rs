@@ -121,4 +121,16 @@ graphql_object!(EloCell: ContextData |&self| {
     field score_change() -> f64 {
         (self.score_change * 10.0).round() / 10.0
     }
+
+    field matches_played() -> i64 {
+        self.matches_played() as i64
+    }
+
+    field matches_won() -> i64 {
+        self.matches_won as i64
+    }
+
+    field matches_lost() -> i64 {
+        self.matches_lost as i64
+    }
 });

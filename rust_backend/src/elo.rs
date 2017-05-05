@@ -70,21 +70,29 @@ fn calc_next_elo_row(prev_row: &EloRow,
             .map(|prev_cell| {
                 let player_id = prev_cell.player_id.clone();
                 let prev_score = prev_cell.score;
+
+                let matches_won = matches
+                    .iter()
+                    .filter(|x| x.winner_id == player_id)
+                    .count();
+                let matches_lost = matches
+                    .iter()
+                    .filter(|x| x.loser_id() == player_id)
+                    .count();
+
                 let next_score = {
                     let expected: f64 = match player_id_expected_score_map.get(&player_id) {
                         Some(expected) => *expected,
                         None => 0.0 as f64,
                     };
-                    let score: f64 = matches
-                        .iter()
-                        .filter(|x| x.winner_id == player_id)
-                        .count() as f64;
-                    elo(prev_score, expected, score)
+                    elo(prev_score, expected, matches_won as f64)
                 };
                 EloCell {
                     player_id: player_id,
                     score: next_score,
                     score_change: next_score - prev_score,
+                    matches_won: matches_won as u16,
+                    matches_lost: matches_lost as u16,
                 }
             })
             .collect(),
@@ -97,12 +105,14 @@ fn get_initial_row(player_ids: &Vec<Rc<Uuid>>) -> EloRow {
         cells: player_ids
             .iter()
             .map(|id| {
-                     EloCell {
-                         player_id: id.clone(),
-                         score: 1000.0,
-                         score_change: 0.0,
-                     }
-                 })
+                EloCell {
+                    player_id: id.clone(),
+                    score: 1000.0,
+                    score_change: 0.0,
+                    matches_won: 0,
+                    matches_lost: 0,
+                }
+            })
             .collect(),
     }
 }

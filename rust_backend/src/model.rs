@@ -117,4 +117,11 @@ pub struct EloCell {
     pub player_id: Rc<Uuid>,
     pub score: f64,
     pub score_change: f64,
+    pub matches_won: u16,
+    pub matches_lost: u16,
+}
+impl EloCell {
+    pub fn matches_played(&self) -> u16 {
+        self.matches_won + self.matches_lost
+    }
 }

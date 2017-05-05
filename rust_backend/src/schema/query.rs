@@ -1,4 +1,6 @@
 use juniper::FieldResult;
+use uuid::Uuid;
+use std::rc::Rc;
 
 use elo;
 use model::{Character, Player, Match, EloRow};
@@ -21,7 +23,8 @@ graphql_object!(QueryRoot: ContextData |&self| {
 
     field all_elo_rows(&executor) -> Vec<EloRow> {
         let matches: Vec<&Match> = executor.context().matches.values().collect();
-        elo::calc_elo_rows(matches)
+        let player_ids: Vec<Rc<Uuid>> = executor.context().players.values().map(|x| x.id.clone()).collect();
+        elo::calc_elo_rows(player_ids, matches)
     }
 
     field get_character(&executor, id: ID) -> FieldResult<&Character> {

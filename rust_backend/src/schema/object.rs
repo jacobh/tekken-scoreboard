@@ -98,10 +98,10 @@ graphql_object!(Match: ContextData |&self| {
 });
 
 graphql_object!(EloRow: ContextData |&self| {
-    field created_at() -> Option<DateTime> {
-        match self.created_at.clone() {
-            Some(datetime) => {
-                Some(DateTime((*datetime).clone()))
+    field date() -> Option<DateTime> {
+        match self.date {
+            Some(date) => {
+                Some(DateTime(date.and_hms(0, 0, 0)))
             }
             None => None
         }

@@ -1,6 +1,6 @@
 use chrono;
 use uuid::Uuid;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::{BTreeMap, HashMap};
 use std::rc::Rc;
 use model::{EloCell, EloRow, Match};
 
@@ -14,73 +14,83 @@ fn elo(old: f64, exp: f64, score: f64) -> f64 {
     old + K * (score - exp)
 }
 
-fn calc_new_elos(winner_original_elo: f64, loser_original_elo: f64) -> (f64, f64) {
-    let winner_exp = expected(winner_original_elo, loser_original_elo);
-    let loser_exp = expected(loser_original_elo, winner_original_elo);
+fn group_matches_by_date(mut matches: Vec<&Match>)
+                         -> BTreeMap<chrono::Date<chrono::UTC>, Vec<&Match>> {
+    matches.sort_by_key(|m| m.created_at.clone());
 
-    (elo(winner_original_elo, winner_exp, 1.0), elo(loser_original_elo, loser_exp, 0.0))
+    matches
+        .iter()
+        .fold(BTreeMap::new(), |mut acc, &x| {
+            let date = x.created_at.date();
+            if acc.contains_key(&date) {
+                let mut todays_matches = acc.get_mut(&date).unwrap();
+                todays_matches.push(x);
+            } else {
+                acc.insert(date, vec![x]);
+            }
+            acc
+        })
 }
 
-// fn group_matches_by_date(matches: Vec<&Match>) -> BTreeMap<chrono::Date<chrono::UTC>, Vec<&Match>> {
-//     matches
-// }
-
-fn calc_next_elo_row(prev_row: &EloRow, match_: &Match) -> EloRow {
-    let winner_id = match_.winner_id.clone();
-    let loser_id = match_.loser_id();
-
-    let winner_prev_elo = prev_row
-        .cells
+fn calc_next_elo_row(prev_row: &EloRow,
+                     date: &chrono::Date<chrono::UTC>,
+                     matches: &Vec<&Match>)
+                     -> EloRow {
+    let player_id_expected_score_map: HashMap<Rc<Uuid>, f64> = matches
         .iter()
-        .find(|x| x.player_id == winner_id)
-        .unwrap()
-        .score;
-    let loser_prev_elo = prev_row
-        .cells
-        .iter()
-        .find(|x| *x.player_id == *loser_id)
-        .unwrap()
-        .score;
+        .fold(HashMap::new(), |mut acc, &x| {
+            let player1_id = x.player1_id.clone();
+            let player2_id = x.player2_id.clone();
 
-    let (winner_next_elo, loser_next_elo) = calc_new_elos(winner_prev_elo, loser_prev_elo);
+            let player1_score = prev_row.get_score_for_player_id(&player1_id).unwrap();
+            let player2_score = prev_row.get_score_for_player_id(&player2_id).unwrap();
+            let mut player1_expected = expected(player1_score, player2_score);
+            let mut player2_expected = expected(player2_score, player1_score);
+
+            if let Some(expected_score) = acc.get(&player1_id) {
+                player1_expected += *expected_score
+            }
+            if let Some(expected_score) = acc.get(&player2_id) {
+                player2_expected += *expected_score
+            }
+
+            acc.insert(player1_id, player1_expected);
+            acc.insert(player2_id, player2_expected);
+            acc
+        });
 
     EloRow {
-        created_at: Some(match_.created_at.clone()),
+        date: Some(*date),
         cells: prev_row
             .cells
             .iter()
             .map(|prev_cell| {
                 let player_id = prev_cell.player_id.clone();
+                let prev_score = prev_cell.score;
                 let next_score = {
-                    if player_id == winner_id {
-                        winner_next_elo
-                    } else if *player_id == *loser_id {
-                        loser_next_elo
-                    } else {
-                        prev_cell.score
-                    }
+                    let expected: f64 = match player_id_expected_score_map.get(&player_id) {
+                        Some(expected) => *expected,
+                        None => 0.0 as f64,
+                    };
+                    let score: f64 = matches
+                        .iter()
+                        .filter(|x| x.winner_id == player_id)
+                        .count() as f64;
+                    elo(prev_score, expected, score)
                 };
                 EloCell {
                     player_id: player_id,
                     score: next_score,
-                    score_change: next_score - prev_cell.score,
+                    score_change: next_score - prev_score,
                 }
             })
             .collect(),
     }
 }
 
-fn get_initial_row(matches: &Vec<&Match>) -> EloRow {
-    let player_ids: HashSet<Rc<Uuid>> = matches
-        .iter()
-        .fold(HashSet::new(), |mut acc, &x| {
-            acc.insert(x.player1_id.clone());
-            acc.insert(x.player2_id.clone());
-            acc
-        });
-
+fn get_initial_row(player_ids: &Vec<Rc<Uuid>>) -> EloRow {
     EloRow {
-        created_at: None,
+        date: None,
         cells: player_ids
             .iter()
             .map(|id| {
@@ -94,16 +104,14 @@ fn get_initial_row(matches: &Vec<&Match>) -> EloRow {
     }
 }
 
-pub fn calc_elo_rows(mut matches: Vec<&Match>) -> Vec<EloRow> {
-    matches.sort_by_key(|m| m.created_at.clone());
-
-    let initial_row = get_initial_row(&matches);
+pub fn calc_elo_rows(player_ids: Vec<Rc<Uuid>>, matches: Vec<&Match>) -> Vec<EloRow> {
+    let initial_row = get_initial_row(&player_ids);
 
     let mut rows: Vec<EloRow> = vec![initial_row];
-    for match_ in matches.iter() {
+    for (date, matches) in group_matches_by_date(matches).iter() {
         let row = {
             let prev_row = rows.last().expect("There should always be one row");
-            calc_next_elo_row(prev_row, match_)
+            calc_next_elo_row(prev_row, date, matches)
         };
         rows.push(row);
     }

@@ -101,8 +101,16 @@ impl RowData for Match {
 }
 
 pub struct EloRow {
-    pub created_at: Option<Rc<chrono::DateTime<chrono::UTC>>>,
+    pub date: Option<chrono::Date<chrono::UTC>>,
     pub cells: Vec<EloCell>,
+}
+impl EloRow {
+    pub fn get_score_for_player_id(&self, player_id: &Uuid) -> Option<f64> {
+        match self.cells.iter().find(|x| *x.player_id == *player_id) {
+            Some(cell) => Some(cell.score),
+            None => None,
+        }
+    }
 }
 
 pub struct EloCell {

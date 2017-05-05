@@ -3,7 +3,7 @@ import { gql } from "react-apollo";
 
 export default gql`{
   allEloRows {
-    createdAt
+    date
     cells {
       player {
         id

@@ -19,7 +19,6 @@ mod db;
 mod elo;
 mod model;
 mod schema;
-mod db_schema;
 
 use iron::prelude::*;
 use iron::method::Method;
@@ -31,7 +30,7 @@ use persistent::Read;
 use std::env;
 use iron_cors::CORS;
 
-use db::PgConnPool;
+use db::pool::PgConnPool;
 use schema::context::context_factory;
 use schema::mutation::MutationRoot;
 use schema::query::QueryRoot;

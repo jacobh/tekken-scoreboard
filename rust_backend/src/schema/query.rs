@@ -3,7 +3,8 @@ use uuid::Uuid;
 use std::rc::Rc;
 
 use elo;
-use model::{Character, Player, Match, EloRow};
+use db::models::{Character, Player, Match};
+use model::{EloRow};
 use schema::context::ContextData;
 use schema::scalar::ID;
 
@@ -23,7 +24,7 @@ graphql_object!(QueryRoot: ContextData |&self| {
 
     field all_elo_rows(&executor) -> Vec<EloRow> {
         let matches: Vec<&Match> = executor.context().matches.values().collect();
-        let player_ids: Vec<Rc<Uuid>> = executor.context().players.values().map(|x| x.id.clone()).collect();
+        let player_ids: Vec<Rc<Uuid>> = executor.context().players.values().map(|x| Rc::new(x.id)).collect();
         elo::calc_elo_rows(player_ids, matches)
     }
 

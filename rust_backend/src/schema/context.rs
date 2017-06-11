@@ -8,7 +8,7 @@ use r2d2_postgres::PostgresConnectionManager;
 use uuid::Uuid;
 
 use db::pool::{PgConnPool, DieselPool};
-use model::{Character, Player, Match, RowData};
+use db::models::{Character, Player, Match};
 
 pub struct ContextData {
     pg_pool: r2d2::Pool<PostgresConnectionManager>,
@@ -30,23 +30,23 @@ pub fn context_factory(req: &mut Request) -> ContextData {
     let diesel_pool = req.get::<Read<DieselPool>>().unwrap().0.clone();
     let diesel_conn = diesel_pool.get().unwrap();
 
-    let characters = match conn.query("SELECT * FROM characters", &[]) {
-        Ok(rows) => Character::new_hashmap_from_rows(&rows),
-        Err(_) => HashMap::new(),
-    };
-    let players = match conn.query("SELECT * FROM players", &[]) {
-        Ok(rows) => Player::new_hashmap_from_rows(&rows),
-        Err(_) => HashMap::new(),
-    };
-    let matches = match conn.query("SELECT * FROM matches", &[]) {
-        Ok(rows) => Match::new_hashmap_from_rows(&rows),
-        Err(_) => HashMap::new(),
-    };
+    // let characters = match conn.query("SELECT * FROM characters", &[]) {
+    //     Ok(rows) => Character::new_hashmap_from_rows(&rows),
+    //     Err(_) => HashMap::new(),
+    // };
+    // let players = match conn.query("SELECT * FROM players", &[]) {
+    //     Ok(rows) => Player::new_hashmap_from_rows(&rows),
+    //     Err(_) => HashMap::new(),
+    // };
+    // let matches = match conn.query("SELECT * FROM matches", &[]) {
+    //     Ok(rows) => Match::new_hashmap_from_rows(&rows),
+    //     Err(_) => HashMap::new(),
+    // };
 
     ContextData {
         pg_pool: pg_pool,
-        characters: characters,
-        players: players,
-        matches: matches,
+        characters: HashMap::new(),
+        players: HashMap::new(),
+        matches: HashMap::new(),
     }
 }

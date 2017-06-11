@@ -3,7 +3,8 @@ use uuid::Uuid;
 use std::collections::{BTreeMap, HashMap};
 use std::collections::btree_map::Entry;
 use std::rc::Rc;
-use model::{EloCell, EloRow, Match};
+use model::{EloCell, EloRow};
+use db::models::Match;
 
 const K: f64 = 32.0;
 
@@ -39,7 +40,7 @@ fn calc_next_elo_row(prev_row: &EloRow,
                      date: &chrono::Date<chrono::UTC>,
                      matches: &Vec<&Match>)
                      -> EloRow {
-    let player_id_expected_score_map: HashMap<Rc<Uuid>, f64> = matches
+    let player_id_expected_score_map: HashMap<Uuid, f64> = matches
         .iter()
         .fold(HashMap::new(), |mut acc, &x| {
             let player1_id = x.player1_id.clone();
@@ -73,11 +74,11 @@ fn calc_next_elo_row(prev_row: &EloRow,
 
                 let matches_won = matches
                     .iter()
-                    .filter(|x| x.winner_id == player_id)
+                    .filter(|x| x.winner_id == *player_id)
                     .count();
                 let matches_lost = matches
                     .iter()
-                    .filter(|x| x.loser_id() == player_id)
+                    .filter(|x| *x.loser_id() == *player_id)
                     .count();
 
                 let next_score = {

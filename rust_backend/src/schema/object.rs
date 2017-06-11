@@ -1,13 +1,15 @@
+use std::rc::Rc;
 use md5;
 use juniper::FieldResult;
 
-use model::{Player, Character, Match, EloRow, EloCell};
+use db::models::{Player, Character, Match};
+use model::{EloRow, EloCell};
 use schema::context::ContextData;
 use schema::scalar::{ID, DateTime};
 
 graphql_object!(Player: ContextData |&self| {
     field id() -> ID {
-        ID(*self.id)
+        ID(self.id)
     }
 
     field name() -> &String {
@@ -46,7 +48,7 @@ graphql_object!(Player: ContextData |&self| {
         let matches = &executor.context().matches;
 
         matches.values().filter(
-            |m| m.loser_id() == self.id
+            |m| m.loser_id() == &self.id
         ).count() as i64
     }
 });
@@ -55,7 +57,7 @@ graphql_object!(Character: () |&self| {
     description: "Tekken 6 playable character"
 
     field id() -> ID {
-        ID(*self.id)
+        ID(self.id)
     }
 
     field name() -> &String {
@@ -65,11 +67,11 @@ graphql_object!(Character: () |&self| {
 
 graphql_object!(Match: ContextData |&self| {
     field id() -> ID {
-        ID(*self.id)
+        ID(self.id)
     }
 
     field created_at() -> DateTime {
-        DateTime(*self.created_at)
+        DateTime(self.created_at)
     }
 
     field winner(&executor) -> FieldResult<&Player> {
@@ -77,7 +79,7 @@ graphql_object!(Match: ContextData |&self| {
     }
 
     field loser(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.loser_id())).unwrap())
+        Ok((&executor.context().players.get(&Rc::new(*self.loser_id()))).unwrap())
     }
 
     field player1(&executor) -> FieldResult<&Player> {

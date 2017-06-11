@@ -6,31 +6,40 @@ type DateTimeUTC = chrono::DateTime<chrono::UTC>;
 #[allow(dead_code)]
 #[derive(Queryable)]
 pub struct Character {
-    id: Uuid,
+    pub id: Uuid,
     created_at: DateTimeUTC,
     updated_at: DateTimeUTC,
-    name: String,
+    pub name: String,
 }
 
 #[allow(dead_code)]
 #[derive(Queryable)]
 pub struct Player {
-    id: Uuid,
+    pub id: Uuid,
     created_at: DateTimeUTC,
     updated_at: DateTimeUTC,
-    name: String,
-    email: String,
+    pub name: String,
+    pub email: String,
 }
 
 #[allow(dead_code)]
 #[derive(Queryable)]
 pub struct Match {
-    id: Uuid,
-    created_at: DateTimeUTC,
+    pub id: Uuid,
+    pub created_at: DateTimeUTC,
     updated_at: DateTimeUTC,
-    winner_id: Uuid,
-    player1_id: Uuid,
-    player2_id: Uuid,
-    character1_id: Uuid,
-    character2_id: Uuid,
+    pub winner_id: Uuid,
+    pub player1_id: Uuid,
+    pub player2_id: Uuid,
+    pub character1_id: Uuid,
+    pub character2_id: Uuid,
+}
+impl Match {
+    pub fn loser_id(&self) -> &Uuid {
+        if self.winner_id == self.player1_id {
+            &self.player2_id
+        } else {
+            &self.player1_id
+        }
+    }
 }

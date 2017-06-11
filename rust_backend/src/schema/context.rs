@@ -7,7 +7,7 @@ use r2d2;
 use r2d2_postgres::PostgresConnectionManager;
 use uuid::Uuid;
 
-use db::pool::PgConnPool;
+use db::pool::{PgConnPool, DieselPool};
 use model::{Character, Player, Match, RowData};
 
 pub struct ContextData {
@@ -26,6 +26,9 @@ impl ContextData {
 pub fn context_factory(req: &mut Request) -> ContextData {
     let pg_pool = req.get::<Read<PgConnPool>>().unwrap().0.clone();
     let conn = pg_pool.get().unwrap();
+
+    let diesel_pool = req.get::<Read<DieselPool>>().unwrap().0.clone();
+    let diesel_conn = diesel_pool.get().unwrap();
 
     let characters = match conn.query("SELECT * FROM characters", &[]) {
         Ok(rows) => Character::new_hashmap_from_rows(&rows),

@@ -18,8 +18,8 @@ impl Key for PgConnPool {
     type Value = PgConnPool;
 }
 
-pub struct DieselPool(r2d2::Pool<ConnectionManager<PgConnection>>);
-impl DieselPool {
+pub struct DieselPool(pub r2d2::Pool<ConnectionManager<PgConnection>>);
+impl DieselPool {    
     pub fn new() -> DieselPool {
     dotenv().ok();
 

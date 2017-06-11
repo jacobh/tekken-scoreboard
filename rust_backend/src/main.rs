@@ -32,7 +32,7 @@ use persistent::Read;
 use std::env;
 use iron_cors::CORS;
 
-use db::pool::PgConnPool;
+use db::pool::{PgConnPool, DieselPool};
 use schema::context::context_factory;
 use schema::mutation::MutationRoot;
 use schema::query::QueryRoot;
@@ -56,6 +56,10 @@ fn main() {
     // set up postgres connection pool
     let pg_pool = PgConnPool::new();
     chain.link(Read::<PgConnPool>::both(pg_pool));
+
+    // set up diesel pool
+    let diesel_pool = DieselPool::new();
+    chain.link(Read::<DieselPool>::both(diesel_pool));
 
     // cors
     let cors = CORS::new(vec![(vec![Method::Get, Method::Post], "graphql".to_owned())]);

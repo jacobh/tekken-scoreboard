@@ -7,19 +7,19 @@ type DateTimeUTC = chrono::DateTime<chrono::UTC>;
 #[derive(Queryable)]
 pub struct Character {
     pub id: Uuid,
+    pub name: String,
     created_at: DateTimeUTC,
     updated_at: DateTimeUTC,
-    pub name: String,
 }
 
 #[allow(dead_code)]
 #[derive(Queryable)]
 pub struct Player {
     pub id: Uuid,
+    pub name: String,
     created_at: DateTimeUTC,
     updated_at: DateTimeUTC,
-    pub name: String,
-    pub email: String,
+    pub email: Option<String>,
 }
 
 #[allow(dead_code)]

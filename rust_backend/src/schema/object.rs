@@ -16,8 +16,8 @@ graphql_object!(Player: ContextData |&self| {
         &self.name
     }
 
-    field gravatar_url() -> String {
-        format!("https://s.gravatar.com/avatar/{:x}", md5::compute(&self.email))
+    field gravatar_url() -> Option<String> {
+        self.email.as_ref().map(|email| format!("https://s.gravatar.com/avatar/{:x}", md5::compute(email)))
     }
 
     field matches(&executor) -> Vec<&Match> {
@@ -136,3 +136,4 @@ graphql_object!(EloCell: ContextData |&self| {
         self.matches_lost as i64
     }
 });
+

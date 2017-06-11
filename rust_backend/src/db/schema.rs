@@ -1,7 +1,7 @@
 table! {
     characters (id) {
         id -> Uuid,
-        name -> Nullable<Varchar>,
+        name -> Varchar,
         createdAt -> Timestamptz,
         updatedAt -> Timestamptz,
     }
@@ -12,20 +12,21 @@ table! {
         id -> Uuid,
         createdAt -> Timestamptz,
         updatedAt -> Timestamptz,
-        winnerId -> Nullable<Uuid>,
-        player1Id -> Nullable<Uuid>,
-        player2Id -> Nullable<Uuid>,
-        character1Id -> Nullable<Uuid>,
-        character2Id -> Nullable<Uuid>,
+        winnerId -> Uuid,
+        player1Id -> Uuid,
+        player2Id -> Uuid,
+        character1Id -> Uuid,
+        character2Id -> Uuid,
     }
 }
 
 table! {
     players (id) {
         id -> Uuid,
-        name -> Nullable<Varchar>,
+        name -> Varchar,
         createdAt -> Timestamptz,
         updatedAt -> Timestamptz,
         email -> Nullable<Text>,
     }
 }
+

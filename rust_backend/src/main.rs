@@ -13,6 +13,7 @@ extern crate persistent;
 extern crate iron_cors;
 extern crate md5;
 #[macro_use] extern crate diesel;
+#[macro_use] extern crate diesel_codegen;
 extern crate dotenv;
 mod utils;
 mod db;

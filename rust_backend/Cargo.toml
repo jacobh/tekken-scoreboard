@@ -5,12 +5,12 @@ authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
 
 [dependencies]
 postgres = {version = "0.14", features = ["with-uuid", "with-chrono"]}
-iron = "0.5.1"
+iron = "0.5"
 mount = "*"
 logger = "*"
 env_logger = "0.4.2"
 juniper = { version = "0.7.0", features = ["iron-handlers"] }
-uuid = { version = "0.4", features = ["serde", "v4"] }
+uuid = { version = "0.5", features = ["serde", "v4"] }
 serde = "*"
 chrono = "*"
 persistent = "*"

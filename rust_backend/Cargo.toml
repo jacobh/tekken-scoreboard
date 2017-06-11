@@ -18,6 +18,7 @@ r2d2 = "*"
 r2d2_postgres = "*"
 iron-cors = { git = "https://github.com/fxbox/iron-cors.git" }
 md5 = "*"
-diesel = { version = "0.13.0", features = ["postgres", "extras"] }
-diesel_codegen = { version = "0.13.0", features = ["postgres"] }
+diesel = { version = "0.13", features = ["postgres", "extras"] }
+diesel_codegen = { version = "0.13", features = ["postgres"] }
+r2d2-diesel = "0.13"
 dotenv = "0.9"

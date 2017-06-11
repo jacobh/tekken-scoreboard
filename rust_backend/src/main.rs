@@ -12,11 +12,14 @@ extern crate juniper;
 extern crate persistent;
 extern crate iron_cors;
 extern crate md5;
+#[macro_use] extern crate diesel;
+extern crate dotenv;
 mod utils;
 mod db;
 mod elo;
 mod model;
 mod schema;
+mod db_schema;
 
 use iron::prelude::*;
 use iron::method::Method;

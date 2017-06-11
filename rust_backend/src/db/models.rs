@@ -1,7 +1,32 @@
+use std::hash::Hash;
+use std::collections::HashMap;
 use uuid::Uuid;
 use chrono;
 
 type DateTimeUTC = chrono::DateTime<chrono::UTC>;
+
+trait Id<I>
+    where I: Eq + Hash
+{
+    fn get_id(&self) -> &I;
+}
+
+pub trait AsIdMap<T, I>
+    where Self: IntoIterator<Item = T>,
+          T: Id<I>,
+          I: Eq + Hash
+{
+    fn as_id_map(&self) -> HashMap<&I, &T> {
+        self.into_iter().map(|x| (x.get_id(), &x)).collect()
+    }
+}
+
+impl<T, I, U> AsIdMap<T, I> for U
+    where U: IntoIterator<Item = T>,
+          T: Id<I>,
+          I: Eq + Hash
+{
+}
 
 #[allow(dead_code)]
 #[derive(Queryable)]
@@ -10,6 +35,11 @@ pub struct Character {
     pub name: String,
     created_at: DateTimeUTC,
     updated_at: DateTimeUTC,
+}
+impl Id<Uuid> for Character {
+    fn get_id(&self) -> &Uuid {
+        &self.id
+    }
 }
 
 #[allow(dead_code)]

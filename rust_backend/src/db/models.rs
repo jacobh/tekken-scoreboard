@@ -15,6 +15,7 @@ pub trait IdCollection<T, I>
     where T: Id<I>,
           I: Eq + Hash
 {
+    fn as_ids(&self) -> Vec<&I>;
     fn as_id_map(&self) -> HashMap<&I, &T>;
     fn find_by_id(&self, id: &I) -> Option<&T>;
 }
@@ -23,6 +24,9 @@ impl<T, I> IdCollection<T, I> for Vec<T>
     where T: Id<I>,
           I: Eq + Hash
 {
+    fn as_ids(&self) -> Vec<&I> {
+        self.iter().map(|x| x.get_id()).collect()
+    }
     fn as_id_map(&self) -> HashMap<&I, &T> {
         self.iter().map(|x| (x.get_id(), x)).collect()
     }

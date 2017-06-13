@@ -1,7 +1,7 @@
 use chrono;
 use uuid::Uuid;
-use std::collections::{BTreeMap, HashMap};
-use std::collections::btree_map::Entry;
+use std::collections::HashMap;
+use std::collections::hash_map::Entry;
 use std::rc::Rc;
 use model::{EloCell, EloRow};
 use db::models::Match;
@@ -18,8 +18,8 @@ fn elo(old: f64, exp: f64, score: f64) -> f64 {
     old + K * (score - exp)
 }
 
-fn group_matches_by_date(matches: &Vec<Match>) -> BTreeMap<DateUTC, Vec<&Match>> {
-    matches.iter().fold(BTreeMap::new(), |mut acc, x| {
+fn group_matches_by_date(matches: &Vec<Match>) -> HashMap<DateUTC, Vec<&Match>> {
+    matches.iter().fold(HashMap::new(), |mut acc, x| {
         let date = x.created_at.date();
         match acc.entry(date) {
             Entry::Occupied(mut entry) => {
@@ -112,6 +112,7 @@ pub fn calc_elo_rows(player_ids: Vec<&Uuid>, matches: &Vec<Match>) -> Vec<EloRow
     let initial_row = get_initial_row(player_ids);
     group_matches_by_date(matches)
         .iter()
+        // sort by date here somehow eg 
         .fold(vec![initial_row], |mut rows, (date, matches)| {
             let row = {
                 let prev_row = rows.last().expect("There should always be one row");

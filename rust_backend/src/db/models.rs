@@ -5,27 +5,30 @@ use chrono;
 
 type DateTimeUTC = chrono::DateTime<chrono::UTC>;
 
-trait Id<I>
+pub trait Id<I>
     where I: Eq + Hash
 {
     fn get_id(&self) -> &I;
 }
 
-pub trait AsIdMap<T, I>
-    where Self: IntoIterator<Item = T>,
-          T: Id<I>,
+pub trait IdCollection<T, I>
+    where T: Id<I>,
+          I: Eq + Hash
+{
+    fn as_id_map(&self) -> HashMap<&I, &T>;
+    fn find_with_id(&self, id: &I) -> Option<&T>;
+}
+
+impl<T, I> IdCollection<T, I> for Vec<T>
+    where T: Id<I>,
           I: Eq + Hash
 {
     fn as_id_map(&self) -> HashMap<&I, &T> {
-        self.into_iter().map(|x| (x.get_id(), &x)).collect()
+        self.iter().map(|x| (x.get_id(), x)).collect()
     }
-}
-
-impl<T, I, U> AsIdMap<T, I> for U
-    where U: IntoIterator<Item = T>,
-          T: Id<I>,
-          I: Eq + Hash
-{
+    fn find_with_id(&self, id: &I) -> Option<&T> {
+        self.iter().find(|x| x.get_id() == id)
+    }
 }
 
 #[allow(dead_code)]

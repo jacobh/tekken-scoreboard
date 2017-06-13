@@ -9,7 +9,7 @@ use uuid::Uuid;
 use diesel::prelude::*;
 
 use db::pool::{PgConnPool, DieselPool};
-use db::models::{Character, Player, Match};
+use db::models::{Character, Player, Match, IdCollection};
 use db::schema;
 
 pub struct ContextData {

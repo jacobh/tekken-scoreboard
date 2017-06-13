@@ -16,7 +16,7 @@ pub trait IdCollection<T, I>
           I: Eq + Hash
 {
     fn as_id_map(&self) -> HashMap<&I, &T>;
-    fn find_with_id(&self, id: &I) -> Option<&T>;
+    fn find_by_id(&self, id: &I) -> Option<&T>;
 }
 
 impl<T, I> IdCollection<T, I> for Vec<T>
@@ -26,7 +26,7 @@ impl<T, I> IdCollection<T, I> for Vec<T>
     fn as_id_map(&self) -> HashMap<&I, &T> {
         self.iter().map(|x| (x.get_id(), x)).collect()
     }
-    fn find_with_id(&self, id: &I) -> Option<&T> {
+    fn find_by_id(&self, id: &I) -> Option<&T> {
         self.iter().find(|x| x.get_id() == id)
     }
 }
@@ -54,6 +54,11 @@ pub struct Player {
     updated_at: DateTimeUTC,
     pub email: Option<String>,
 }
+impl Id<Uuid> for Player {
+    fn get_id(&self) -> &Uuid {
+        &self.id
+    }
+}
 
 #[allow(dead_code)]
 #[derive(Queryable)]
@@ -74,6 +79,11 @@ impl Match {
         } else {
             &self.player1_id
         }
+    }
+}
+impl Id<Uuid> for Match {
+    fn get_id(&self) -> &Uuid {
+        &self.id
     }
 }
 

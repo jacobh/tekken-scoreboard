@@ -2,7 +2,7 @@ use std::rc::Rc;
 use md5;
 use juniper::FieldResult;
 
-use db::models::{Player, Character, Match};
+use db::models::{Player, Character, Match, IdCollection};
 use model::{EloRow, EloCell};
 use schema::context::ContextData;
 use schema::scalar::{ID, DateTime};
@@ -23,7 +23,7 @@ graphql_object!(Player: ContextData |&self| {
     field matches(&executor) -> Vec<&Match> {
         let matches = &executor.context().matches;
 
-        matches.values().filter(
+        matches.iter().filter(
             |m| m.player1_id == self.id || m.player2_id == self.id
         ).collect()
     }
@@ -31,7 +31,7 @@ graphql_object!(Player: ContextData |&self| {
     field played_matches(&executor) -> i64 {
         let matches = &executor.context().matches;
 
-        matches.values().filter(
+        matches.iter().filter(
             |m| m.player1_id == self.id || m.player2_id == self.id
         ).count() as i64
     }
@@ -39,7 +39,7 @@ graphql_object!(Player: ContextData |&self| {
     field won_matches(&executor) -> i64 {
         let matches = &executor.context().matches;
 
-        matches.values().filter(
+        matches.iter().filter(
             |m| m.winner_id == self.id
         ).count() as i64
     }
@@ -47,7 +47,7 @@ graphql_object!(Player: ContextData |&self| {
     field lost_matches(&executor) -> i64 {
         let matches = &executor.context().matches;
 
-        matches.values().filter(
+        matches.iter().filter(
             |m| m.loser_id() == &self.id
         ).count() as i64
     }
@@ -75,27 +75,27 @@ graphql_object!(Match: ContextData |&self| {
     }
 
     field winner(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.winner_id)).unwrap())
+        Ok((&executor.context().players.find_by_id(&self.winner_id)).unwrap())
     }
 
     field loser(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&Rc::new(*self.loser_id()))).unwrap())
+        Ok((&executor.context().players.find_by_id(&Rc::new(*self.loser_id()))).unwrap())
     }
 
     field player1(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.player1_id)).unwrap())
+        Ok((&executor.context().players.find_by_id(&self.player1_id)).unwrap())
     }
 
     field player2(&executor) -> FieldResult<&Player> {
-        Ok((&executor.context().players.get(&self.player2_id)).unwrap())
+        Ok((&executor.context().players.find_by_id(&self.player2_id)).unwrap())
     }
 
     field character1(&executor) -> FieldResult<&Character> {
-        Ok((&executor.context().characters.get(&self.character1_id)).unwrap())
+        Ok((&executor.context().characters.find_by_id(&self.character1_id)).unwrap())
     }
 
     field character2(&executor) -> FieldResult<&Character> {
-        Ok((&executor.context().characters.get(&self.character2_id)).unwrap())
+        Ok((&executor.context().characters.find_by_id(&self.character2_id)).unwrap())
     }
 });
 
@@ -115,7 +115,7 @@ graphql_object!(EloRow: ContextData |&self| {
 
 graphql_object!(EloCell: ContextData |&self| {
     field player(&executor) -> &Player {
-        (&executor.context().players.get(&self.player_id)).unwrap()
+        (&executor.context().players.find_by_id(&self.player_id)).unwrap()
     }
     field score() -> f64 {
         (self.score * 10.0).round() / 10.0

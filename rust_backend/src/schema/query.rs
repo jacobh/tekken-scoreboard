@@ -47,4 +47,3 @@ graphql_object!(QueryRoot: ContextData |&self| {
         }
     }
 });
-

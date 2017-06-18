@@ -11,7 +11,9 @@ impl PgConnPool {
     pub fn new() -> PgConnPool {
         let database_url = get_env_var("DATABASE_URL".to_string()).unwrap();
         let pg_pool_manager = PostgresConnectionManager::new(database_url, TlsMode::None).unwrap();
-        PgConnPool(r2d2::Pool::new(r2d2::Config::default(), pg_pool_manager).unwrap())
+        PgConnPool(
+            r2d2::Pool::new(r2d2::Config::default(), pg_pool_manager).unwrap(),
+        )
     }
 }
 impl Key for PgConnPool {
@@ -19,15 +21,15 @@ impl Key for PgConnPool {
 }
 
 pub struct DieselPool(pub r2d2::Pool<ConnectionManager<PgConnection>>);
-impl DieselPool {    
+impl DieselPool {
     pub fn new() -> DieselPool {
-    dotenv().ok();
+        dotenv().ok();
 
-    let database_url = get_env_var("DATABASE_URL".to_string()).unwrap();
-    let config = r2d2::Config::default();
-    let manager = ConnectionManager::<PgConnection>::new(database_url);
+        let database_url = get_env_var("DATABASE_URL".to_string()).unwrap();
+        let config = r2d2::Config::default();
+        let manager = ConnectionManager::<PgConnection>::new(database_url);
 
-    DieselPool(r2d2::Pool::new(config, manager).unwrap())
+        DieselPool(r2d2::Pool::new(config, manager).unwrap())
     }
 }
 impl Key for DieselPool {

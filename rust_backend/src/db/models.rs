@@ -6,14 +6,16 @@ use chrono;
 type DateTimeUTC = chrono::DateTime<chrono::UTC>;
 
 pub trait Id<I>
-    where I: Eq + Hash
+where
+    I: Eq + Hash,
 {
     fn get_id(&self) -> &I;
 }
 
 pub trait IdCollection<T, I>
-    where T: Id<I>,
-          I: Eq + Hash
+where
+    T: Id<I>,
+    I: Eq + Hash,
 {
     fn as_ids(&self) -> Vec<&I>;
     fn as_id_map(&self) -> HashMap<&I, &T>;
@@ -21,8 +23,9 @@ pub trait IdCollection<T, I>
 }
 
 impl<T, I> IdCollection<T, I> for Vec<T>
-    where T: Id<I>,
-          I: Eq + Hash
+where
+    T: Id<I>,
+    I: Eq + Hash,
 {
     fn as_ids(&self) -> Vec<&I> {
         self.iter().map(|x| x.get_id()).collect()
@@ -90,4 +93,3 @@ impl Id<Uuid> for Match {
         &self.id
     }
 }
-

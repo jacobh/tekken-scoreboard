@@ -9,7 +9,8 @@ pub trait RowData {
     fn get_id(&self) -> Rc<Uuid>;
     fn new_from_row(row: &postgres::rows::Row) -> Self;
     fn new_from_rows(rows: &postgres::rows::Rows) -> Vec<Self>
-        where Self: std::marker::Sized
+    where
+        Self: std::marker::Sized,
     {
         let mut instances: Vec<Self> = Vec::new();
         for row in rows.iter() {
@@ -18,7 +19,8 @@ pub trait RowData {
         instances
     }
     fn new_hashmap_from_rows(rows: &postgres::rows::Rows) -> HashMap<Rc<Uuid>, Self>
-        where Self: std::marker::Sized
+    where
+        Self: std::marker::Sized,
     {
         let instances = Self::new_from_rows(rows);
         let mut instance_map: HashMap<Rc<Uuid>, Self> = HashMap::new();

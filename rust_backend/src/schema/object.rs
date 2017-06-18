@@ -136,4 +136,3 @@ graphql_object!(EloCell: ContextData |&self| {
         self.matches_lost as i64
     }
 });
-

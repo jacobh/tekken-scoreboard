@@ -29,4 +29,3 @@ table! {
         email -> Nullable<Text>,
     }
 }
-

@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use uuid::Uuid;
 use chrono;
 
+use db::schema::matches;
+
 type DateTimeUTC = chrono::DateTime<chrono::UTC>;
 
 pub trait Id<I>
@@ -92,4 +94,17 @@ impl Id<Uuid> for Match {
     fn get_id(&self) -> &Uuid {
         &self.id
     }
+}
+
+#[derive(Insertable)]
+#[table_name = "matches"]
+pub struct NewMatch {
+    pub id: Uuid,
+    pub createdAt: DateTimeUTC,
+    pub updatedAt: DateTimeUTC,
+    pub winnerId: Uuid,
+    pub player1Id: Uuid,
+    pub player2Id: Uuid,
+    pub character1Id: Uuid,
+    pub character2Id: Uuid,
 }

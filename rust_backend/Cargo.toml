@@ -22,3 +22,4 @@ diesel = { version = "0.13", features = ["postgres", "uuid", "chrono"] }
 diesel_codegen = { version = "0.13", features = ["postgres"] }
 r2d2-diesel = "0.13"
 dotenv = "0.9"
+itertools = "0.6"

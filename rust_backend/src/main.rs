@@ -18,6 +18,8 @@ extern crate diesel;
 extern crate diesel_codegen;
 extern crate r2d2_diesel;
 extern crate dotenv;
+extern crate itertools;
+
 mod utils;
 mod db;
 mod elo;
@@ -64,11 +66,10 @@ fn main() {
     chain.link(Read::<DieselPool>::both(diesel_pool));
 
     // cors
-    let cors = CORS::new(vec![
-        (vec![Method::Get, Method::Post], "graphql".to_owned()),
-    ]);
+    let cors = CORS::new(vec![(vec![Method::Get, Method::Post], "graphql".to_owned())]);
     chain.link_after(cors);
 
     let port = utils::get_env_var("PORT".to_string()).unwrap_or("4000".to_string());
     Iron::new(chain).http(format!("0.0.0.0:{}", port)).unwrap();
 }
+

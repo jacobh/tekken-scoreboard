@@ -3,6 +3,7 @@ use uuid::Uuid;
 use std::collections::HashMap;
 use std::collections::hash_map::Entry;
 use std::rc::Rc;
+use itertools::Itertools;
 use model::{EloCell, EloRow};
 use db::models::Match;
 
@@ -111,14 +112,16 @@ fn get_initial_row(player_ids: Vec<&Uuid>) -> EloRow {
 pub fn calc_elo_rows(player_ids: Vec<&Uuid>, matches: &Vec<Match>) -> Vec<EloRow> {
     let initial_row = get_initial_row(player_ids);
     group_matches_by_date(matches)
-        .iter()
-        // sort by date here somehow eg 
+        .into_iter()
+        .sorted_by(|&(date1, _), &(date2, _)| Ord::cmp(&date1, &date2))
+        .into_iter()
         .fold(vec![initial_row], |mut rows, (date, matches)| {
             let row = {
                 let prev_row = rows.last().expect("There should always be one row");
-                calc_next_elo_row(prev_row, date, matches)
+                calc_next_elo_row(prev_row, &date, &matches)
             };
             rows.push(row);
             rows
         })
 }
+

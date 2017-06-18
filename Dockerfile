@@ -1,8 +1,10 @@
-FROM jimmycuadra/rust
+FROM jimmycuadra/rust:1.17.0
 
 # Melbourne timezone
 ENV TZ=Australia/Melbourne
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && apt-get install libpq-dev -y
 
 WORKDIR /app
 RUN mkdir src && touch src/main.rs

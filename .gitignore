@@ -2,3 +2,7 @@ node_modules
 backend/dist
 dumps
 rust_backend/target
+
+.env
+
+*.bk

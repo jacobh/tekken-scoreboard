@@ -4,17 +4,20 @@ version = "0.1.0"
 authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
 
 [dependencies]
-postgres = {version = "0.14", features = ["with-uuid", "with-chrono"]}
-iron = "0.5.1"
+iron = "0.5"
 mount = "*"
 logger = "*"
 env_logger = "0.4.2"
 juniper = { version = "0.7.0", features = ["iron-handlers"] }
-uuid = { version = "0.4", features = ["serde", "v4"] }
-serde = "*"
-chrono = "*"
+uuid = { version = "0.5", features = ["serde", "v4"] }
+serde = "1.0"
+chrono = "0.3"
 persistent = "*"
 r2d2 = "*"
-r2d2_postgres = "*"
 iron-cors = { git = "https://github.com/fxbox/iron-cors.git" }
 md5 = "*"
+diesel = { version = "0.13", features = ["postgres", "uuid", "chrono"] }
+diesel_codegen = { version = "0.13", features = ["postgres"] }
+r2d2-diesel = "0.13"
+dotenv = "0.9"
+itertools = "0.6"

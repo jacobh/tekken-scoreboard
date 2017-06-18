@@ -66,10 +66,11 @@ fn main() {
     chain.link(Read::<DieselPool>::both(diesel_pool));
 
     // cors
-    let cors = CORS::new(vec![(vec![Method::Get, Method::Post], "graphql".to_owned())]);
+    let cors = CORS::new(vec![
+        (vec![Method::Get, Method::Post], "graphql".to_owned()),
+    ]);
     chain.link_after(cors);
 
     let port = utils::get_env_var("PORT".to_string()).unwrap_or("4000".to_string());
     Iron::new(chain).http(format!("0.0.0.0:{}", port)).unwrap();
 }
-

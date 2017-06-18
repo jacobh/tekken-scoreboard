@@ -124,4 +124,3 @@ pub fn calc_elo_rows(player_ids: Vec<&Uuid>, matches: &Vec<Match>) -> Vec<EloRow
             rows
         })
 }
-

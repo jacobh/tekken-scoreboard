@@ -4,3 +4,5 @@ dumps
 rust_backend/target
 
 .env
+
+*.bk

@@ -5,8 +5,6 @@ extern crate logger;
 extern crate env_logger;
 extern crate uuid;
 extern crate r2d2;
-extern crate r2d2_postgres;
-extern crate postgres;
 #[macro_use]
 extern crate juniper;
 extern crate persistent;
@@ -36,7 +34,7 @@ use persistent::Read;
 use std::env;
 use iron_cors::CORS;
 
-use db::pool::{PgConnPool, DieselPool};
+use db::pool::DieselPool;
 use schema::context::context_factory;
 use schema::mutation::MutationRoot;
 use schema::query::QueryRoot;
@@ -56,10 +54,6 @@ fn main() {
 
     // set up logging
     chain.link(Logger::new(Some(Format::default())));
-
-    // set up postgres connection pool
-    let pg_pool = PgConnPool::new();
-    chain.link(Read::<PgConnPool>::both(pg_pool));
 
     // set up diesel pool
     let diesel_pool = DieselPool::new();

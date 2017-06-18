@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 use std::hash::Hash;
 use std::collections::HashMap;
 use uuid::Uuid;

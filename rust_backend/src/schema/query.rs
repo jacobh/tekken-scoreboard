@@ -1,7 +1,7 @@
 use juniper::FieldResult;
 
 use elo;
-use db::models::{Character, Player, Match, IdCollection};
+use db::models::{Character, IdCollection, Match, Player};
 use model::EloRow;
 use schema::context::ContextData;
 use schema::scalar::ID;

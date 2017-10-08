@@ -6,7 +6,7 @@ use diesel::prelude::*;
 use diesel::pg::PgConnection;
 
 use db::pool::DieselPool;
-use db::models::{Character, Player, Match};
+use db::models::{Character, Match, Player};
 use db::schema;
 
 pub struct ContextData {
@@ -33,11 +33,11 @@ pub fn context_factory(req: &mut Request) -> ContextData {
         characters: schema::characters::table
             .load::<Character>(diesel_conn)
             .expect("Failed to load characters"),
-        players: schema::players::table.load::<Player>(diesel_conn).expect(
-            "Failed to load players",
-        ),
-        matches: schema::matches::table.load::<Match>(diesel_conn).expect(
-            "Failed to load matches",
-        ),
+        players: schema::players::table
+            .load::<Player>(diesel_conn)
+            .expect("Failed to load players"),
+        matches: schema::matches::table
+            .load::<Match>(diesel_conn)
+            .expect("Failed to load matches"),
     }
 }

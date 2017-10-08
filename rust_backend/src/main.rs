@@ -1,22 +1,22 @@
-extern crate iron;
 extern crate chrono;
-extern crate mount;
-extern crate logger;
-extern crate env_logger;
-extern crate uuid;
-extern crate r2d2;
-#[macro_use]
-extern crate juniper;
-extern crate persistent;
-extern crate iron_cors;
-extern crate md5;
 #[macro_use]
 extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
-extern crate r2d2_diesel;
 extern crate dotenv;
+extern crate env_logger;
+extern crate iron;
+extern crate iron_cors;
 extern crate itertools;
+#[macro_use]
+extern crate juniper;
+extern crate logger;
+extern crate md5;
+extern crate mount;
+extern crate persistent;
+extern crate r2d2;
+extern crate r2d2_diesel;
+extern crate uuid;
 
 mod utils;
 mod db;

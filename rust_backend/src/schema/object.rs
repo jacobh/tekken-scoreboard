@@ -2,10 +2,10 @@ use std::rc::Rc;
 use md5;
 use juniper::FieldResult;
 
-use db::models::{Player, Character, Match, IdCollection};
-use model::{EloRow, EloCell};
+use db::models::{Character, IdCollection, Match, Player};
+use model::{EloCell, EloRow};
 use schema::context::ContextData;
-use schema::scalar::{ID, DateTime};
+use schema::scalar::{DateTime, ID};
 
 graphql_object!(Player: ContextData |&self| {
     field id() -> ID {

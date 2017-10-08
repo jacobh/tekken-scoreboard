@@ -9,7 +9,7 @@ impl Clone for ID {
     }
 }
 
-pub struct DateTime(pub chrono::DateTime<chrono::UTC>);
+pub struct DateTime(pub chrono::DateTime<chrono::Utc>);
 impl Clone for DateTime {
     fn clone(&self) -> DateTime {
         DateTime(self.0.clone())
@@ -54,7 +54,7 @@ graphql_scalar!(DateTime {
             Some(string_value) => {
                 match chrono::DateTime::parse_from_rfc3339(string_value) {
                     Ok(datetime) => {
-                        Some(DateTime(datetime.with_timezone(&chrono::UTC)))
+                        Some(DateTime(datetime.with_timezone(&chrono::Utc)))
                     }
                     Err(_) => {
                         None

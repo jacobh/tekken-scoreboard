@@ -7,7 +7,7 @@ use itertools::Itertools;
 use model::{EloCell, EloRow};
 use db::models::Match;
 
-type DateUTC = chrono::Date<chrono::UTC>;
+type DateUtc = chrono::Date<chrono::Utc>;
 
 const K: f64 = 32.0;
 
@@ -19,7 +19,7 @@ fn elo(old: f64, exp: f64, score: f64) -> f64 {
     old + K * (score - exp)
 }
 
-fn group_matches_by_date(matches: &Vec<Match>) -> HashMap<DateUTC, Vec<&Match>> {
+fn group_matches_by_date(matches: &Vec<Match>) -> HashMap<DateUtc, Vec<&Match>> {
     matches.iter().fold(HashMap::new(), |mut acc, x| {
         let date = x.created_at.date();
         match acc.entry(date) {
@@ -34,7 +34,7 @@ fn group_matches_by_date(matches: &Vec<Match>) -> HashMap<DateUTC, Vec<&Match>> 
     })
 }
 
-fn calc_next_elo_row(prev_row: &EloRow, date: &DateUTC, matches: &Vec<&Match>) -> EloRow {
+fn calc_next_elo_row(prev_row: &EloRow, date: &DateUtc, matches: &Vec<&Match>) -> EloRow {
     let player_id_expected_score_map: HashMap<&Uuid, f64> =
         matches.iter().fold(HashMap::new(), |mut acc, &x| {
             let player1_id = &x.player1_id;

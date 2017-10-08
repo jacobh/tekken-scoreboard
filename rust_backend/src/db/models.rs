@@ -6,7 +6,7 @@ use chrono;
 
 use db::schema::matches;
 
-type DateTimeUTC = chrono::DateTime<chrono::UTC>;
+type DateTimeUtc = chrono::DateTime<chrono::Utc>;
 
 pub trait Id<I>
 where
@@ -46,8 +46,8 @@ where
 pub struct Character {
     pub id: Uuid,
     pub name: String,
-    created_at: DateTimeUTC,
-    updated_at: DateTimeUTC,
+    created_at: DateTimeUtc,
+    updated_at: DateTimeUtc,
 }
 impl Id<Uuid> for Character {
     fn get_id(&self) -> &Uuid {
@@ -60,8 +60,8 @@ impl Id<Uuid> for Character {
 pub struct Player {
     pub id: Uuid,
     pub name: String,
-    created_at: DateTimeUTC,
-    updated_at: DateTimeUTC,
+    created_at: DateTimeUtc,
+    updated_at: DateTimeUtc,
     pub email: Option<String>,
 }
 impl Id<Uuid> for Player {
@@ -74,8 +74,8 @@ impl Id<Uuid> for Player {
 #[derive(Queryable)]
 pub struct Match {
     pub id: Uuid,
-    pub created_at: DateTimeUTC,
-    updated_at: DateTimeUTC,
+    pub created_at: DateTimeUtc,
+    updated_at: DateTimeUtc,
     pub winner_id: Uuid,
     pub player1_id: Uuid,
     pub player2_id: Uuid,
@@ -101,8 +101,8 @@ impl Id<Uuid> for Match {
 #[table_name = "matches"]
 pub struct NewMatch {
     pub id: Uuid,
-    pub createdAt: DateTimeUTC,
-    pub updatedAt: DateTimeUTC,
+    pub createdAt: DateTimeUtc,
+    pub updatedAt: DateTimeUtc,
     pub winnerId: Uuid,
     pub player1Id: Uuid,
     pub player2Id: Uuid,

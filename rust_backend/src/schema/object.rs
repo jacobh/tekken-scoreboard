@@ -28,28 +28,28 @@ graphql_object!(Player: ContextData |&self| {
         ).collect()
     }
 
-    field played_matches(&executor) -> i64 {
+    field played_matches(&executor) -> i32 {
         let matches = &executor.context().matches;
 
         matches.iter().filter(
             |m| m.player1_id == self.id || m.player2_id == self.id
-        ).count() as i64
+        ).count() as i32
     }
 
-    field won_matches(&executor) -> i64 {
+    field won_matches(&executor) -> i32 {
         let matches = &executor.context().matches;
 
         matches.iter().filter(
             |m| m.winner_id == self.id
-        ).count() as i64
+        ).count() as i32
     }
 
-    field lost_matches(&executor) -> i64 {
+    field lost_matches(&executor) -> i32 {
         let matches = &executor.context().matches;
 
         matches.iter().filter(
             |m| m.loser_id() == &self.id
-        ).count() as i64
+        ).count() as i32
     }
 });
 
@@ -124,15 +124,15 @@ graphql_object!(EloCell: ContextData |&self| {
         (self.score_change * 10.0).round() / 10.0
     }
 
-    field matches_played() -> i64 {
-        self.matches_played() as i64
+    field matches_played() -> i32 {
+        self.matches_played() as i32
     }
 
-    field matches_won() -> i64 {
-        self.matches_won as i64
+    field matches_won() -> i32 {
+        self.matches_won as i32
     }
 
-    field matches_lost() -> i64 {
-        self.matches_lost as i64
+    field matches_lost() -> i32 {
+        self.matches_lost as i32
     }
 });

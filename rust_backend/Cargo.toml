@@ -7,17 +7,17 @@ authors = ["Jacob Haslehurst <jacob@haslehurst.net>"]
 iron = "0.5"
 mount = "*"
 logger = "*"
-env_logger = "0.4.2"
-juniper = { version = "0.7.0", features = ["iron-handlers"] }
+env_logger = "0.4"
+juniper = { version = "0.8", features = ["iron-handlers"] }
 uuid = { version = "0.5", features = ["serde", "v4"] }
 serde = "1.0"
-chrono = "0.3"
+chrono = "0.4"
 persistent = "*"
-r2d2 = "*"
+r2d2 = "0.7"
 iron-cors = { git = "https://github.com/fxbox/iron-cors.git" }
 md5 = "*"
-diesel = { version = "0.13", features = ["postgres", "uuid", "chrono"] }
-diesel_codegen = { version = "0.13", features = ["postgres"] }
-r2d2-diesel = "0.13"
-dotenv = "0.9"
+diesel = { version = "0.16", features = ["postgres", "uuid", "chrono"] }
+diesel_codegen = { version = "0.16", features = ["postgres"] }
+r2d2-diesel = "0.16"
+dotenv = "0.10"
 itertools = "0.6"

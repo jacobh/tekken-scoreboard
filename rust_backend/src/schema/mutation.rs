@@ -14,7 +14,7 @@ graphql_object!(MutationRoot: ContextData |&self| {
         use db::schema::matches;
         let conn = &*executor.context().get_conn();
 
-        let now = chrono::UTC::now();
+        let now = chrono::Utc::now();
         let new_match = NewMatch {
             id: Uuid::new_v4(),
             createdAt: now.clone(),

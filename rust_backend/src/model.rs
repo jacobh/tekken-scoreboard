@@ -3,7 +3,7 @@ use std::rc::Rc;
 use uuid::Uuid;
 
 pub struct EloRow {
-    pub date: Option<chrono::Date<chrono::UTC>>,
+    pub date: Option<chrono::Date<chrono::Utc>>,
     pub cells: Vec<EloCell>,
 }
 impl EloRow {
